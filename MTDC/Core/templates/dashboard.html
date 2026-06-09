@@ -811,24 +811,9 @@
             zIndex: 20
         });
 
-        const selectedAreaSource = new ol.source.Vector();
-        const selectedAreaLayer = new ol.layer.Vector({
-            source: selectedAreaSource,
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: '#f5821f',
-                    width: 4
-                }),
-                fill: new ol.style.Fill({
-                    color: 'rgba(245, 130, 31, 0.18)'
-                })
-            }),
-            zIndex: 30
-        });
-
         const map = new ol.Map({
             target: 'mtdc-map',
-            layers: [baseLayers.hybrid, areaMtdcLayer, pointMtdcLayer, selectedAreaLayer],
+            layers: [baseLayers.hybrid, areaMtdcLayer, pointMtdcLayer],
             view: new ol.View({
                 center: ol.proj.fromLonLat([75.7139, 19.7515]),
                 zoom: 7
@@ -944,9 +929,7 @@
                 return;
             }
 
-            selectedAreaSource.clear();
-            selectedAreaSource.addFeatures(features);
-            map.getView().fit(selectedAreaSource.getExtent(), {
+            map.getView().fit(features[0].getGeometry().getExtent(), {
                 padding: [70, 70, 70, 70],
                 duration: 700,
                 maxZoom: 20
