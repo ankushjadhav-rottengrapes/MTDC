@@ -16,7 +16,7 @@
             --ink: #101820;
             --muted: #5d6675;
             --saffron: #f5821f;
-            --sun: #ffc72c;
+            --sun: #ffe79a;
             --cream: #fff4df;
             --cream-2: #fffaf1;
             --line: #e4d8c6;
@@ -58,8 +58,6 @@
         .brand,
         .nav-links,
         .search,
-        .filters,
-        .top-actions,
         .asset-meta,
         .card-actions {
             display: flex;
@@ -67,11 +65,11 @@
         }
 
         .site-header {
-            height: 96px;
-            padding: 14px 28px;
+            height: 62px;
+            padding: 6px 24px;
             display: grid;
-            grid-template-columns: auto minmax(0, 1fr) auto;
-            gap: 26px;
+            grid-template-columns: auto minmax(0, 1fr);
+            gap: 22px;
             align-items: center;
             background: rgba(255, 255, 255, 0.94);
             border-bottom: 1px solid var(--line);
@@ -82,13 +80,13 @@
         }
 
         .brand {
-            gap: 14px;
-            min-width: 230px;
+            gap: 12px;
+            min-width: 220px;
         }
 
         .brand-logo {
-            width: 74px;
-            height: 64px;
+            width: 46px;
+            height: 40px;
             display: block;
             object-fit: contain;
             flex: 0 0 auto;
@@ -97,14 +95,14 @@
         .brand-text strong {
             display: block;
             color: var(--navy);
-            font-size: 22px;
+            font-size: 18px;
             line-height: 1.05;
             font-weight: 800;
         }
 
         .brand-text span {
             display: block;
-            margin-top: 4px;
+            margin-top: 3px;
             color: var(--saffron);
             font-size: 11px;
             font-weight: 800;
@@ -112,7 +110,7 @@
         }
 
         .nav-links {
-            gap: clamp(14px, 2vw, 30px);
+            gap: clamp(12px, 2vw, 28px);
             justify-content: center;
             min-width: 0;
         }
@@ -120,7 +118,7 @@
         .nav-links a {
             color: #1f2430;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 800;
             white-space: nowrap;
         }
@@ -129,14 +127,8 @@
             color: var(--saffron);
         }
 
-        .top-actions {
-            gap: 12px;
-            justify-content: flex-end;
-        }
-
-        .login-btn,
         .icon-btn {
-            min-height: 42px;
+            min-height: 36px;
             border: 1px solid #d9cfbf;
             border-radius: 8px;
             background: #fff8ea;
@@ -144,31 +136,25 @@
             font-weight: 800;
         }
 
-        .login-btn {
-            padding: 0 16px;
-        }
-
         .icon-btn {
-            width: 42px;
+            width: 36px;
             display: grid;
             place-items: center;
         }
 
         .dashboard-bar {
-            height: 82px;
-            padding: 14px 28px;
-            display: grid;
-            grid-template-columns: minmax(280px, 1fr) auto;
-            gap: 16px;
+            height: 58px;
+            padding: 8px 24px;
+            display: block;
             align-items: center;
-            background: linear-gradient(90deg, var(--sun), #ffd95e);
-            border-bottom: 1px solid rgba(145, 96, 16, 0.18);
+            background: linear-gradient(90deg, #fff0b8, #ffe49a);
+            border-bottom: 1px solid rgba(145, 96, 16, 0.12);
         }
 
         .search {
-            min-height: 46px;
+            min-height: 42px;
             gap: 10px;
-            padding: 0 14px;
+            padding: 0 13px;
             border: 1px solid rgba(52, 45, 30, 0.22);
             border-radius: 8px;
             background: rgba(255, 255, 255, 0.9);
@@ -186,27 +172,10 @@
             font-weight: 600;
         }
 
-        .filters {
-            gap: 10px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        .filters select {
-            min-height: 46px;
-            min-width: 132px;
-            padding: 0 34px 0 13px;
-            border: 1px solid rgba(52, 45, 30, 0.22);
-            border-radius: 8px;
-            color: #20242c;
-            background: #fffaf1;
-            font-weight: 800;
-        }
-
         .content {
-            height: calc(100vh - 178px);
+            height: calc(100vh - 120px);
             display: grid;
-            grid-template-columns: minmax(0, 1fr) 430px;
+            grid-template-columns: minmax(0, 4fr) minmax(300px, 1fr);
             background: #f9eedb;
         }
 
@@ -312,7 +281,7 @@
             position: sticky;
             top: 0;
             z-index: 2;
-            padding: 22px 24px;
+            padding: 16px 18px;
             display: flex;
             justify-content: space-between;
             gap: 18px;
@@ -325,21 +294,21 @@
         .sidebar-head h2 {
             margin: 0;
             color: var(--navy);
-            font-size: 24px;
+            font-size: 20px;
             line-height: 1.15;
         }
 
         .sidebar-head p {
-            margin: 5px 0 0;
+            margin: 4px 0 0;
             color: var(--muted);
             font-size: 13px;
             font-weight: 700;
         }
 
         .cards {
-            padding: 20px;
+            padding: 14px;
             display: grid;
-            gap: 18px;
+            gap: 14px;
         }
 
         .asset-card {
@@ -352,7 +321,7 @@
 
         .asset-img {
             position: relative;
-            height: 154px;
+            height: 118px;
             overflow: hidden;
         }
 
@@ -372,40 +341,40 @@
             position: absolute;
             top: 12px;
             right: 12px;
-            padding: 7px 10px;
+            padding: 6px 8px;
             border-radius: 8px;
             color: #ffffff;
             background: rgba(12, 22, 40, 0.88);
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
         }
 
         .asset-body {
-            padding: 20px;
+            padding: 14px;
         }
 
         .asset-title {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 14px;
-            margin-bottom: 14px;
+            gap: 10px;
+            margin-bottom: 12px;
         }
 
         .asset-title h3 {
             margin: 0;
             color: var(--navy);
-            font-size: 21px;
+            font-size: 18px;
             line-height: 1.2;
         }
 
         .status {
             flex: 0 0 auto;
-            padding: 6px 11px;
+            padding: 5px 9px;
             border-radius: 999px;
             color: #074a75;
             background: #dff0ff;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
         }
 
@@ -420,15 +389,15 @@
         }
 
         .asset-meta {
-            gap: 22px;
-            margin-bottom: 18px;
+            gap: 18px;
+            margin-bottom: 14px;
         }
 
         .meta-label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             color: #586274;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
             letter-spacing: 0.08em;
         }
@@ -436,17 +405,17 @@
         .meta-value {
             font-family: "JetBrains Mono", monospace;
             color: #111827;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 800;
         }
 
         .card-actions {
-            gap: 10px;
+            gap: 8px;
         }
 
         .details-btn,
         .view-btn {
-            min-height: 44px;
+            min-height: 38px;
             border: 0;
             border-radius: 8px;
             font-weight: 800;
@@ -459,14 +428,14 @@
         }
 
         .view-btn {
-            width: 54px;
+            width: 46px;
             color: #ffffff;
             background: var(--saffron);
         }
 
         @media (max-width: 1180px) {
             .site-header {
-                grid-template-columns: 1fr auto;
+                grid-template-columns: 1fr;
             }
 
             .nav-links {
@@ -474,7 +443,7 @@
             }
 
             .content {
-                grid-template-columns: minmax(0, 1fr) 380px;
+                grid-template-columns: minmax(0, 1fr) 320px;
             }
         }
 
@@ -500,10 +469,6 @@
                 border-bottom: 1px solid #cfc4b2;
             }
 
-            .filters,
-            .top-actions {
-                justify-content: flex-start;
-            }
         }
 
         @media (max-width: 620px) {
@@ -526,10 +491,6 @@
                 font-size: 18px;
             }
 
-            .filters select,
-            .login-btn {
-                width: 100%;
-            }
         }
     </style>
 </head>
@@ -550,35 +511,13 @@
             <a href="#">Survey Status</a>
             <a href="#">Reports</a>
         </nav>
-
-        <div class="top-actions">
-            <button class="login-btn" type="button">Log in</button>
-            <button class="icon-btn" type="button" aria-label="Filter"><span class="material-symbols-outlined">filter_list</span></button>
-            <button class="icon-btn" type="button" aria-label="Notifications"><span class="material-symbols-outlined">notifications</span></button>
-        </div>
     </header>
 
     <section class="dashboard-bar" aria-label="Dashboard search filters">
         <label class="search">
             <span class="material-symbols-outlined">search</span>
             <input type="search" placeholder="Search Property ID, Survey No, Resort, District...">
-            <span class="material-symbols-outlined">mic</span>
         </label>
-        <div class="filters">
-            <select aria-label="District">
-                <option>District: All</option>
-                <option>Ratnagiri</option>
-                <option>Nashik</option>
-                <option>Sindhudurg</option>
-                <option>Aurangabad</option>
-            </select>
-            <select aria-label="Taluka">
-                <option>Taluka: All</option>
-            </select>
-            <select aria-label="Village">
-                <option>Village: All</option>
-            </select>
-        </div>
     </section>
 
     <main class="content">
