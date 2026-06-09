@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-label="Stylized coastal tourism destination">
+  <defs>
+    <linearGradient id="water" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#47c7cf"/>
+      <stop offset=".55" stop-color="#1683bb"/>
+      <stop offset="1" stop-color="#0b4f91"/>
+    </linearGradient>
+    <linearGradient id="sand" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#ffe2a6"/>
+      <stop offset="1" stop-color="#f7b65a"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="360" fill="url(#water)"/>
+  <path d="M0 245c145-32 218 6 335-22 146-35 222-112 565-88v225H0z" fill="url(#sand)"/>
+  <path d="M0 213c160-34 233 14 350-18 154-43 230-111 550-88" fill="none" stroke="#ffffff" stroke-width="16" opacity=".85"/>
+  <path d="M0 190c168-30 236 17 344-13 144-40 224-100 556-82" fill="none" stroke="#bff5ee" stroke-width="8" opacity=".75"/>
+  <path d="M118 278c52-42 122-48 184-23 56 22 104 16 154-13 79-45 171-47 270-18" fill="none" stroke="#18724c" stroke-width="18" opacity=".82"/>
+  <g fill="#0f593d">
+    <path d="M196 235l-12 76h20z"/>
+    <path d="M207 235c26 15 44 30 59 56-28-11-50-22-68-41z"/>
+    <path d="M192 232c-31 12-55 30-75 58 34-10 61-22 83-43z"/>
+    <path d="M606 210l-10 78h18z"/>
+    <path d="M616 212c32 17 52 35 70 64-34-12-61-26-80-50z"/>
+    <path d="M601 209c-28 11-50 27-70 53 31-8 57-19 78-39z"/>
+  </g>
+</svg>

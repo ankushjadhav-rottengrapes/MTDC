@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 360" role="img" aria-label="Stylized aerial view of Lonar lake">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#f9c15f"/>
+      <stop offset="1" stop-color="#87c487"/>
+    </linearGradient>
+    <radialGradient id="lake" cx="50%" cy="52%" r="45%">
+      <stop offset="0" stop-color="#0b6f76"/>
+      <stop offset="0.68" stop-color="#064a5b"/>
+      <stop offset="1" stop-color="#032d38"/>
+    </radialGradient>
+  </defs>
+  <rect width="900" height="360" fill="url(#sky)"/>
+  <path d="M0 250c130-55 230-38 345-70 125-35 254-85 555-34v214H0z" fill="#8f7b36" opacity=".82"/>
+  <path d="M0 288c128-35 238-30 358-60 154-39 306-64 542-30v162H0z" fill="#486f32" opacity=".78"/>
+  <ellipse cx="466" cy="184" rx="294" ry="118" fill="#9b7a38"/>
+  <ellipse cx="466" cy="184" rx="246" ry="88" fill="url(#lake)"/>
+  <ellipse cx="400" cy="155" rx="90" ry="24" fill="#2fa7a3" opacity=".36"/>
+  <path d="M118 298c82-35 154-42 226-28 67 13 114 7 171-10 91-28 179-27 267 4" fill="none" stroke="#e8d58a" stroke-width="9" opacity=".55"/>
+  <circle cx="724" cy="70" r="38" fill="#fff3be" opacity=".75"/>
+</svg>
