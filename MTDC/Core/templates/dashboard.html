@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MTDC GIS Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#002045",
+                        "surface": "#f7fafc",
+                        "secondary": "#0061a5",
+                        "on-surface-variant": "#43474e",
+                        "on-primary-container": "#86a0cd",
+                        "primary-fixed": "#d6e3ff",
+                        "on-primary": "#ffffff",
+                        "on-secondary-fixed": "#001d37",
+                        "tertiary-fixed": "#84f5ee",
+                        "on-primary-fixed-variant": "#2d476f",
+                        "surface-tint": "#455f88",
+                        "secondary-fixed-dim": "#9fcaff",
+                        "secondary-container": "#66affe",
+                        "tertiary-container": "#003d3a",
+                        "background": "#f7fafc",
+                        "on-error": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#34afa9",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#d7dadc",
+                        "primary-fixed-dim": "#adc7f7",
+                        "outline-variant": "#c4c6cf",
+                        "surface-bright": "#f7fafc",
+                        "on-secondary": "#ffffff",
+                        "secondary-fixed": "#d2e4ff",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-fixed": "#00201e",
+                        "on-secondary-container": "#004172",
+                        "on-primary-fixed": "#001b3c",
+                        "primary-container": "#1a365d",
+                        "on-tertiary": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#adc7f7",
+                        "on-tertiary-fixed-variant": "#00504d",
+                        "on-surface": "#181c1e",
+                        "surface-container-high": "#e5e9eb",
+                        "inverse-on-surface": "#eef1f3",
+                        "tertiary": "#002524",
+                        "surface-container-low": "#f1f4f6",
+                        "outline": "#74777f",
+                        "surface-variant": "#e0e3e5",
+                        "on-secondary-fixed-variant": "#00497e",
+                        "surface-container": "#ebeef0",
+                        "on-background": "#181c1e",
+                        "inverse-surface": "#2d3133",
+                        "tertiary-fixed-dim": "#66d8d2",
+                        "surface-container-highest": "#e0e3e5"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "stack-lg": "24px",
+                        "panel-width": "320px",
+                        "stack-xs": "4px",
+                        "stack-sm": "8px",
+                        "gutter": "16px",
+                        "base": "4px",
+                        "stack-md": "16px",
+                        "margin-edge": "24px",
+                        "toolbar-size": "40px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "mono-data": ["JetBrains Mono"],
+                        "headline-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-md": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "mono-data": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "headline-sm": ["18px", {"lineHeight": "26px", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["11px", {"lineHeight": "14px", "fontWeight": "500"}],
+                        "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7fafc; color: #181c1e; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .map-container { height: calc(100vh - 64px); }
+        .sidebar-scroll { height: calc(100vh - 64px); overflow-y: auto; }
+        .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border: 1px solid rgba(224, 227, 229, 0.5); }
+    </style>
+</head>
+<body class="overflow-hidden">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full h-16 flex items-center px-margin-edge bg-surface/85 backdrop-blur-md z-[100] shadow-sm">
+<div class="flex items-center gap-6 w-full">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">map</span>
+<h1 class="text-headline-sm font-headline-sm font-bold text-primary whitespace-nowrap">MTDC GIS Dashboard</h1>
+</div>
+<div class="flex-1 max-w-4xl flex items-center gap-3">
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-body-md">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border border-outline-variant rounded-lg text-body-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all" placeholder="Search Property ID or Survey No..." type="text"/>
+</div>
+<div class="flex gap-2">
+<select class="bg-surface-container-low border border-outline-variant rounded-lg text-label-md px-3 py-2 outline-none focus:ring-1 focus:ring-primary">
+<option>District: All</option>
+<option>Aurangabad</option>
+<option>Buldhana</option>
+<option>Ratnagiri</option>
+</select>
+<select class="bg-surface-container-low border border-outline-variant rounded-lg text-label-md px-3 py-2 outline-none focus:ring-1 focus:ring-primary">
+<option>Taluka: All</option>
+</select>
+<select class="bg-surface-container-low border border-outline-variant rounded-lg text-label-md px-3 py-2 outline-none focus:ring-1 focus:ring-primary">
+<option>Village: All</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<button class="p-2 hover:bg-surface-container-low rounded-full transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center overflow-hidden">
+<img alt="User Profile" class="w-full h-full object-cover" data-alt="A professional headshot of a government official or GIS analyst in a corporate setting. The person is wearing a smart navy blue suit with a clean white shirt. The background is a soft-focus office interior with warm, natural lighting and minimalist professional decor." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXXtqsKoH1F1K7xT2a5Fy3SzoRzO1-5x5MheN9pK7wUJmfAmY8824YnlVBnqvJ0eQs9M_-R88eaesQ2GQk9JmcKTM39cze-OPkTEvV8290VFbi-bej8S8w3yQPqv9UfdOirtUnyyvmap5eXugBABO1bL2soJNzJs4CnsNLSzBHk59wsrxpADAqhvCkcgw2f-DRcXG3Ggxmz4xSN7DuyTsfBuEXXtNZjFdOZBuph6HfL31KXVsJSr9jIIpLLScKMOgVEhIh2b2nelE"/>
+</div>
+</div>
+</div>
+</header>
+<main class="pt-16 flex h-screen overflow-hidden">
+<!-- Left Section: Interactive Map -->
+<section class="w-3/4 relative map-container bg-surface-container">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-90" data-alt="A high-altitude satellite view of the Maharashtra topography, showing lush green landscapes, mountainous terrain of the Western Ghats, and the intricate blue coastline of the Arabian Sea. The image is overlaid with semi-transparent blue polygonal shapes representing land assets, giving it a technical GIS mapping aesthetic. The lighting is crisp daylight, emphasizing geographic textures." data-location="Maharashtra" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7_mBRDwfmYY30RWLUZKOO95vliXw1Ryc0qwp1SfpyBSte0j_zZgP3qSrHBf12i8QW4R1--t3tvsHekSusfkB9JFZ9FhSsZptk6GOJZQHWn_2VJXURXzA1USkJ4GIvr8pu7L8f-zUfTONk55dBQ81iXye3y-wb5DxqMsCGKftSW6O1j7-Ar8kZAc8cJgS9y38TYSYfLLVwV6JYk3bgZM7M0aY_HUvsULmXfxpmB5fyyQTBJhkfPbEeWMg0tw3OUf1VeMiEl1yEhRg"/>
+<!-- SVG Overlay for simulated GIS Polygons -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none" viewbox="0 0 1000 1000">
+<path class="hover:fill-opacity-60 cursor-pointer pointer-events-auto transition-all" d="M400,300 L450,280 L480,320 L440,350 Z" fill="#0061a5" fill-opacity="0.3" stroke="#002045" stroke-width="1"></path>
+<path class="hover:fill-opacity-60 cursor-pointer pointer-events-auto transition-all" d="M600,500 L660,480 L690,540 L630,570 Z" fill="#0061a5" fill-opacity="0.3" stroke="#002045" stroke-width="1"></path>
+<path class="hover:fill-opacity-60 cursor-pointer pointer-events-auto transition-all" d="M200,600 L250,580 L280,620 L240,650 Z" fill="#0061a5" fill-opacity="0.3" stroke="#002045" stroke-width="1"></path>
+</svg>
+</div>
+<!-- Floating GIS Controls -->
+<div class="absolute bottom-6 right-6 flex flex-col gap-2 z-10">
+<div class="flex flex-col glass-panel rounded-lg shadow-lg overflow-hidden">
+<button class="p-3 hover:bg-surface-container-highest transition-all text-primary border-b border-outline-variant">
+<span class="material-symbols-outlined">add</span>
+</button>
+<button class="p-3 hover:bg-surface-container-highest transition-all text-primary">
+<span class="material-symbols-outlined">remove</span>
+</button>
+</div>
+<button class="glass-panel p-3 rounded-lg shadow-lg hover:bg-surface-container-highest transition-all text-primary">
+<span class="material-symbols-outlined">my_location</span>
+</button>
+<button class="glass-panel p-3 rounded-lg shadow-lg hover:bg-surface-container-highest transition-all text-primary">
+<span class="material-symbols-outlined">layers</span>
+</button>
+<button class="bg-primary text-white p-3 rounded-lg shadow-lg hover:opacity-90 transition-all flex items-center justify-center">
+<span class="material-symbols-outlined">features</span>
+</button>
+</div>
+<!-- Legend Overlay -->
+<div class="absolute top-6 left-6 glass-panel p-4 rounded-lg shadow-sm w-48 z-10">
+<h3 class="text-label-md text-primary mb-3">Map Legend</h3>
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 bg-secondary-container border border-primary opacity-50 rounded-sm"></div>
+<span class="text-label-sm text-on-surface-variant">Active Assets</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 bg-tertiary-fixed border border-tertiary-container rounded-sm"></div>
+<span class="text-label-sm text-on-surface-variant">Survey Pending</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 border-2 border-error border-dashed rounded-sm"></div>
+<span class="text-label-sm text-on-surface-variant">Disputed Land</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Right Sidebar: Property Insights -->
+<aside class="w-1/4 bg-surface sidebar-scroll border-l border-outline-variant flex flex-col">
+<div class="p-6 border-b border-outline-variant bg-surface-container-low flex justify-between items-center">
+<div>
+<h2 class="text-headline-sm font-headline-sm text-primary">Property Insights</h2>
+<p class="text-label-sm text-on-surface-variant">Total 42 Assets Found</p>
+</div>
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">download</span>
+</button>
+</div>
+<div class="p-4 space-y-4">
+<!-- Property Card 1 -->
+<div class="group bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg hover:border-primary transition-all cursor-pointer">
+<div class="h-32 w-full relative">
+<img alt="Lonar Lake" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A breathtaking aerial view of the Lonar Crater Lake in Maharashtra, characterized by its emerald green alkaline waters and circular perimeter surrounded by dense forest. The image uses high-contrast lighting to highlight the geological uniqueness of the impact crater. The color palette is rich in earthy greens, deep teals, and rocky browns, fitting a professional environmental GIS context." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDmC5pyxfCdcn7n-70jWdAxXT_ZEEPuGAiOULnG3Dwt8lJObTGP8LMdkbydFV8D1QRbUdAw9FjR53x2DCzd3u4zmI4hZY9K9W0Z6QhrORkJXKWbTaRj4c5Dzl1V4yCGxhlNJIna_A_cw5wQoR6oKWJUTP7S0iTsNt0maL88AwdJqrEYP4PgB_sl1U7sNv25XaiQbSmvKuwFXUmVyFAD9uDKvlA2Ff7UBkPfbSkdMVqltXs89BBuGxbLfbQp1Dy_AekENPTDX2o7Hbs"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-primary/80 backdrop-blur-md text-white text-[10px] font-bold rounded-md">
+                            ASSET ID: MTDC-LL-042
+                        </div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<h4 class="text-body-lg font-bold text-primary">Lonar Lake Development</h4>
+<span class="bg-secondary-container/20 text-on-secondary-container text-label-sm px-2 py-0.5 rounded-full">Completed</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Area</p>
+<p class="text-body-md font-mono-data font-semibold">124.50 Ha</p>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">District</p>
+<p class="text-body-md font-semibold">Buldhana</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-surface-container-high hover:bg-surface-container-highest text-primary py-2 rounded-lg text-label-md transition-colors">Details</button>
+<button class="px-3 bg-secondary-container hover:bg-secondary text-on-secondary-container hover:text-white py-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Property Card 2 -->
+<div class="group bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg hover:border-primary transition-all cursor-pointer">
+<div class="h-32 w-full relative">
+<img alt="Aurangabad Heritage" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A grand architectural view of the Bibi Ka Maqbara in Aurangabad, captured during the golden hour with warm, honey-toned sunlight casting long shadows. The white marble structure stands majestically against a clear blue sky. The image emphasizes cultural heritage and institutional preservation, using a palette of crisp whites, soft yellows, and deep evening blues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmBxTQNM9YlxqMJZRAHM8eE3yuYiRR9CoUQW_-xPCdfIZvLTI5ek9t4tsLaq0lK2lZ9S7GteG0dobyEZ0W92iDHzbESG8sjmjJ1N1LjKHYo_d0LiTkVfQ2oF0vxpilQG52BZCndy-8n9-7Z_vVmLdCRda_NEKT0csCV-wyJgZJmQBd9J4swcDiqW5b7ic8yAMbTrZ1z1-ZwEThTiqt9qfaiBGz76EZ7_Abs_aaYsDCkqq5LGlTQx3yexjltV5Zcu0sEw3Gph4GhvI"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-primary/80 backdrop-blur-md text-white text-[10px] font-bold rounded-md">
+                            ASSET ID: MTDC-AU-089
+                        </div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<h4 class="text-body-lg font-bold text-primary">Aurangabad Heritage Site</h4>
+<span class="bg-tertiary-fixed/20 text-on-tertiary-fixed-variant text-label-sm px-2 py-0.5 rounded-full">In Survey</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Area</p>
+<p class="text-body-md font-mono-data font-semibold">45.20 Ha</p>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">District</p>
+<p class="text-body-md font-semibold">Aurangabad</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-surface-container-high hover:bg-surface-container-highest text-primary py-2 rounded-lg text-label-md transition-colors">Details</button>
+<button class="px-3 bg-secondary-container hover:bg-secondary text-on-secondary-container hover:text-white py-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Property Card 3 -->
+<div class="group bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden hover:shadow-lg hover:border-primary transition-all cursor-pointer">
+<div class="h-32 w-full relative">
+<img alt="Tarkarli Coast" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="An expansive aerial drone shot of the Tarkarli beach coastline in Sindhudurg, showing turquoise waters meeting pristine white sands. The image is bright and airy, with a high-key light-mode aesthetic. Coconut groves line the shore, and the overall mood is serene and commercially viable for tourism development. The colors are dominated by vibrant aquamarine and lush forest greens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDotZt2IECpWs7wQyRUj_8D22V6bHPhxRg1-YRP9NVm7Jx8FtNy-64LoKFRxh-gA52kkcriPAtCt0j-briRSGE3kP_yd3FcjlmX9HvmAJuD8Bv5jotEiiGp0nDTHhRkNXSyFA1neDTk9WQhQWkDDz6tjJSpu6z2PwkhUC_Y83gpGc-DO-bJ8hxyalf5EVMiLUQgJjc2HEAx_cH8ttAJ_gKt2D_mkfM7LYeTYtonsHjzrkPfVn6lsPTm_CzgmPitGz8DYQ-9vSOVo28"/>
+<div class="absolute top-2 right-2 px-2 py-1 bg-primary/80 backdrop-blur-md text-white text-[10px] font-bold rounded-md">
+                            ASSET ID: MTDC-TK-112
+                        </div>
+</div>
+<div class="p-4">
+<div class="flex justify-between items-start mb-2">
+<h4 class="text-body-lg font-bold text-primary">Tarkarli Coastal Asset</h4>
+<span class="bg-error-container/20 text-error text-label-sm px-2 py-0.5 rounded-full">Disputed</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">Area</p>
+<p class="text-body-md font-mono-data font-semibold">18.75 Ha</p>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant uppercase tracking-wider">District</p>
+<p class="text-body-md font-semibold">Sindhudurg</p>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-surface-container-high hover:bg-surface-container-highest text-primary py-2 rounded-lg text-label-md transition-colors">Details</button>
+<button class="px-3 bg-secondary-container hover:bg-secondary text-on-secondary-container hover:text-white py-2 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-auto p-4 border-t border-outline-variant bg-surface-container-low">
+<button class="w-full bg-primary text-white py-3 rounded-lg font-bold shadow-md hover:bg-primary-container transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">add_location_alt</span>
+<span>Register New Asset</span>
+</button>
+</div>
+</aside>
+</main>
+<script>
+        // Simple micro-interaction for map polygons
+        document.querySelectorAll('path').forEach(path => {
+            path.addEventListener('mouseenter', () => {
+                path.style.cursor = 'pointer';
+            });
+            path.addEventListener('click', (e) => {
+                const id = Math.floor(Math.random() * 1000);
+                console.log(`Property selected: MTDC-GIS-${id}`);
+            });
+        });
+
+        // Search highlight simulation
+        const searchInput = document.querySelector('input');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('scale-[1.01]');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('scale-[1.01]');
+        });
+    </script>
+</body></html>
