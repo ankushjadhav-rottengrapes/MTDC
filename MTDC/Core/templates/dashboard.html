@@ -835,26 +835,6 @@
             })
         });
 
-        areaMtdcSource.on('tileloadstart', () => {
-            console.info('[MTDC WMS] area_mtdc tile loading', areaMtdcSource.getParams());
-        });
-
-        areaMtdcSource.on('tileloadend', () => {
-            console.info('[MTDC WMS] area_mtdc tile loaded', {
-                visible: areaMtdcLayer.getVisible(),
-                opacity: areaMtdcLayer.getOpacity(),
-                params: areaMtdcSource.getParams()
-            });
-        });
-
-        areaMtdcSource.on('tileloaderror', (event) => {
-            console.error('[MTDC WMS] area_mtdc tile failed', {
-                visible: areaMtdcLayer.getVisible(),
-                params: areaMtdcSource.getParams(),
-                tile: event.tile
-            });
-        });
-
         const hoverElement = document.getElementById('mtdc-hover-label');
         const hoverOverlay = new ol.Overlay({
             element: hoverElement,
@@ -935,15 +915,11 @@
             );
 
             if (!infoUrl) {
-                console.warn('[MTDC WMS] GetFeatureInfo URL missing', { layerName, coordinate, extraParams });
                 return Promise.resolve(null);
             }
 
-            console.info('[MTDC WMS] GetFeatureInfo request', { layerName, infoUrl });
-
             return fetch(infoUrl).then((response) => {
                 if (!response.ok) {
-                    console.warn('[MTDC WMS] GetFeatureInfo failed', { layerName, status: response.status, infoUrl });
                     return null;
                 }
 
@@ -953,13 +929,6 @@
 
         const zoomToAreaFeature = (payload, fallbackCoordinate) => {
             if (!payload || !Array.isArray(payload.features) || payload.features.length === 0) {
-                console.warn('[MTDC WMS] No area feature returned at selected location/filter', {
-                    property: selectedPropertyName,
-                    layer: selectedPropertyLayer,
-                    filter: selectedAreaFilter,
-                    fallbackCoordinate
-                });
-
                 if (fallbackCoordinate) {
                     map.getView().animate({ center: fallbackCoordinate, zoom: 16, duration: 550 });
                 }
@@ -969,8 +938,6 @@
             const features = readPayloadFeatures(payload);
 
             if (features.length === 0) {
-                console.warn('[MTDC WMS] Area feature returned but geometry could not be read', payload);
-
                 if (fallbackCoordinate) {
                     map.getView().animate({ center: fallbackCoordinate, zoom: 16, duration: 550 });
                 }
@@ -1004,7 +971,6 @@
             for (const coordinate of candidateCoordinates) {
                 const payload = await getFeatureInfo(areaMtdcSource, coordinate, AREA_LAYER_NAME);
                 const featureCount = payload?.features?.length || 0;
-                console.info('[MTDC WMS] area_mtdc scan result', { coordinate, featureCount });
 
                 if (featureCount > 0) {
                     return payload;
@@ -1094,16 +1060,6 @@
 
         if (hasSelectedProperty) {
             const selectedCoordinate = ol.proj.fromLonLat([selectedPropertyLon, selectedPropertyLat]);
-            console.info('[MTDC WMS] Detail page state', {
-                areaLayerVisible: areaMtdcLayer.getVisible(),
-                pointLayerVisible: pointMtdcLayer.getVisible(),
-                areaLayerParams: areaMtdcSource.getParams(),
-                selectedPropertyName,
-                selectedPropertyLayer,
-                selectedAreaFilter,
-                selectedPropertyLon,
-                selectedPropertyLat
-            });
 
             map.getView().setCenter(selectedCoordinate);
             map.getView().setZoom(14);
