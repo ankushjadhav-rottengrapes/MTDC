@@ -696,9 +696,11 @@
         const urlParams = new URLSearchParams(window.location.search);
         const selectedPropertyName = urlParams.get('property') || '';
         const selectedPropertyLayer = urlParams.get('layer') || '';
+        const selectedPropertyId = Number(urlParams.get('property_id'));
         const selectedPropertyLon = Number(urlParams.get('lon'));
         const selectedPropertyLat = Number(urlParams.get('lat'));
         const hasSelectedProperty = selectedPropertyName && Number.isFinite(selectedPropertyLon) && Number.isFinite(selectedPropertyLat);
+        const hasSelectedPropertyId = Number.isInteger(selectedPropertyId);
 
         const googleAttribution = 'Google';
         const baseLayers = {
@@ -783,6 +785,7 @@
         };
 
         const buildAreaFilter = () => (
+            hasSelectedPropertyId ? `property_id=${selectedPropertyId}` :
             buildLayerTokenFilter(selectedPropertyLayer) ||
             buildLayerTokenFilter(selectedPropertyName)
         );
@@ -833,12 +836,14 @@
         let hoveredPointCoordinate = null;
         let hoveredPropertyName = '';
         let hoveredLayerName = '';
+        let hoveredPropertyId = null;
 
         const hideHoverLabel = () => {
             hoverElement.hidden = true;
             hoveredPointCoordinate = null;
             hoveredPropertyName = '';
             hoveredLayerName = '';
+            hoveredPropertyId = null;
             hoverOverlay.setPosition(undefined);
         };
 
@@ -963,11 +968,14 @@
             return null;
         };
 
-        const openPropertyDashboard = (featureName, layerName, coordinate, targetWindow = null) => {
+        const openPropertyDashboard = (featureName, layerName, propertyId, coordinate, targetWindow = null) => {
             const lonLat = ol.proj.toLonLat(coordinate);
             const targetUrl = new URL(window.location.href);
             targetUrl.searchParams.set('property', featureName);
             targetUrl.searchParams.set('layer', normalizeText(layerName));
+            if (propertyId !== null && propertyId !== undefined && propertyId !== '' && Number.isInteger(Number(propertyId))) {
+                targetUrl.searchParams.set('property_id', Number(propertyId));
+            }
             targetUrl.searchParams.set('lon', lonLat[0].toFixed(7));
             targetUrl.searchParams.set('lat', lonLat[1].toFixed(7));
 
@@ -1019,7 +1027,9 @@
 
                     hoverElement.textContent = featureName;
                     hoverElement.hidden = false;
-                    hoveredLayerName = getFeatureProperties(payload).layer || '';
+                    const pointProperties = getFeatureProperties(payload);
+                    hoveredLayerName = pointProperties.layer || '';
+                    hoveredPropertyId = pointProperties.property_id ?? null;
                     hoveredPropertyName = featureName;
                     hoveredPointCoordinate = getFeatureCenterFromPayload(payload, event.coordinate);
                     hoverOverlay.setPosition(hoveredPointCoordinate);
@@ -1038,7 +1048,7 @@
                 return;
             }
 
-            openPropertyDashboard(hoveredPropertyName, hoveredLayerName, hoveredPointCoordinate);
+            openPropertyDashboard(hoveredPropertyName, hoveredLayerName, hoveredPropertyId, hoveredPointCoordinate);
         });
 
         if (hasSelectedProperty) {
