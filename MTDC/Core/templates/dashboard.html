@@ -289,6 +289,35 @@
             background: #0d6efd;
         }
 
+        .map-hover-label {
+            min-width: max-content;
+            max-width: 220px;
+            padding: 8px 11px;
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            border-radius: 8px;
+            color: #172033;
+            background: #ffffff;
+            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.22);
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.25;
+            pointer-events: none;
+            white-space: normal;
+        }
+
+        .map-hover-label::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: -6px;
+            width: 10px;
+            height: 10px;
+            border-left: 1px solid rgba(15, 23, 42, 0.12);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.12);
+            background: #ffffff;
+            transform: translateY(-50%) rotate(45deg);
+        }
+
         .sidebar {
             overflow-y: auto;
             background: #fffaf1;
@@ -548,6 +577,7 @@
     <main class="content">
         <section class="map-panel" aria-label="Satellite basemap">
             <div id="mtdc-map"></div>
+            <div id="mtdc-hover-label" class="map-hover-label" hidden></div>
             <div class="layer-menu" aria-label="Basemap switcher">
                 <button class="layer-toggle" type="button" aria-label="Change basemap">
                     <span class="material-symbols-outlined">layers</span>
@@ -659,6 +689,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js"></script>
     <script>
+        const GEOSERVER_URL = 'http://purandar-airport.rottengrapes.tech/geoserver';
+        const GEOSERVER_WORKSPACE = 'mtdc';
+        const POINT_LAYER_NAME = `${GEOSERVER_WORKSPACE}:pt_mtdc`;
+        const AREA_LAYER_NAME = `${GEOSERVER_WORKSPACE}:area_mtdc`;
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedPropertyName = urlParams.get('property') || '';
+        const selectedPropertyLayer = urlParams.get('layer') || '';
+        const selectedPropertyLon = Number(urlParams.get('lon'));
+        const selectedPropertyLat = Number(urlParams.get('lat'));
+        const hasSelectedProperty = selectedPropertyName && Number.isFinite(selectedPropertyLon) && Number.isFinite(selectedPropertyLat);
+
         const googleAttribution = 'Google';
         const baseLayers = {
             hybrid: new ol.layer.Tile({
@@ -695,14 +736,384 @@
             })
         };
 
+        const pointMtdcSource = new ol.source.TileWMS({
+            url: `${GEOSERVER_URL}/${GEOSERVER_WORKSPACE}/wms`,
+            params: {
+                LAYERS: POINT_LAYER_NAME,
+                TILED: true,
+                VERSION: '1.1.1',
+                FORMAT: 'image/png',
+                TRANSPARENT: true
+            },
+            serverType: 'geoserver',
+            crossOrigin: 'anonymous',
+            transition: 0
+        });
+
+        const pointMtdcLayer = new ol.layer.Tile({
+            source: pointMtdcSource,
+            opacity: 1,
+            visible: !hasSelectedProperty,
+            zIndex: 10
+        });
+
+        const escapeCqlText = (value) => String(value).replace(/'/g, "''");
+
+        const normalizeText = (value) => String(value || '').replace(/\s+/g, ' ').trim();
+
+        const buildLayerTokenFilter = (value) => {
+            const ignoredTokens = new Set(['kmz', 'kml']);
+            const tokens = normalizeText(value)
+                .replace(/^\d+[\._\-\s]+/, '')
+                .replace(/\.(kmz|kml)$/i, '')
+                .split(/[^a-zA-Z0-9]+/)
+                .map((token) => token.trim())
+                .filter((token) => token.length >= 3 && !ignoredTokens.has(token.toLowerCase()));
+
+            if (tokens.length === 0) {
+                return '';
+            }
+
+            return tokens
+                .map((token) => {
+                    const escapedToken = escapeCqlText(token);
+                    return `(layer LIKE '%${escapedToken}%' OR path LIKE '%${escapedToken}%')`;
+                })
+                .join(' AND ');
+        };
+
+        const buildAreaFilter = () => (
+            buildLayerTokenFilter(selectedPropertyLayer) ||
+            buildLayerTokenFilter(selectedPropertyName)
+        );
+
+        const selectedAreaFilter = hasSelectedProperty ? buildAreaFilter() : '';
+
+        const areaMtdcSource = new ol.source.TileWMS({
+            url: `${GEOSERVER_URL}/${GEOSERVER_WORKSPACE}/wms`,
+            params: {
+                LAYERS: AREA_LAYER_NAME,
+                TILED: true,
+                VERSION: '1.1.1',
+                FORMAT: 'image/png',
+                TRANSPARENT: true,
+                ...(selectedAreaFilter ? { CQL_FILTER: selectedAreaFilter } : {})
+            },
+            serverType: 'geoserver',
+            crossOrigin: 'anonymous',
+            transition: 0
+        });
+
+        const areaMtdcLayer = new ol.layer.Tile({
+            source: areaMtdcSource,
+            opacity: 1,
+            visible: hasSelectedProperty,
+            zIndex: 20
+        });
+
+        const selectedAreaSource = new ol.source.Vector();
+        const selectedAreaLayer = new ol.layer.Vector({
+            source: selectedAreaSource,
+            style: new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: '#f5821f',
+                    width: 4
+                }),
+                fill: new ol.style.Fill({
+                    color: 'rgba(245, 130, 31, 0.18)'
+                })
+            }),
+            zIndex: 30
+        });
+
         const map = new ol.Map({
             target: 'mtdc-map',
-            layers: [baseLayers.hybrid],
+            layers: [baseLayers.hybrid, areaMtdcLayer, pointMtdcLayer, selectedAreaLayer],
             view: new ol.View({
                 center: ol.proj.fromLonLat([75.7139, 19.7515]),
                 zoom: 7
             })
         });
+
+        areaMtdcSource.on('tileloadstart', () => {
+            console.info('[MTDC WMS] area_mtdc tile loading', areaMtdcSource.getParams());
+        });
+
+        areaMtdcSource.on('tileloadend', () => {
+            console.info('[MTDC WMS] area_mtdc tile loaded', {
+                visible: areaMtdcLayer.getVisible(),
+                opacity: areaMtdcLayer.getOpacity(),
+                params: areaMtdcSource.getParams()
+            });
+        });
+
+        areaMtdcSource.on('tileloaderror', (event) => {
+            console.error('[MTDC WMS] area_mtdc tile failed', {
+                visible: areaMtdcLayer.getVisible(),
+                params: areaMtdcSource.getParams(),
+                tile: event.tile
+            });
+        });
+
+        const hoverElement = document.getElementById('mtdc-hover-label');
+        const hoverOverlay = new ol.Overlay({
+            element: hoverElement,
+            offset: [14, 0],
+            positioning: 'center-left',
+            stopEvent: false
+        });
+        map.addOverlay(hoverOverlay);
+
+        let hoverRequestController = null;
+        let hoveredPointCoordinate = null;
+        let hoveredPropertyName = '';
+        let hoveredLayerName = '';
+
+        const hideHoverLabel = () => {
+            hoverElement.hidden = true;
+            hoveredPointCoordinate = null;
+            hoveredPropertyName = '';
+            hoveredLayerName = '';
+            hoverOverlay.setPosition(undefined);
+        };
+
+        const extractFeatureName = (payload) => {
+            if (!payload || !Array.isArray(payload.features) || payload.features.length === 0) {
+                return '';
+            }
+
+            const properties = payload.features[0].properties || {};
+            return properties.name || '';
+        };
+
+        const getFeatureProperties = (payload) => {
+            if (!payload || !Array.isArray(payload.features) || payload.features.length === 0) {
+                return {};
+            }
+
+            return payload.features[0].properties || {};
+        };
+
+        const getPayloadProjection = (payload) => {
+            const crsName = payload?.crs?.properties?.name || '';
+            return crsName.includes('3857') ? 'EPSG:3857' : 'EPSG:4326';
+        };
+
+        const readPayloadFeatures = (payload) => {
+            if (!payload || !Array.isArray(payload.features) || payload.features.length === 0) {
+                return [];
+            }
+
+            return new ol.format.GeoJSON().readFeatures(payload, {
+                dataProjection: getPayloadProjection(payload),
+                featureProjection: 'EPSG:3857'
+            });
+        };
+
+        const getFeatureCenterFromPayload = (payload, fallbackCoordinate) => {
+            const features = readPayloadFeatures(payload);
+            if (features.length === 0) {
+                return fallbackCoordinate;
+            }
+
+            return ol.extent.getCenter(features[0].getGeometry().getExtent());
+        };
+
+        const getFeatureInfo = (source, coordinate, layerName, extraParams = {}) => {
+            const viewResolution = map.getView().getResolution();
+            const infoUrl = source.getFeatureInfoUrl(
+                coordinate,
+                viewResolution,
+                'EPSG:3857',
+                {
+                    INFO_FORMAT: 'application/json',
+                    FEATURE_COUNT: 1,
+                    QUERY_LAYERS: layerName,
+                    BUFFER: 12,
+                    ...extraParams
+                }
+            );
+
+            if (!infoUrl) {
+                console.warn('[MTDC WMS] GetFeatureInfo URL missing', { layerName, coordinate, extraParams });
+                return Promise.resolve(null);
+            }
+
+            console.info('[MTDC WMS] GetFeatureInfo request', { layerName, infoUrl });
+
+            return fetch(infoUrl).then((response) => {
+                if (!response.ok) {
+                    console.warn('[MTDC WMS] GetFeatureInfo failed', { layerName, status: response.status, infoUrl });
+                    return null;
+                }
+
+                return response.json();
+            });
+        };
+
+        const zoomToAreaFeature = (payload, fallbackCoordinate) => {
+            if (!payload || !Array.isArray(payload.features) || payload.features.length === 0) {
+                console.warn('[MTDC WMS] No area feature returned at selected location/filter', {
+                    property: selectedPropertyName,
+                    layer: selectedPropertyLayer,
+                    filter: selectedAreaFilter,
+                    fallbackCoordinate
+                });
+
+                if (fallbackCoordinate) {
+                    map.getView().animate({ center: fallbackCoordinate, zoom: 16, duration: 550 });
+                }
+                return;
+            }
+
+            const features = readPayloadFeatures(payload);
+
+            if (features.length === 0) {
+                console.warn('[MTDC WMS] Area feature returned but geometry could not be read', payload);
+
+                if (fallbackCoordinate) {
+                    map.getView().animate({ center: fallbackCoordinate, zoom: 16, duration: 550 });
+                }
+                return;
+            }
+
+            selectedAreaSource.clear();
+            selectedAreaSource.addFeatures(features);
+            map.getView().fit(selectedAreaSource.getExtent(), {
+                padding: [70, 70, 70, 70],
+                duration: 700,
+                maxZoom: 20
+            });
+        };
+
+        const findAreaFeatureAround = async (centerCoordinate) => {
+            const candidateCoordinates = [centerCoordinate];
+            const extent = map.getView().calculateExtent(map.getSize());
+            const width = ol.extent.getWidth(extent);
+            const height = ol.extent.getHeight(extent);
+
+            [0.2, 0.35, 0.5, 0.65, 0.8].forEach((xRatio) => {
+                [0.2, 0.35, 0.5, 0.65, 0.8].forEach((yRatio) => {
+                    candidateCoordinates.push([
+                        extent[0] + width * xRatio,
+                        extent[1] + height * yRatio
+                    ]);
+                });
+            });
+
+            for (const coordinate of candidateCoordinates) {
+                const payload = await getFeatureInfo(areaMtdcSource, coordinate, AREA_LAYER_NAME);
+                const featureCount = payload?.features?.length || 0;
+                console.info('[MTDC WMS] area_mtdc scan result', { coordinate, featureCount });
+
+                if (featureCount > 0) {
+                    return payload;
+                }
+            }
+
+            return null;
+        };
+
+        const openPropertyDashboard = (featureName, layerName, coordinate, targetWindow = null) => {
+            const lonLat = ol.proj.toLonLat(coordinate);
+            const targetUrl = new URL(window.location.href);
+            targetUrl.searchParams.set('property', featureName);
+            targetUrl.searchParams.set('layer', normalizeText(layerName));
+            targetUrl.searchParams.set('lon', lonLat[0].toFixed(7));
+            targetUrl.searchParams.set('lat', lonLat[1].toFixed(7));
+
+            if (targetWindow) {
+                targetWindow.location.href = targetUrl.toString();
+                return;
+            }
+
+            window.open(targetUrl.toString(), '_blank');
+        };
+
+        map.on('pointermove', (event) => {
+            if (event.dragging) {
+                hideHoverLabel();
+                return;
+            }
+
+            const viewResolution = map.getView().getResolution();
+            const infoUrl = pointMtdcSource.getFeatureInfoUrl(
+                event.coordinate,
+                viewResolution,
+                'EPSG:3857',
+                {
+                    INFO_FORMAT: 'application/json',
+                    FEATURE_COUNT: 1,
+                    QUERY_LAYERS: POINT_LAYER_NAME
+                }
+            );
+
+            if (!infoUrl) {
+                hideHoverLabel();
+                return;
+            }
+
+            if (hoverRequestController) {
+                hoverRequestController.abort();
+            }
+
+            hoverRequestController = new AbortController();
+
+            fetch(infoUrl, { signal: hoverRequestController.signal })
+                .then((response) => (response.ok ? response.json() : null))
+                .then((payload) => {
+                    const featureName = extractFeatureName(payload);
+                    if (!featureName) {
+                        hideHoverLabel();
+                        return;
+                    }
+
+                    hoverElement.textContent = featureName;
+                    hoverElement.hidden = false;
+                    hoveredLayerName = getFeatureProperties(payload).layer || '';
+                    hoveredPropertyName = featureName;
+                    hoveredPointCoordinate = getFeatureCenterFromPayload(payload, event.coordinate);
+                    hoverOverlay.setPosition(hoveredPointCoordinate);
+                })
+                .catch((error) => {
+                    if (error.name !== 'AbortError') {
+                        hideHoverLabel();
+                    }
+                });
+        });
+
+        map.getViewport().addEventListener('mouseleave', hideHoverLabel);
+
+        map.on('singleclick', (event) => {
+            if (hoverElement.hidden || !hoveredPropertyName || !hoveredPointCoordinate) {
+                return;
+            }
+
+            openPropertyDashboard(hoveredPropertyName, hoveredLayerName, hoveredPointCoordinate);
+        });
+
+        if (hasSelectedProperty) {
+            const selectedCoordinate = ol.proj.fromLonLat([selectedPropertyLon, selectedPropertyLat]);
+            console.info('[MTDC WMS] Detail page state', {
+                areaLayerVisible: areaMtdcLayer.getVisible(),
+                pointLayerVisible: pointMtdcLayer.getVisible(),
+                areaLayerParams: areaMtdcSource.getParams(),
+                selectedPropertyName,
+                selectedPropertyLayer,
+                selectedAreaFilter,
+                selectedPropertyLon,
+                selectedPropertyLat
+            });
+
+            map.getView().setCenter(selectedCoordinate);
+            map.getView().setZoom(14);
+
+            findAreaFeatureAround(selectedCoordinate)
+                .then((payload) => zoomToAreaFeature(payload, selectedCoordinate))
+                .catch(() => {
+                    map.getView().animate({ center: selectedCoordinate, zoom: 16, duration: 550 });
+                });
+        }
 
         document.querySelectorAll('.layer-options button').forEach((button) => {
             button.addEventListener('click', () => {
