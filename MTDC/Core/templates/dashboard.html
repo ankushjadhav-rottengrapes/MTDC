@@ -80,12 +80,21 @@
         }
 
         .brand {
-            gap: 12px;
-            min-width: 220px;
+            gap: 14px;
+            min-width: 360px;
+        }
+
+        .brand-logo-wrap {
+            width: 54px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            border-radius: 6px;
+            background: #ffffff;
         }
 
         .brand-logo {
-            width: 46px;
+            width: 48px;
             height: 40px;
             display: block;
             object-fit: contain;
@@ -95,7 +104,7 @@
         .brand-text strong {
             display: block;
             color: var(--navy);
-            font-size: 18px;
+            font-size: 17px;
             line-height: 1.05;
             font-weight: 800;
         }
@@ -104,9 +113,17 @@
             display: block;
             margin-top: 3px;
             color: var(--saffron);
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 800;
             letter-spacing: 0.04em;
+        }
+
+        .brand-text small {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
         }
 
         .nav-links {
@@ -482,9 +499,14 @@
                 min-width: 0;
             }
 
+            .brand-logo-wrap {
+                width: 50px;
+                height: 44px;
+            }
+
             .brand-logo {
-                width: 58px;
-                height: 52px;
+                width: 44px;
+                height: 38px;
             }
 
             .brand-text strong {
@@ -497,10 +519,13 @@
 <body>
     <header class="site-header">
         <div class="brand">
-            <img class="brand-logo" src="{% static 'logo/mtdc-logo.png' %}" alt="Maharashtra Tourism logo">
+            <div class="brand-logo-wrap">
+                <img class="brand-logo" src="{% static 'logo/mtdc-logo.png' %}" alt="Maharashtra Tourism logo">
+            </div>
             <div class="brand-text">
-                <strong>MTDC GIS Dashboard</strong>
-                <span>MAHARASHTRA TOURISM</span>
+                <strong>Maharashtra Tourism Development Corporation</strong>
+                <span>MTDC GIS Dashboard</span>
+                <small>Maharashtra Tourism</small>
             </div>
         </div>
 
