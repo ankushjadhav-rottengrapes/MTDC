@@ -56,6 +56,8 @@
         }
 
         .brand,
+        .site-footer,
+        .footer-credit,
         .nav-links,
         .search,
         .asset-meta,
@@ -190,10 +192,52 @@
         }
 
         .content {
-            height: calc(100vh - 120px);
+            height: calc(100vh - 176px);
             display: grid;
             grid-template-columns: minmax(0, 4fr) minmax(300px, 1fr);
             background: #f9eedb;
+        }
+
+        .site-footer {
+            height: 56px;
+            padding: 8px 24px;
+            justify-content: center;
+            color: #263244;
+            background: #ffffff;
+            border-top: 1px solid var(--line);
+            box-shadow: 0 -10px 24px rgba(18, 25, 36, 0.08);
+            font-size: 13px;
+            font-weight: 800;
+            position: relative;
+            z-index: 4;
+        }
+
+        .footer-credit {
+            min-width: 0;
+            min-height: 40px;
+            padding: 5px 14px;
+            gap: 12px;
+            justify-content: center;
+            border: 1px solid #f0dec2;
+            border-radius: 8px;
+            background: #fffaf1;
+            text-align: center;
+        }
+
+        .footer-logo {
+            width: 112px;
+            height: 30px;
+            flex: 0 0 auto;
+            object-fit: contain;
+        }
+
+        .footer-credit span {
+            min-width: 0;
+            color: #3b4351;
+        }
+
+        .footer-credit strong {
+            color: var(--saffron);
         }
 
         .map-panel {
@@ -569,6 +613,10 @@
             gap: 8px;
         }
 
+        .asset-title + .card-actions {
+            margin-top: 4px;
+        }
+
         .details-btn,
         .view-btn {
             min-height: 38px;
@@ -624,6 +672,7 @@
 
             .site-header,
             .dashboard-bar,
+            .site-footer,
             .content {
                 height: auto;
                 grid-template-columns: 1fr;
@@ -643,9 +692,26 @@
 
         @media (max-width: 620px) {
             .site-header,
-            .dashboard-bar {
+            .dashboard-bar,
+            .site-footer {
                 padding-left: 16px;
                 padding-right: 16px;
+            }
+
+            .site-footer {
+                min-height: 62px;
+                font-size: 11px;
+            }
+
+            .footer-credit {
+                flex-wrap: wrap;
+                gap: 6px;
+                padding: 6px 10px;
+            }
+
+            .footer-logo {
+                width: 96px;
+                height: 26px;
             }
 
             .brand {
@@ -740,106 +806,111 @@
                     <div class="asset-body">
                         <div class="asset-title">
                             <h3>{{ property.name }}</h3>
-                            <span class="status{% if property.asset_total == 0 %} disputed{% elif property.layers.all|length == 0 %} survey{% endif %}">
-                                {% if property.asset_total == 0 %}No Assets{% elif property.layers.all|length == 0 %}Media Ready{% else %}Mapped{% endif %}
-                            </span>
+                            {% if is_property_detail %}
+                                <span class="status{% if property.asset_total == 0 %} disputed{% elif property.layers.all|length == 0 %} survey{% endif %}">
+                                    {% if property.asset_total == 0 %}No Assets{% elif property.layers.all|length == 0 %}Media Ready{% else %}Mapped{% endif %}
+                                </span>
+                            {% endif %}
                         </div>
-                        <div class="asset-meta">
-                            <div>
-                                <span class="meta-label">TOTAL FILES</span>
-                                <span class="meta-value">{{ property.asset_total }}</span>
+
+                        {% if is_property_detail %}
+                            <div class="asset-meta">
+                                <div>
+                                    <span class="meta-label">TOTAL FILES</span>
+                                    <span class="meta-value">{{ property.asset_total }}</span>
+                                </div>
+                                <div>
+                                    <span class="meta-label">STATUS</span>
+                                    <span class="meta-value">{% if property.is_active %}ACTIVE{% else %}INACTIVE{% endif %}</span>
+                                </div>
                             </div>
-                            <div>
-                                <span class="meta-label">STATUS</span>
-                                <span class="meta-value">{% if property.is_active %}ACTIVE{% else %}INACTIVE{% endif %}</span>
+
+                            <div class="asset-summary" aria-label="Property asset counts">
+                                <div class="asset-pill"><strong>{{ property.documents.all|length }}</strong><span>Docs</span></div>
+                                <div class="asset-pill"><strong>{{ property.images.all|length }}</strong><span>Images</span></div>
+                                <div class="asset-pill"><strong>{{ property.videos.all|length }}</strong><span>Videos</span></div>
+                                <div class="asset-pill"><strong>{{ property.models_3d.all|length }}</strong><span>3D</span></div>
+                                <div class="asset-pill"><strong>{{ property.layers.all|length }}</strong><span>Layers</span></div>
                             </div>
-                        </div>
 
-                        <div class="asset-summary" aria-label="Property asset counts">
-                            <div class="asset-pill"><strong>{{ property.documents.all|length }}</strong><span>Docs</span></div>
-                            <div class="asset-pill"><strong>{{ property.images.all|length }}</strong><span>Images</span></div>
-                            <div class="asset-pill"><strong>{{ property.videos.all|length }}</strong><span>Videos</span></div>
-                            <div class="asset-pill"><strong>{{ property.models_3d.all|length }}</strong><span>3D</span></div>
-                            <div class="asset-pill"><strong>{{ property.layers.all|length }}</strong><span>Layers</span></div>
-                        </div>
+                            <div class="asset-groups">
+                                <section class="asset-group">
+                                    <h4 class="asset-group-title">Documents <span class="asset-count">{{ property.documents.all|length }}</span></h4>
+                                    <div class="asset-list">
+                                        {% for document in property.documents.all|slice:":3" %}
+                                            <div class="asset-row">
+                                                <span class="material-symbols-outlined">description</span>
+                                                <span class="asset-name">{{ document.title }}</span>
+                                            </div>
+                                        {% empty %}
+                                            <p class="asset-empty">No documents uploaded yet.</p>
+                                        {% endfor %}
+                                    </div>
+                                </section>
 
-                        <div class="asset-groups">
-                            <section class="asset-group">
-                                <h4 class="asset-group-title">Documents <span class="asset-count">{{ property.documents.all|length }}</span></h4>
-                                <div class="asset-list">
-                                    {% for document in property.documents.all|slice:":3" %}
-                                        <div class="asset-row">
-                                            <span class="material-symbols-outlined">description</span>
-                                            <span class="asset-name">{{ document.title }}</span>
-                                        </div>
-                                    {% empty %}
-                                        <p class="asset-empty">No documents uploaded yet.</p>
-                                    {% endfor %}
-                                </div>
-                            </section>
+                                <section class="asset-group">
+                                    <h4 class="asset-group-title">Images <span class="asset-count">{{ property.images.all|length }}</span></h4>
+                                    <div class="asset-list">
+                                        {% for image in property.images.all|slice:":3" %}
+                                            <div class="asset-row">
+                                                <span class="material-symbols-outlined">image</span>
+                                                <span class="asset-name">{{ image.caption|default:"Property image" }}</span>
+                                            </div>
+                                        {% empty %}
+                                            <p class="asset-empty">No images uploaded yet.</p>
+                                        {% endfor %}
+                                    </div>
+                                </section>
 
-                            <section class="asset-group">
-                                <h4 class="asset-group-title">Images <span class="asset-count">{{ property.images.all|length }}</span></h4>
-                                <div class="asset-list">
-                                    {% for image in property.images.all|slice:":3" %}
-                                        <div class="asset-row">
-                                            <span class="material-symbols-outlined">image</span>
-                                            <span class="asset-name">{{ image.caption|default:"Property image" }}</span>
-                                        </div>
-                                    {% empty %}
-                                        <p class="asset-empty">No images uploaded yet.</p>
-                                    {% endfor %}
-                                </div>
-                            </section>
+                                <section class="asset-group">
+                                    <h4 class="asset-group-title">Videos <span class="asset-count">{{ property.videos.all|length }}</span></h4>
+                                    <div class="asset-list">
+                                        {% for video in property.videos.all|slice:":3" %}
+                                            <div class="asset-row">
+                                                <span class="material-symbols-outlined">movie</span>
+                                                <span class="asset-name">{{ video.title }}</span>
+                                            </div>
+                                        {% empty %}
+                                            <p class="asset-empty">No videos uploaded yet.</p>
+                                        {% endfor %}
+                                    </div>
+                                </section>
 
-                            <section class="asset-group">
-                                <h4 class="asset-group-title">Videos <span class="asset-count">{{ property.videos.all|length }}</span></h4>
-                                <div class="asset-list">
-                                    {% for video in property.videos.all|slice:":3" %}
-                                        <div class="asset-row">
-                                            <span class="material-symbols-outlined">movie</span>
-                                            <span class="asset-name">{{ video.title }}</span>
-                                        </div>
-                                    {% empty %}
-                                        <p class="asset-empty">No videos uploaded yet.</p>
-                                    {% endfor %}
-                                </div>
-                            </section>
+                                <section class="asset-group">
+                                    <h4 class="asset-group-title">3D Models <span class="asset-count">{{ property.models_3d.all|length }}</span></h4>
+                                    <div class="asset-list">
+                                        {% for model in property.models_3d.all|slice:":3" %}
+                                            <div class="asset-row">
+                                                <span class="material-symbols-outlined">deployed_code</span>
+                                                <span class="asset-name">{{ model.title }}</span>
+                                            </div>
+                                        {% empty %}
+                                            <p class="asset-empty">No 3D models uploaded yet.</p>
+                                        {% endfor %}
+                                    </div>
+                                </section>
 
-                            <section class="asset-group">
-                                <h4 class="asset-group-title">3D Models <span class="asset-count">{{ property.models_3d.all|length }}</span></h4>
-                                <div class="asset-list">
-                                    {% for model in property.models_3d.all|slice:":3" %}
-                                        <div class="asset-row">
-                                            <span class="material-symbols-outlined">deployed_code</span>
-                                            <span class="asset-name">{{ model.title }}</span>
-                                        </div>
-                                    {% empty %}
-                                        <p class="asset-empty">No 3D models uploaded yet.</p>
-                                    {% endfor %}
-                                </div>
-                            </section>
-
-                            <section class="asset-group">
-                                <h4 class="asset-group-title">GIS Layers <span class="asset-count">{{ property.layers.all|length }}</span></h4>
-                                <div class="asset-list">
-                                    {% for layer in property.layers.all|slice:":3" %}
-                                        <div class="asset-row">
-                                            <span class="material-symbols-outlined">layers</span>
-                                            <span class="asset-name">{{ layer.get_layer_type_display }} - {{ layer.layer_name }}</span>
-                                        </div>
-                                    {% empty %}
-                                        <p class="asset-empty">No GIS layers linked yet.</p>
-                                    {% endfor %}
-                                </div>
-                            </section>
-                        </div>
-
-                        {% if property.description %}
-                            <div class="asset-group">
-                                <h4 class="asset-group-title">Tourism Note</h4>
-                                <p class="asset-empty">{{ property.description|truncatechars:160 }}</p>
+                                <section class="asset-group">
+                                    <h4 class="asset-group-title">GIS Layers <span class="asset-count">{{ property.layers.all|length }}</span></h4>
+                                    <div class="asset-list">
+                                        {% for layer in property.layers.all|slice:":3" %}
+                                            <div class="asset-row">
+                                                <span class="material-symbols-outlined">layers</span>
+                                                <span class="asset-name">{{ layer.get_layer_type_display }} - {{ layer.layer_name }}</span>
+                                            </div>
+                                        {% empty %}
+                                            <p class="asset-empty">No GIS layers linked yet.</p>
+                                        {% endfor %}
+                                    </div>
+                                </section>
                             </div>
+
+                            {% if property.description %}
+                                <div class="asset-group">
+                                    <h4 class="asset-group-title">Tourism Note</h4>
+                                    <p class="asset-empty">{{ property.description|truncatechars:160 }}</p>
+                                </div>
+                            {% endif %}
                         {% endif %}
 
                         <div class="card-actions">
@@ -858,6 +929,13 @@
             </div>
         </aside>
     </main>
+
+    <footer class="site-footer">
+        <div class="footer-credit">
+            <img class="footer-logo" src="{% static 'logo/monarch_logo.jpg' %}" alt="Monarch Surveyors and Engineering Consultants Limited logo">
+            <span>Designed and developed by <strong>Monarch Surveyors and Engineering Consultants Limited</strong></span>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js"></script>
     <script>
