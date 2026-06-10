@@ -11,11 +11,30 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import importlib.util
 import os
-from decouple import config
+from decouple import Csv, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+def config_bool(name, default=False):
+    value = config(name, default=None)
+    if value is None:
+        return default
+
+    normalized_value = str(value).strip().lower()
+    if normalized_value in {'1', 'true', 't', 'yes', 'y', 'on', 'debug', 'dev', 'development'}:
+        return True
+    if normalized_value in {'0', 'false', 'f', 'no', 'n', 'off', 'release', 'prod', 'production'}:
+        return False
+
+    return default
+
+
+def config_csv(name, default=''):
+    return [value for value in config(name, default=default, cast=Csv()) if value]
 
 
 # Quick-start development settings - unsuitable for production
@@ -25,9 +44,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-h+_&dy5*iprf36*3ljox2^z52q1tud)m2d6ni=%-d#kc$vp1kb')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DJANGO_DEBUG', default=True, cast=bool)
+DEBUG = config_bool('DJANGO_DEBUG', default=config_bool('DEBUG', default=True))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = config_csv('ALLOWED_HOSTS', default='localhost,127.0.0.1')
+
+CSRF_TRUSTED_ORIGINS = config_csv('CSRF_TRUSTED_ORIGINS')
 
 
 # Application definition
@@ -51,6 +72,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+if importlib.util.find_spec('whitenoise'):
+    MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
 ROOT_URLCONF = 'MTDC.urls'
 
@@ -126,6 +150,16 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+if importlib.util.find_spec('whitenoise'):
+    STORAGES = {
+        'default': {
+            'BACKEND': 'django.core.files.storage.FileSystemStorage',
+        },
+        'staticfiles': {
+            'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        },
+    }
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'

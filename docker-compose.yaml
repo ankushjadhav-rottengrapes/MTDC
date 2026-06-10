@@ -1,0 +1,16 @@
+services:
+  web:
+    build: .
+    container_name: mtdc-web
+    command: >
+      gunicorn MTDC.wsgi:application
+      --bind 127.0.0.1:8000
+      --workers 4
+      --threads 2
+      --timeout 120
+    env_file:
+      - .env
+    volumes:
+      - /var/www/media/mtdc:/app/MTDC/media
+    network_mode: host
+    restart: always

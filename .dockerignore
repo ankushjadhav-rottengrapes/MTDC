@@ -1,0 +1,14 @@
+.git
+.env
+.env.*
+!.env.example
+__pycache__
+*.pyc
+myenv
+.venv
+venv
+.vscode
+.idea
+django-server.*.log
+MTDC/staticfiles
+MTDC/media
