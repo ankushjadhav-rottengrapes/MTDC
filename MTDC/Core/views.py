@@ -1,14 +1,12 @@
 from django.db import connection
 from django.db.models import Prefetch
 from django.shortcuts import redirect, render
-from django.utils.http import urlencode
 
 from .models import (
     Property,
     Property3DModel,
     PropertyDocument,
     PropertyImage,
-    PropertyLayer,
     PropertyVideo,
 )
 
@@ -68,30 +66,11 @@ def get_state_boundary_extent():
     }
 
 
-def dashboard(request):
-    selected_property_id = request.GET.get("property_id")
+def dashboard(request, property_id=None):
+    selected_property_id = str(property_id) if property_id is not None else request.GET.get("property_id")
 
-    if (
-        selected_property_id
-        and selected_property_id.isdigit()
-        and not {"layer", "lon", "lat"}.issubset(request.GET)
-    ):
-        map_details = get_property_map_details([int(selected_property_id)]).get(
-            int(selected_property_id)
-        )
-        if map_details:
-            return redirect(
-                "?"
-                + urlencode(
-                    {
-                        "property": map_details["property"] or request.GET.get("property", ""),
-                        "layer": map_details["layer"],
-                        "property_id": int(selected_property_id),
-                        "lon": f"{map_details['lon']:.7f}",
-                        "lat": f"{map_details['lat']:.7f}",
-                    }
-                )
-            )
+    if property_id is None and selected_property_id and selected_property_id.isdigit():
+        return redirect(f"/property/{int(selected_property_id)}/")
 
     properties = (
         Property.objects.filter(is_active=True)
@@ -100,7 +79,6 @@ def dashboard(request):
             Prefetch("images", queryset=PropertyImage.objects.order_by("-uploaded_at")),
             Prefetch("videos", queryset=PropertyVideo.objects.order_by("-uploaded_at")),
             Prefetch("models_3d", queryset=Property3DModel.objects.order_by("-uploaded_at")),
-            Prefetch("layers", queryset=PropertyLayer.objects.order_by("layer_type", "layer_name")),
         )
         .order_by("property_id")
     )
@@ -120,26 +98,26 @@ def dashboard(request):
             + len(property_card.images.all())
             + len(property_card.videos.all())
             + len(property_card.models_3d.all())
-            + len(property_card.layers.all())
         )
         map_details = map_details_by_property_id.get(property_card.property_id)
-        if map_details:
-            property_card.dashboard_url = "?" + urlencode(
-                {
-                    "property": map_details["property"] or property_card.name,
-                    "layer": map_details["layer"],
-                    "property_id": property_card.property_id,
-                    "lon": f"{map_details['lon']:.7f}",
-                    "lat": f"{map_details['lat']:.7f}",
-                }
-            )
-        else:
-            property_card.dashboard_url = "?" + urlencode(
-                {
-                    "property_id": property_card.property_id,
-                    "property": property_card.name,
-                }
-            )
+        property_card.dashboard_url = f"/property/{property_card.property_id}/"
+
+    selected_property_map_details = None
+    if selected_property_id and selected_property_id.isdigit():
+        selected_property_map_details = map_details_by_property_id.get(
+            int(selected_property_id)
+        )
+        if selected_property_map_details:
+            selected_property_map_details = {
+                "property": (
+                    selected_property_map_details["property"]
+                    or (property_cards[0].name if property_cards else "")
+                ),
+                "layer": selected_property_map_details["layer"],
+                "property_id": int(selected_property_id),
+                "lon": selected_property_map_details["lon"],
+                "lat": selected_property_map_details["lat"],
+            }
 
     state_boundary_extent = get_state_boundary_extent()
     state_boundary_extent_coords = (
@@ -158,5 +136,6 @@ def dashboard(request):
         "property_count": len(property_cards),
         "is_property_detail": bool(selected_property_id and selected_property_id.isdigit()),
         "state_boundary_extent_coords": state_boundary_extent_coords,
+        "selected_property_map_details": selected_property_map_details,
     }
     return render(request, "dashboard.html", context)

@@ -485,7 +485,7 @@
 
         .asset-summary {
             display: grid;
-            grid-template-columns: repeat(5, minmax(0, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 6px;
             margin-bottom: 14px;
         }
@@ -807,8 +807,8 @@
                         <div class="asset-title">
                             <h3>{{ property.name }}</h3>
                             {% if is_property_detail %}
-                                <span class="status{% if property.asset_total == 0 %} disputed{% elif property.layers.all|length == 0 %} survey{% endif %}">
-                                    {% if property.asset_total == 0 %}No Assets{% elif property.layers.all|length == 0 %}Media Ready{% else %}Mapped{% endif %}
+                                <span class="status{% if property.asset_total == 0 %} disputed{% endif %}">
+                                    {% if property.asset_total == 0 %}No Assets{% else %}Media Ready{% endif %}
                                 </span>
                             {% endif %}
                         </div>
@@ -830,7 +830,6 @@
                                 <div class="asset-pill"><strong>{{ property.images.all|length }}</strong><span>Images</span></div>
                                 <div class="asset-pill"><strong>{{ property.videos.all|length }}</strong><span>Videos</span></div>
                                 <div class="asset-pill"><strong>{{ property.models_3d.all|length }}</strong><span>3D</span></div>
-                                <div class="asset-pill"><strong>{{ property.layers.all|length }}</strong><span>Layers</span></div>
                             </div>
 
                             <div class="asset-groups">
@@ -890,19 +889,6 @@
                                     </div>
                                 </section>
 
-                                <section class="asset-group">
-                                    <h4 class="asset-group-title">GIS Layers <span class="asset-count">{{ property.layers.all|length }}</span></h4>
-                                    <div class="asset-list">
-                                        {% for layer in property.layers.all|slice:":3" %}
-                                            <div class="asset-row">
-                                                <span class="material-symbols-outlined">layers</span>
-                                                <span class="asset-name">{{ layer.get_layer_type_display }} - {{ layer.layer_name }}</span>
-                                            </div>
-                                        {% empty %}
-                                            <p class="asset-empty">No GIS layers linked yet.</p>
-                                        {% endfor %}
-                                    </div>
-                                </section>
                             </div>
 
                             {% if property.description %}
@@ -923,7 +909,7 @@
                 </article>
                 {% empty %}
                     <div class="empty-sidebar">
-                        No active properties found for this view. Add properties and related documents, images, videos, 3D models, or GIS layers from the admin panel.
+                        No active properties found for this view. Add properties and related documents, images, videos, or 3D models from the admin panel.
                     </div>
                 {% endfor %}
             </div>
@@ -938,6 +924,7 @@
     </footer>
 
     {{ state_boundary_extent_coords|json_script:"state-boundary-extent-data" }}
+    {{ selected_property_map_details|json_script:"selected-property-map-data" }}
     <script src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js"></script>
     <script>
         const GEOSERVER_URL = 'http://purandar-airport.rottengrapes.tech/geoserver';
@@ -946,14 +933,17 @@
         const POINT_LAYER_NAME = `${GEOSERVER_WORKSPACE}:pt_mtdc`;
         const AREA_LAYER_NAME = `${GEOSERVER_WORKSPACE}:area_mtdc`;
         const urlParams = new URLSearchParams(window.location.search);
-        const selectedPropertyName = urlParams.get('property') || '';
-        const selectedPropertyLayer = urlParams.get('layer') || '';
+        const selectedPropertyMapData = JSON.parse(
+            document.getElementById('selected-property-map-data').textContent
+        );
+        const selectedPropertyName = urlParams.get('property') || selectedPropertyMapData?.property || '';
+        const selectedPropertyLayer = urlParams.get('layer') || selectedPropertyMapData?.layer || '';
         const selectedPropertyIdParam = urlParams.get('property_id');
-        const selectedPropertyId = selectedPropertyIdParam !== null ? Number(selectedPropertyIdParam) : NaN;
-        const selectedPropertyLon = Number(urlParams.get('lon'));
-        const selectedPropertyLat = Number(urlParams.get('lat'));
+        const selectedPropertyId = selectedPropertyIdParam !== null ? Number(selectedPropertyIdParam) : Number(selectedPropertyMapData?.property_id);
+        const selectedPropertyLon = urlParams.has('lon') ? Number(urlParams.get('lon')) : Number(selectedPropertyMapData?.lon);
+        const selectedPropertyLat = urlParams.has('lat') ? Number(urlParams.get('lat')) : Number(selectedPropertyMapData?.lat);
         const hasSelectedPropertyCoordinate = selectedPropertyName && Number.isFinite(selectedPropertyLon) && Number.isFinite(selectedPropertyLat);
-        const hasSelectedPropertyId = selectedPropertyIdParam !== null && Number.isInteger(selectedPropertyId);
+        const hasSelectedPropertyId = Number.isInteger(selectedPropertyId);
         const hasSelectedProperty = hasSelectedPropertyCoordinate;
         const stateBoundaryExtent = JSON.parse(
             document.getElementById('state-boundary-extent-data').textContent
@@ -1267,15 +1257,11 @@
         };
 
         const openPropertyDashboard = (featureName, layerName, propertyId, coordinate, targetWindow = null) => {
-            const lonLat = ol.proj.toLonLat(coordinate);
-            const targetUrl = new URL(window.location.href);
-            targetUrl.searchParams.set('property', featureName);
-            targetUrl.searchParams.set('layer', normalizeText(layerName));
-            if (propertyId !== null && propertyId !== undefined && propertyId !== '' && Number.isInteger(Number(propertyId))) {
-                targetUrl.searchParams.set('property_id', Number(propertyId));
+            if (propertyId === null || propertyId === undefined || propertyId === '' || !Number.isInteger(Number(propertyId))) {
+                return;
             }
-            targetUrl.searchParams.set('lon', lonLat[0].toFixed(7));
-            targetUrl.searchParams.set('lat', lonLat[1].toFixed(7));
+
+            const targetUrl = new URL(`/property/${Number(propertyId)}/`, window.location.origin);
 
             if (targetWindow) {
                 targetWindow.location.href = targetUrl.toString();

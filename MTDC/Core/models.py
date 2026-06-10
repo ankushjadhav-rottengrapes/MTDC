@@ -108,37 +108,3 @@ class Property3DModel(models.Model):
 
     def __str__(self):
         return f"{self.property}: {self.title}"
-
-
-class PropertyLayer(models.Model):
-    class LayerType(models.TextChoices):
-        ORTHO = "ORTHO", "Ortho"
-        DSM = "DSM", "DSM"
-        DTM = "DTM", "DTM"
-        ECW = "ECW", "ECW"
-        OTHER = "OTHER", "Other"
-
-    property = models.ForeignKey(
-        Property,
-        on_delete=models.CASCADE,
-        related_name="layers",
-    )
-    layer_name = models.CharField(max_length=255)
-    layer_type = models.CharField(
-        max_length=20,
-        choices=LayerType.choices,
-        default=LayerType.OTHER,
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        ordering = ["layer_type", "layer_name"]
-        constraints = [
-            models.UniqueConstraint(
-                fields=["property", "layer_name"],
-                name="unique_property_geoserver_layer",
-            )
-        ]
-
-    def __str__(self):
-        return f"{self.property}: {self.layer_name} ({self.layer_type})"

@@ -5,7 +5,6 @@ from .models import (
     Property3DModel,
     PropertyDocument,
     PropertyImage,
-    PropertyLayer,
     PropertyVideo,
 )
 
@@ -38,13 +37,6 @@ class Property3DModelInline(admin.TabularInline):
     readonly_fields = ("uploaded_at",)
 
 
-class PropertyLayerInline(admin.TabularInline):
-    model = PropertyLayer
-    extra = 1
-    fields = ("layer_name", "layer_type", "created_at")
-    readonly_fields = ("created_at",)
-
-
 @admin.register(Property)
 class PropertyAdmin(admin.ModelAdmin):
     list_display = ("property_id", "name", "is_active", "created_at", "updated_at")
@@ -60,7 +52,6 @@ class PropertyAdmin(admin.ModelAdmin):
         PropertyImageInline,
         PropertyVideoInline,
         Property3DModelInline,
-        PropertyLayerInline,
     )
 
 
@@ -98,12 +89,3 @@ class Property3DModelAdmin(admin.ModelAdmin):
     search_fields = ("title", "property__name", "property__property_id")
     autocomplete_fields = ("property",)
     readonly_fields = ("uploaded_at",)
-
-
-@admin.register(PropertyLayer)
-class PropertyLayerAdmin(admin.ModelAdmin):
-    list_display = ("layer_name", "layer_type", "property", "created_at")
-    list_filter = ("layer_type", "created_at")
-    search_fields = ("layer_name", "property__name", "property__property_id")
-    autocomplete_fields = ("property",)
-    readonly_fields = ("created_at",)
