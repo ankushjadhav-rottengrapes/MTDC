@@ -43,6 +43,31 @@ def get_property_map_details(property_ids):
         }
 
 
+def get_state_boundary_extent():
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT
+                ST_XMin(ST_Extent(ST_Transform(geom, 4326))) AS min_lon,
+                ST_YMin(ST_Extent(ST_Transform(geom, 4326))) AS min_lat,
+                ST_XMax(ST_Extent(ST_Transform(geom, 4326))) AS max_lon,
+                ST_YMax(ST_Extent(ST_Transform(geom, 4326))) AS max_lat
+            FROM public.state_bd
+            """
+        )
+        extent = cursor.fetchone()
+
+    if not extent or any(value is None for value in extent):
+        return None
+
+    return {
+        "min_lon": extent[0],
+        "min_lat": extent[1],
+        "max_lon": extent[2],
+        "max_lat": extent[3],
+    }
+
+
 def dashboard(request):
     selected_property_id = request.GET.get("property_id")
 
@@ -116,9 +141,22 @@ def dashboard(request):
                 }
             )
 
+    state_boundary_extent = get_state_boundary_extent()
+    state_boundary_extent_coords = (
+        [
+            state_boundary_extent["min_lon"],
+            state_boundary_extent["min_lat"],
+            state_boundary_extent["max_lon"],
+            state_boundary_extent["max_lat"],
+        ]
+        if state_boundary_extent
+        else None
+    )
+
     context = {
         "properties": property_cards,
         "property_count": len(property_cards),
         "is_property_detail": bool(selected_property_id and selected_property_id.isdigit()),
+        "state_boundary_extent_coords": state_boundary_extent_coords,
     }
     return render(request, "dashboard.html", context)

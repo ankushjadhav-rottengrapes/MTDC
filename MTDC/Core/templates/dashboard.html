@@ -937,10 +937,12 @@
         </div>
     </footer>
 
+    {{ state_boundary_extent_coords|json_script:"state-boundary-extent-data" }}
     <script src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js"></script>
     <script>
         const GEOSERVER_URL = 'http://purandar-airport.rottengrapes.tech/geoserver';
         const GEOSERVER_WORKSPACE = 'mtdc';
+        const STATE_BOUNDARY_LAYER_NAME = `${GEOSERVER_WORKSPACE}:state_bd`;
         const POINT_LAYER_NAME = `${GEOSERVER_WORKSPACE}:pt_mtdc`;
         const AREA_LAYER_NAME = `${GEOSERVER_WORKSPACE}:area_mtdc`;
         const urlParams = new URLSearchParams(window.location.search);
@@ -953,6 +955,9 @@
         const hasSelectedPropertyCoordinate = selectedPropertyName && Number.isFinite(selectedPropertyLon) && Number.isFinite(selectedPropertyLat);
         const hasSelectedPropertyId = selectedPropertyIdParam !== null && Number.isInteger(selectedPropertyId);
         const hasSelectedProperty = hasSelectedPropertyCoordinate;
+        const stateBoundaryExtent = JSON.parse(
+            document.getElementById('state-boundary-extent-data').textContent
+        );
 
         const googleAttribution = 'Google';
         const baseLayers = {
@@ -1009,6 +1014,27 @@
             opacity: 1,
             visible: !hasSelectedPropertyCoordinate,
             zIndex: 10
+        });
+
+        const stateBoundarySource = new ol.source.TileWMS({
+            url: `${GEOSERVER_URL}/${GEOSERVER_WORKSPACE}/wms`,
+            params: {
+                LAYERS: STATE_BOUNDARY_LAYER_NAME,
+                TILED: true,
+                VERSION: '1.1.1',
+                FORMAT: 'image/png',
+                TRANSPARENT: true
+            },
+            serverType: 'geoserver',
+            crossOrigin: 'anonymous',
+            transition: 0
+        });
+
+        const stateBoundaryLayer = new ol.layer.Tile({
+            source: stateBoundarySource,
+            opacity: 1,
+            visible: true,
+            zIndex: 5
         });
 
         const escapeCqlText = (value) => String(value).replace(/'/g, "''");
@@ -1068,12 +1094,32 @@
 
         const map = new ol.Map({
             target: 'mtdc-map',
-            layers: [baseLayers.hybrid, areaMtdcLayer, pointMtdcLayer],
+            layers: [baseLayers.hybrid, stateBoundaryLayer, areaMtdcLayer, pointMtdcLayer],
             view: new ol.View({
-                center: ol.proj.fromLonLat([75.7139, 19.7515]),
-                zoom: 7
+                center: ol.proj.fromLonLat([76.75, 18.85]),
+                zoom: 6
             })
         });
+
+        const fitStateBoundary = () => {
+            if (!stateBoundaryExtent || hasSelectedPropertyCoordinate) {
+                return;
+            }
+
+            const projectedExtent = ol.proj.transformExtent(
+                stateBoundaryExtent,
+                'EPSG:4326',
+                'EPSG:3857'
+            );
+
+            map.getView().fit(projectedExtent, {
+                padding: [34, 34, 34, 34],
+                maxZoom: 7,
+                duration: 0
+            });
+        };
+
+        map.once('postrender', fitStateBoundary);
 
         const hoverElement = document.getElementById('mtdc-hover-label');
         const hoverOverlay = new ol.Overlay({
