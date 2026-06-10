@@ -146,21 +146,6 @@
             color: var(--saffron);
         }
 
-        .icon-btn {
-            min-height: 36px;
-            border: 1px solid #d9cfbf;
-            border-radius: 8px;
-            background: #fff8ea;
-            color: #222936;
-            font-weight: 800;
-        }
-
-        .icon-btn {
-            width: 36px;
-            display: grid;
-            place-items: center;
-        }
-
         .dashboard-bar {
             height: 58px;
             padding: 8px 24px;
@@ -760,7 +745,7 @@
     <section class="dashboard-bar" aria-label="Dashboard search filters">
         <label class="search">
             <span class="material-symbols-outlined">search</span>
-            <input type="search" placeholder="Search Property ID, Survey No, Resort, District...">
+            <input id="property-search" type="search" placeholder="Search Property ID, Survey No, Resort, District...">
         </label>
     </section>
 
@@ -785,13 +770,13 @@
             <div class="sidebar-head">
                 <div>
                     <h2>{% if is_property_detail %}Selected Property{% else %}Property Insights{% endif %}</h2>
-                    <p>{{ property_count }} {% if property_count == 1 %}property{% else %}properties{% endif %} loaded from records</p>
+                    <p id="property-sidebar-count">{{ property_count }} {% if property_count == 1 %}property{% else %}properties{% endif %} loaded from records</p>
                 </div>
             </div>
 
             <div class="cards">
                 {% for property in properties %}
-                <article class="asset-card">
+                <article class="asset-card" data-property-id="{{ property.property_id }}" data-property-name="{{ property.name }}">
                     <div class="asset-img">
                         {% if property.cover_image %}
                             <img src="{{ property.cover_image.image.url }}" alt="{{ property.cover_image.caption|default:property.name }}">
@@ -895,6 +880,9 @@
                         No active properties found for this view. Add properties and related documents, images, videos, or 3D models from the admin panel.
                     </div>
                 {% endfor %}
+                <div id="property-search-empty" class="empty-sidebar" hidden>
+                    No matching properties found.
+                </div>
             </div>
         </aside>
     </main>
@@ -1346,6 +1334,40 @@
                 });
             });
         });
+
+        const propertySearchInput = document.getElementById('property-search');
+        const propertyCards = Array.from(document.querySelectorAll('.asset-card[data-property-id]'));
+        const propertySearchEmpty = document.getElementById('property-search-empty');
+        const propertySidebarCount = document.getElementById('property-sidebar-count');
+        const initialPropertyCountLabel = propertySidebarCount?.textContent || '';
+
+        const filterPropertyCards = () => {
+            const query = normalizeText(propertySearchInput?.value || '').toLowerCase();
+            let visibleCount = 0;
+
+            propertyCards.forEach((card) => {
+                const searchableText = `${card.dataset.propertyId || ''} ${card.dataset.propertyName || ''}`.toLowerCase();
+                const isMatch = !query || searchableText.includes(query);
+                card.hidden = !isMatch;
+                if (isMatch) {
+                    visibleCount += 1;
+                }
+            });
+
+            if (propertySearchEmpty) {
+                propertySearchEmpty.hidden = visibleCount !== 0;
+            }
+
+            if (propertySidebarCount) {
+                propertySidebarCount.textContent = query
+                    ? `${visibleCount} ${visibleCount === 1 ? 'property' : 'properties'} matched`
+                    : initialPropertyCountLabel;
+            }
+        };
+
+        if (propertySearchInput) {
+            propertySearchInput.addEventListener('input', filterPropertyCards);
+        }
     </script>
 </body>
 </html>
