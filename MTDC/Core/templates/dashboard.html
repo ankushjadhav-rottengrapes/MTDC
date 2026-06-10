@@ -59,6 +59,9 @@
         .site-footer,
         .footer-credit,
         .nav-links,
+        .profile-trigger,
+        .profile-summary,
+        .logout-button,
         .search,
         .asset-meta,
         .card-actions {
@@ -70,7 +73,7 @@
             height: 62px;
             padding: 6px 24px;
             display: grid;
-            grid-template-columns: auto minmax(0, 1fr);
+            grid-template-columns: auto minmax(0, 1fr) auto;
             gap: 22px;
             align-items: center;
             background: rgba(255, 255, 255, 0.94);
@@ -134,8 +137,7 @@
             min-width: 0;
         }
 
-        .nav-links a,
-        .logout-button {
+        .nav-links a {
             color: #1f2430;
             text-decoration: none;
             font-size: 15px;
@@ -147,19 +149,108 @@
             color: var(--saffron);
         }
 
+        .profile-menu {
+            position: relative;
+            justify-self: end;
+            z-index: 6;
+        }
+
+        .profile-menu summary {
+            list-style: none;
+        }
+
+        .profile-menu summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .profile-trigger {
+            min-width: 144px;
+            min-height: 48px;
+            gap: 10px;
+            padding: 6px 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--navy);
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(18, 25, 36, 0.08);
+        }
+
+        .profile-avatar {
+            width: 34px;
+            height: 34px;
+            flex: 0 0 auto;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: #ffffff;
+            background: var(--saffron);
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .profile-summary {
+            min-width: 0;
+            flex: 1;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.1;
+        }
+
+        .profile-name {
+            max-width: 92px;
+            overflow: hidden;
+            color: var(--navy);
+            font-size: 13px;
+            font-weight: 800;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .profile-role {
+            margin-top: 3px;
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .profile-chevron {
+            color: var(--muted);
+            font-size: 20px;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 190px;
+            padding: 8px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 16px 34px rgba(15, 23, 42, 0.16);
+        }
+
         .logout-form {
             margin: 0;
         }
 
         .logout-button {
+            width: 100%;
+            min-height: 38px;
+            gap: 8px;
             border: 0;
-            padding: 0;
+            border-radius: 7px;
+            padding: 0 10px;
+            color: #c2410c;
             background: transparent;
+            font-size: 14px;
+            font-weight: 800;
+            text-align: left;
         }
 
         .logout-button:hover,
         .logout-button:focus {
-            color: var(--saffron);
+            background: #fff4df;
         }
 
         .dashboard-bar {
@@ -871,11 +962,15 @@
 
         @media (max-width: 1180px) {
             .site-header {
-                grid-template-columns: 1fr;
+                grid-template-columns: minmax(0, 1fr) auto;
             }
 
             .nav-links {
                 display: none;
+            }
+
+            .brand {
+                min-width: 0;
             }
 
             .content {
@@ -894,6 +989,10 @@
             .content {
                 height: auto;
                 grid-template-columns: 1fr;
+            }
+
+            .site-header {
+                grid-template-columns: minmax(0, 1fr) auto;
             }
 
             .content {
@@ -950,6 +1049,16 @@
                 font-size: 18px;
             }
 
+            .profile-trigger {
+                min-width: 52px;
+                padding: 6px 8px;
+            }
+
+            .profile-summary,
+            .profile-chevron {
+                display: none;
+            }
+
         }
     </style>
 </head>
@@ -971,11 +1080,27 @@
             <a href="#">Explore Maharashtra</a>
             <a href="#">Survey Status</a>
             <a href="#">Reports</a>
-            <form class="logout-form" method="post" action="{% url 'core:logout' %}">
-                {% csrf_token %}
-                <button class="logout-button" type="submit">Logout</button>
-            </form>
         </nav>
+
+        <details class="profile-menu">
+            <summary class="profile-trigger" aria-label="Open profile menu">
+                <span class="profile-avatar">{{ user.username|first|upper|default:"U" }}</span>
+                <span class="profile-summary">
+                    <span class="profile-name">{% if user.get_short_name %}{{ user.get_short_name }}{% else %}{{ user.username }}{% endif %}</span>
+                    <span class="profile-role">{% if user.is_staff %}Admin{% else %}User{% endif %}</span>
+                </span>
+                <span class="material-symbols-outlined profile-chevron" aria-hidden="true">expand_more</span>
+            </summary>
+            <div class="profile-dropdown">
+                <form class="logout-form" method="post" action="{% url 'core:logout' %}">
+                    {% csrf_token %}
+                    <button class="logout-button" type="submit">
+                        <span class="material-symbols-outlined" aria-hidden="true">logout</span>
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </details>
     </header>
 
     <section class="dashboard-bar" aria-label="Dashboard search filters">
