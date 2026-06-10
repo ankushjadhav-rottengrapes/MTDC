@@ -97,7 +97,7 @@ class Property3DModel(models.Model):
     title = models.CharField(max_length=255)
     file = models.FileField(
         upload_to=property_asset_upload_path,
-        validators=[FileExtensionValidator(allowed_extensions=["glb", "gltf", "obj"])],
+        validators=[FileExtensionValidator(allowed_extensions=["glb", "gltf", "obj", "dem"])],
     )
     uploaded_at = models.DateTimeField(auto_now_add=True)
 
