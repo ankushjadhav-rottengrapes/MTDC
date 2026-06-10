@@ -918,6 +918,12 @@
             overflow: auto;
         }
 
+        .asset-viewer-stage.is-video {
+            padding: 0;
+            overflow: hidden;
+            background: #000000;
+        }
+
         .asset-viewer-stage img,
         .asset-viewer-stage video,
         .asset-viewer-stage iframe,
@@ -931,7 +937,13 @@
         }
 
         .asset-viewer-stage video {
-            width: min(100%, 980px);
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            max-height: none;
+            border-radius: 0;
+            object-fit: contain;
+            box-shadow: none;
         }
 
         .asset-viewer-stage iframe,
@@ -1789,6 +1801,7 @@
 
         const renderAssetEmptyState = (message) => {
             assetViewerStage.replaceChildren();
+            assetViewerStage.className = 'asset-viewer-stage';
             const empty = document.createElement('div');
             empty.className = 'asset-viewer-empty';
             empty.textContent = message;
@@ -1818,6 +1831,7 @@
 
             assetViewerTitle.textContent = item.title;
             assetViewerStage.replaceChildren();
+            assetViewerStage.className = `asset-viewer-stage is-${item.kind}`;
 
             if (item.kind === 'image') {
                 const image = document.createElement('img');
