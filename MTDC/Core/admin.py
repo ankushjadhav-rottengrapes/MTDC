@@ -39,12 +39,12 @@ class Property3DModelInline(admin.TabularInline):
 
 @admin.register(Property)
 class PropertyAdmin(admin.ModelAdmin):
-    list_display = ("property_id", "name", "is_active", "created_at", "updated_at")
+    list_display = ("property_id", "name", "cover_image", "is_active", "created_at", "updated_at")
     list_filter = ("is_active",)
     search_fields = ("name", "property_id")
     readonly_fields = ("created_at", "updated_at")
     fieldsets = (
-        (None, {"fields": ("property_id", "name", "description", "is_active")}),
+        (None, {"fields": ("property_id", "name", "description", "cover_image", "is_active")}),
         ("Timestamps", {"fields": ("created_at", "updated_at")}),
     )
     inlines = (

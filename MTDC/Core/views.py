@@ -92,7 +92,6 @@ def dashboard(request, property_id=None):
     )
 
     for property_card in property_cards:
-        property_card.cover_image = next(iter(property_card.images.all()), None)
         property_card.asset_total = (
             len(property_card.documents.all())
             + len(property_card.images.all())

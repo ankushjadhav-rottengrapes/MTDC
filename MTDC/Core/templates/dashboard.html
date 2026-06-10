@@ -995,7 +995,7 @@
                 <article class="asset-card" data-property-id="{{ property.property_id }}" data-property-name="{{ property.name }}">
                     <div class="asset-img">
                         {% if property.cover_image %}
-                            <img src="{{ property.cover_image.image.url }}" alt="{{ property.cover_image.caption|default:property.name }}">
+                            <img src="{{ property.cover_image.url }}" alt="{{ property.name }}">
                         {% else %}
                             <img src="{% static 'images/tarkarli-coast.svg' %}" alt="{{ property.name }}">
                         {% endif %}

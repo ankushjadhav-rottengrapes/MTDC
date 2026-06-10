@@ -13,10 +13,16 @@ def property_asset_upload_path(instance, filename):
     )
 
 
+def property_cover_upload_path(instance, filename):
+    extension = Path(filename).suffix.lower()
+    return f"properties/{instance.property_id}/cover/{uuid4().hex}{extension}"
+
+
 class Property(models.Model):
     property_id = models.PositiveIntegerField(unique=True)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
+    cover_image = models.ImageField(upload_to=property_cover_upload_path, blank=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
