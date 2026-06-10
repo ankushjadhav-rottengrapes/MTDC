@@ -1,5 +1,6 @@
 from django.db import connection
 from django.db.models import Prefetch
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from .models import (
@@ -66,6 +67,7 @@ def get_state_boundary_extent():
     }
 
 
+@login_required
 def dashboard(request, property_id=None):
     selected_property_id = str(property_id) if property_id is not None else request.GET.get("property_id")
 

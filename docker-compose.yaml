@@ -4,7 +4,7 @@ services:
     container_name: mtdc-web
     command: >
       gunicorn MTDC.wsgi:application
-      --bind 127.0.0.1:8000
+      --bind 127.0.0.1:8003
       --workers 4
       --threads 2
       --timeout 120

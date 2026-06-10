@@ -134,7 +134,8 @@
             min-width: 0;
         }
 
-        .nav-links a {
+        .nav-links a,
+        .logout-button {
             color: #1f2430;
             text-decoration: none;
             font-size: 15px;
@@ -143,6 +144,21 @@
         }
 
         .nav-links a.active {
+            color: var(--saffron);
+        }
+
+        .logout-form {
+            margin: 0;
+        }
+
+        .logout-button {
+            border: 0;
+            padding: 0;
+            background: transparent;
+        }
+
+        .logout-button:hover,
+        .logout-button:focus {
             color: var(--saffron);
         }
 
@@ -955,6 +971,10 @@
             <a href="#">Explore Maharashtra</a>
             <a href="#">Survey Status</a>
             <a href="#">Reports</a>
+            <form class="logout-form" method="post" action="{% url 'core:logout' %}">
+                {% csrf_token %}
+                <button class="logout-button" type="submit">Logout</button>
+            </form>
         </nav>
     </header>
 

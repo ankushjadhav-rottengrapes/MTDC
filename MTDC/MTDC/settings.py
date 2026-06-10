@@ -163,3 +163,7 @@ if importlib.util.find_spec('whitenoise'):
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+LOGIN_URL = 'core:login'
+LOGIN_REDIRECT_URL = 'core:dashboard'
+LOGOUT_REDIRECT_URL = 'core:login'
