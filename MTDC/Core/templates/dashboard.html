@@ -543,6 +543,37 @@
             gap: 6px;
         }
 
+        .asset-category-row {
+            min-height: 48px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .asset-category-name {
+            color: #273248;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .asset-view-btn {
+            width: 34px;
+            height: 32px;
+            border: 0;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            color: #ffffff;
+            background: var(--saffron);
+        }
+
+        .asset-view-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
+
         .asset-row {
             min-width: 0;
             display: grid;
@@ -634,6 +665,191 @@
             background: #ffffff;
             font-weight: 700;
             line-height: 1.5;
+        }
+
+        .asset-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: grid;
+            grid-template-columns: minmax(220px, 20%) minmax(0, 80%);
+            color: #182133;
+            background: #ffffff;
+        }
+
+        .asset-modal[hidden] {
+            display: none;
+        }
+
+        .asset-modal-left {
+            min-width: 0;
+            padding: 18px;
+            border-right: 1px solid #ddd2c0;
+            background: #fffaf1;
+            overflow-y: auto;
+        }
+
+        .asset-modal-head h2 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 21px;
+            line-height: 1.2;
+        }
+
+        .asset-modal-head p {
+            margin: 5px 0 14px;
+            color: #667085;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .asset-modal-search {
+            width: 100%;
+            min-height: 42px;
+            margin-bottom: 14px;
+            padding: 0 12px;
+            border: 1px solid #d9cbb8;
+            border-radius: 8px;
+            outline: 0;
+            background: #ffffff;
+            font-weight: 700;
+        }
+
+        .asset-modal-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .asset-modal-group {
+            margin: 10px 0 3px;
+            color: #6b7280;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .asset-modal-item {
+            min-height: 42px;
+            padding: 9px 10px;
+            border: 1px solid #eadcc7;
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: 24px minmax(0, 1fr);
+            gap: 9px;
+            align-items: center;
+            color: #263244;
+            background: #ffffff;
+            text-align: left;
+            font-weight: 800;
+        }
+
+        .asset-modal-item.is-active {
+            border-color: var(--saffron);
+            background: #fff1da;
+        }
+
+        .asset-modal-item .material-symbols-outlined {
+            color: var(--saffron);
+            font-size: 20px;
+        }
+
+        .asset-modal-item span:last-child {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .asset-modal-right {
+            min-width: 0;
+            display: grid;
+            grid-template-rows: auto minmax(0, 1fr);
+            background: #f7f1e8;
+        }
+
+        .asset-viewer-bar {
+            min-height: 58px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            background: #ffffff;
+            border-bottom: 1px solid #ddd2c0;
+        }
+
+        .asset-viewer-title {
+            min-width: 0;
+            color: var(--navy);
+            font-size: 16px;
+            font-weight: 900;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .asset-modal-close,
+        .asset-nav-btn {
+            width: 38px;
+            height: 36px;
+            border: 0;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            color: #ffffff;
+            background: var(--navy);
+        }
+
+        .asset-viewer-stage {
+            min-width: 0;
+            min-height: 0;
+            padding: 18px;
+            display: grid;
+            place-items: center;
+            overflow: auto;
+        }
+
+        .asset-viewer-stage img,
+        .asset-viewer-stage video,
+        .asset-viewer-stage iframe,
+        .asset-viewer-stage model-viewer {
+            max-width: 100%;
+            max-height: 100%;
+            border: 0;
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 16px 34px rgba(15, 23, 42, 0.12);
+        }
+
+        .asset-viewer-stage video {
+            width: min(100%, 980px);
+        }
+
+        .asset-viewer-stage iframe,
+        .asset-viewer-stage model-viewer {
+            width: 100%;
+            height: 100%;
+        }
+
+        .asset-viewer-empty {
+            max-width: 460px;
+            padding: 24px;
+            border: 1px dashed #d7c7af;
+            border-radius: 8px;
+            background: #ffffff;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .asset-viewer-empty a {
+            color: var(--saffron);
+        }
+
+        .asset-viewer-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
         }
 
         @media (max-width: 1180px) {
@@ -799,62 +1015,52 @@
                             </div>
 
                             <div class="asset-groups">
-                                <section class="asset-group">
-                                    <h4 class="asset-group-title">Documents <span class="asset-count">{{ property.documents.all|length }}</span></h4>
-                                    <div class="asset-list">
-                                        {% for document in property.documents.all|slice:":3" %}
-                                            <div class="asset-row">
-                                                <span class="material-symbols-outlined">description</span>
-                                                <span class="asset-name">{{ document.title }}</span>
-                                            </div>
-                                        {% empty %}
-                                            <p class="asset-empty">No documents uploaded yet.</p>
-                                        {% endfor %}
-                                    </div>
+                                <section class="asset-group asset-category-row">
+                                    <span class="asset-category-name">Documents</span>
+                                    <span class="asset-count">{{ property.documents.all|length }}</span>
+                                    <button class="asset-view-btn" type="button" data-category="documents" data-property-id="{{ property.property_id }}" aria-label="View documents">
+                                        <span class="material-symbols-outlined">visibility</span>
+                                    </button>
                                 </section>
 
-                                <section class="asset-group">
-                                    <h4 class="asset-group-title">Images <span class="asset-count">{{ property.images.all|length }}</span></h4>
-                                    <div class="asset-list">
-                                        {% for image in property.images.all|slice:":3" %}
-                                            <div class="asset-row">
-                                                <span class="material-symbols-outlined">image</span>
-                                                <span class="asset-name">{{ image.caption|default:"Property image" }}</span>
-                                            </div>
-                                        {% empty %}
-                                            <p class="asset-empty">No images uploaded yet.</p>
-                                        {% endfor %}
-                                    </div>
+                                <section class="asset-group asset-category-row">
+                                    <span class="asset-category-name">Images</span>
+                                    <span class="asset-count">{{ property.images.all|length }}</span>
+                                    <button class="asset-view-btn" type="button" data-category="images" data-property-id="{{ property.property_id }}" aria-label="View images">
+                                        <span class="material-symbols-outlined">visibility</span>
+                                    </button>
                                 </section>
 
-                                <section class="asset-group">
-                                    <h4 class="asset-group-title">Videos <span class="asset-count">{{ property.videos.all|length }}</span></h4>
-                                    <div class="asset-list">
-                                        {% for video in property.videos.all|slice:":3" %}
-                                            <div class="asset-row">
-                                                <span class="material-symbols-outlined">movie</span>
-                                                <span class="asset-name">{{ video.title }}</span>
-                                            </div>
-                                        {% empty %}
-                                            <p class="asset-empty">No videos uploaded yet.</p>
-                                        {% endfor %}
-                                    </div>
+                                <section class="asset-group asset-category-row">
+                                    <span class="asset-category-name">Videos</span>
+                                    <span class="asset-count">{{ property.videos.all|length }}</span>
+                                    <button class="asset-view-btn" type="button" data-category="videos" data-property-id="{{ property.property_id }}" aria-label="View videos">
+                                        <span class="material-symbols-outlined">visibility</span>
+                                    </button>
                                 </section>
 
-                                <section class="asset-group">
-                                    <h4 class="asset-group-title">3D Models <span class="asset-count">{{ property.models_3d.all|length }}</span></h4>
-                                    <div class="asset-list">
-                                        {% for model in property.models_3d.all|slice:":3" %}
-                                            <div class="asset-row">
-                                                <span class="material-symbols-outlined">deployed_code</span>
-                                                <span class="asset-name">{{ model.title }}</span>
-                                            </div>
-                                        {% empty %}
-                                            <p class="asset-empty">No 3D models uploaded yet.</p>
-                                        {% endfor %}
-                                    </div>
+                                <section class="asset-group asset-category-row">
+                                    <span class="asset-category-name">3D Models</span>
+                                    <span class="asset-count">{{ property.models_3d.all|length }}</span>
+                                    <button class="asset-view-btn" type="button" data-category="models3d" data-property-id="{{ property.property_id }}" aria-label="View 3D models">
+                                        <span class="material-symbols-outlined">visibility</span>
+                                    </button>
                                 </section>
+                            </div>
 
+                            <div class="property-asset-data" data-property-id="{{ property.property_id }}" data-property-name="{{ property.name }}" hidden>
+                                {% for document in property.documents.all %}
+                                    <span class="asset-data-item" data-category="documents" data-group="Uploaded documents" data-title="{{ document.title }}" data-url="{{ document.file.url }}" data-kind="document"></span>
+                                {% endfor %}
+                                {% for image in property.images.all %}
+                                    <span class="asset-data-item" data-category="images" data-group="Uploaded images" data-title="{{ image.caption|default:'Property image' }}" data-url="{{ image.image.url }}" data-kind="image"></span>
+                                {% endfor %}
+                                {% for video in property.videos.all %}
+                                    <span class="asset-data-item" data-category="videos" data-group="Uploaded videos" data-title="{{ video.title }}" data-url="{{ video.video.url }}" data-kind="video"></span>
+                                {% endfor %}
+                                {% for model in property.models_3d.all %}
+                                    <span class="asset-data-item" data-category="models3d" data-group="Uploaded 3D models" data-title="{{ model.title }}" data-url="{{ model.file.url }}" data-kind="model"></span>
+                                {% endfor %}
                             </div>
 
                             {% if property.description %}
@@ -894,9 +1100,40 @@
         </div>
     </footer>
 
+    <section id="asset-viewer-modal" class="asset-modal" aria-modal="true" role="dialog" hidden>
+        <aside class="asset-modal-left">
+            <div class="asset-modal-head">
+                <h2 id="asset-modal-title">Assets</h2>
+                <p id="asset-modal-subtitle">0 items</p>
+            </div>
+            <input id="asset-modal-search" class="asset-modal-search" type="search" placeholder="Search...">
+            <div id="asset-modal-list" class="asset-modal-list"></div>
+        </aside>
+        <section class="asset-modal-right">
+            <div class="asset-viewer-bar">
+                <div id="asset-viewer-title" class="asset-viewer-title">Select an item</div>
+                <div class="asset-viewer-actions">
+                    <button id="asset-prev-btn" class="asset-nav-btn" type="button" aria-label="Previous image">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    <button id="asset-next-btn" class="asset-nav-btn" type="button" aria-label="Next image">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                    <button id="asset-modal-close" class="asset-modal-close" type="button" aria-label="Close asset viewer">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+            </div>
+            <div id="asset-viewer-stage" class="asset-viewer-stage">
+                <div class="asset-viewer-empty">Select an item from the left panel.</div>
+            </div>
+        </section>
+    </section>
+
     {{ state_boundary_extent_coords|json_script:"state-boundary-extent-data" }}
     {{ selected_property_map_details|json_script:"selected-property-map-data" }}
     <script src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <script>
         const GEOSERVER_URL = 'http://purandar-airport.rottengrapes.tech/geoserver';
         const GEOSERVER_WORKSPACE = 'mtdc';
@@ -1368,6 +1605,249 @@
         if (propertySearchInput) {
             propertySearchInput.addEventListener('input', filterPropertyCards);
         }
+
+        const assetModal = document.getElementById('asset-viewer-modal');
+        const assetModalTitle = document.getElementById('asset-modal-title');
+        const assetModalSubtitle = document.getElementById('asset-modal-subtitle');
+        const assetModalSearch = document.getElementById('asset-modal-search');
+        const assetModalList = document.getElementById('asset-modal-list');
+        const assetViewerTitle = document.getElementById('asset-viewer-title');
+        const assetViewerStage = document.getElementById('asset-viewer-stage');
+        const assetModalClose = document.getElementById('asset-modal-close');
+        const assetPrevBtn = document.getElementById('asset-prev-btn');
+        const assetNextBtn = document.getElementById('asset-next-btn');
+        const assetCategoryLabels = {
+            documents: 'Documents',
+            images: 'Images',
+            videos: 'Videos',
+            models3d: '3D Models'
+        };
+        const assetCategoryIcons = {
+            documents: 'description',
+            images: 'image',
+            videos: 'movie',
+            models3d: 'deployed_code'
+        };
+        let activeAssetItems = [];
+        let activeAssetIndex = -1;
+        let activeAssetCategory = '';
+
+        const getAssetItems = (propertyId, category) => {
+            const propertyData = document.querySelector(`.property-asset-data[data-property-id="${Number(propertyId)}"]`);
+            if (!propertyData) {
+                return [];
+            }
+
+            return Array.from(propertyData.querySelectorAll(`.asset-data-item[data-category="${category}"]`)).map((item) => ({
+                category,
+                group: item.dataset.group || assetCategoryLabels[category],
+                kind: item.dataset.kind || category,
+                title: item.dataset.title || 'Untitled asset',
+                url: item.dataset.url || ''
+            }));
+        };
+
+        const getFileExtension = (url) => {
+            const cleanUrl = String(url || '').split('?')[0].split('#')[0];
+            const extension = cleanUrl.includes('.') ? cleanUrl.split('.').pop() : '';
+            return extension.toLowerCase();
+        };
+
+        const renderAssetEmptyState = (message) => {
+            assetViewerStage.replaceChildren();
+            const empty = document.createElement('div');
+            empty.className = 'asset-viewer-empty';
+            empty.textContent = message;
+            assetViewerStage.appendChild(empty);
+        };
+
+        const updateAssetNav = () => {
+            const canNavigate = ['images', 'models3d'].includes(activeAssetCategory) && activeAssetItems.length > 1;
+            assetPrevBtn.hidden = !canNavigate;
+            assetNextBtn.hidden = !canNavigate;
+        };
+
+        const renderAssetViewer = (index) => {
+            activeAssetIndex = index;
+            const item = activeAssetItems[index];
+
+            assetModalList.querySelectorAll('.asset-modal-item').forEach((button, buttonIndex) => {
+                button.classList.toggle('is-active', buttonIndex === index);
+            });
+
+            if (!item) {
+                assetViewerTitle.textContent = 'Select an item';
+                renderAssetEmptyState('Select an item from the left panel.');
+                updateAssetNav();
+                return;
+            }
+
+            assetViewerTitle.textContent = item.title;
+            assetViewerStage.replaceChildren();
+
+            if (item.kind === 'image') {
+                const image = document.createElement('img');
+                image.src = item.url;
+                image.alt = item.title;
+                assetViewerStage.appendChild(image);
+            } else if (item.kind === 'video') {
+                const video = document.createElement('video');
+                video.src = item.url;
+                video.controls = true;
+                video.playsInline = true;
+                assetViewerStage.appendChild(video);
+            } else if (item.kind === 'model') {
+                const extension = getFileExtension(item.url);
+                if (['glb', 'gltf'].includes(extension)) {
+                    const modelViewer = document.createElement('model-viewer');
+                    modelViewer.src = item.url;
+                    modelViewer.alt = item.title;
+                    modelViewer.setAttribute('camera-controls', '');
+                    modelViewer.setAttribute('auto-rotate', '');
+                    modelViewer.setAttribute('shadow-intensity', '0.6');
+                    assetViewerStage.appendChild(modelViewer);
+                } else {
+                    const fallback = document.createElement('div');
+                    fallback.className = 'asset-viewer-empty';
+                    fallback.append(
+                        document.createTextNode('Preview is not available for this 3D file.'),
+                        document.createElement('br'),
+                        document.createElement('br')
+                    );
+                    const link = document.createElement('a');
+                    link.href = item.url;
+                    link.target = '_blank';
+                    link.rel = 'noopener';
+                    link.textContent = 'Open or download 3D file';
+                    fallback.appendChild(link);
+                    assetViewerStage.appendChild(fallback);
+                }
+            } else {
+                const extension = getFileExtension(item.url);
+                if (extension === 'pdf') {
+                    const frame = document.createElement('iframe');
+                    frame.src = item.url;
+                    frame.title = item.title;
+                    assetViewerStage.appendChild(frame);
+                } else {
+                    const fallback = document.createElement('div');
+                    fallback.className = 'asset-viewer-empty';
+                    fallback.append(
+                        document.createTextNode('Preview is not available for this file.'),
+                        document.createElement('br'),
+                        document.createElement('br')
+                    );
+                    const link = document.createElement('a');
+                    link.href = item.url;
+                    link.target = '_blank';
+                    link.rel = 'noopener';
+                    link.textContent = 'Open or download file';
+                    fallback.appendChild(link);
+                    assetViewerStage.appendChild(fallback);
+                }
+            }
+
+            updateAssetNav();
+        };
+
+        const renderAssetList = () => {
+            const query = normalizeText(assetModalSearch.value).toLowerCase();
+            const filteredItems = activeAssetItems.filter((item) => (
+                !query ||
+                item.title.toLowerCase().includes(query) ||
+                item.group.toLowerCase().includes(query)
+            ));
+            let currentGroup = '';
+
+            assetModalList.replaceChildren();
+
+            if (filteredItems.length === 0) {
+                const empty = document.createElement('div');
+                empty.className = 'asset-viewer-empty';
+                empty.textContent = 'No matching assets found.';
+                assetModalList.appendChild(empty);
+                renderAssetEmptyState('No matching assets found.');
+                return;
+            }
+
+            filteredItems.forEach((item) => {
+                const originalIndex = activeAssetItems.indexOf(item);
+                if (item.group !== currentGroup) {
+                    currentGroup = item.group;
+                    const group = document.createElement('div');
+                    group.className = 'asset-modal-group';
+                    group.textContent = currentGroup;
+                    assetModalList.appendChild(group);
+                }
+
+                const button = document.createElement('button');
+                button.className = 'asset-modal-item';
+                button.type = 'button';
+                const icon = document.createElement('span');
+                icon.className = 'material-symbols-outlined';
+                icon.textContent = assetCategoryIcons[item.category];
+                const title = document.createElement('span');
+                title.textContent = item.title;
+                button.append(icon, title);
+                button.addEventListener('click', () => renderAssetViewer(originalIndex));
+                assetModalList.appendChild(button);
+            });
+
+            const selectedIndex = filteredItems.includes(activeAssetItems[activeAssetIndex])
+                ? activeAssetIndex
+                : activeAssetItems.indexOf(filteredItems[0]);
+            renderAssetViewer(selectedIndex);
+        };
+
+        const openAssetModal = (propertyId, category) => {
+            const propertyData = document.querySelector(`.property-asset-data[data-property-id="${Number(propertyId)}"]`);
+            const propertyName = propertyData?.dataset.propertyName || 'Selected property';
+            activeAssetCategory = category;
+            activeAssetItems = getAssetItems(propertyId, category);
+            activeAssetIndex = -1;
+
+            assetModalTitle.textContent = assetCategoryLabels[category] || 'Assets';
+            assetModalSubtitle.textContent = `${propertyName} - ${activeAssetItems.length} ${activeAssetItems.length === 1 ? 'item' : 'items'}`;
+            assetModalSearch.value = '';
+            assetModal.hidden = false;
+            document.body.style.overflow = 'hidden';
+            renderAssetList();
+            assetModalSearch.focus();
+        };
+
+        const closeAssetModal = () => {
+            assetModal.hidden = true;
+            document.body.style.overflow = '';
+            assetViewerStage.replaceChildren();
+            assetModalList.replaceChildren();
+            activeAssetItems = [];
+            activeAssetIndex = -1;
+            activeAssetCategory = '';
+        };
+
+        document.querySelectorAll('.asset-view-btn').forEach((button) => {
+            button.addEventListener('click', () => {
+                openAssetModal(button.dataset.propertyId, button.dataset.category);
+            });
+        });
+
+        assetModalSearch.addEventListener('input', renderAssetList);
+        assetModalClose.addEventListener('click', closeAssetModal);
+        assetPrevBtn.addEventListener('click', () => {
+            if (activeAssetItems.length === 0) return;
+            const nextIndex = (activeAssetIndex - 1 + activeAssetItems.length) % activeAssetItems.length;
+            renderAssetViewer(nextIndex);
+        });
+        assetNextBtn.addEventListener('click', () => {
+            if (activeAssetItems.length === 0) return;
+            const nextIndex = (activeAssetIndex + 1) % activeAssetItems.length;
+            renderAssetViewer(nextIndex);
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && !assetModal.hidden) {
+                closeAssetModal();
+            }
+        });
     </script>
 </body>
 </html>
