@@ -787,9 +787,6 @@
                     <h2>{% if is_property_detail %}Selected Property{% else %}Property Insights{% endif %}</h2>
                     <p>{{ property_count }} {% if property_count == 1 %}property{% else %}properties{% endif %} loaded from records</p>
                 </div>
-                <button class="icon-btn" type="button" aria-label="Download insights">
-                    <span class="material-symbols-outlined">download</span>
-                </button>
             </div>
 
             <div class="cards">
@@ -806,25 +803,9 @@
                     <div class="asset-body">
                         <div class="asset-title">
                             <h3>{{ property.name }}</h3>
-                            {% if is_property_detail %}
-                                <span class="status{% if property.asset_total == 0 %} disputed{% endif %}">
-                                    {% if property.asset_total == 0 %}No Assets{% else %}Media Ready{% endif %}
-                                </span>
-                            {% endif %}
                         </div>
 
                         {% if is_property_detail %}
-                            <div class="asset-meta">
-                                <div>
-                                    <span class="meta-label">TOTAL FILES</span>
-                                    <span class="meta-value">{{ property.asset_total }}</span>
-                                </div>
-                                <div>
-                                    <span class="meta-label">STATUS</span>
-                                    <span class="meta-value">{% if property.is_active %}ACTIVE{% else %}INACTIVE{% endif %}</span>
-                                </div>
-                            </div>
-
                             <div class="asset-summary" aria-label="Property asset counts">
                                 <div class="asset-pill"><strong>{{ property.documents.all|length }}</strong><span>Docs</span></div>
                                 <div class="asset-pill"><strong>{{ property.images.all|length }}</strong><span>Images</span></div>
@@ -899,12 +880,14 @@
                             {% endif %}
                         {% endif %}
 
-                        <div class="card-actions">
-                            <a class="details-btn" href="{{ property.dashboard_url }}" target="_blank" rel="noopener">Open property</a>
-                            <a class="view-btn" href="{{ property.dashboard_url }}" target="_blank" rel="noopener" aria-label="Open {{ property.name }}">
-                                <span class="material-symbols-outlined">open_in_new</span>
-                            </a>
-                        </div>
+                        {% if not is_property_detail %}
+                            <div class="card-actions">
+                                <a class="details-btn" href="{{ property.dashboard_url }}" target="_blank" rel="noopener">Open property</a>
+                                <a class="view-btn" href="{{ property.dashboard_url }}" target="_blank" rel="noopener" aria-label="Open {{ property.name }}">
+                                    <span class="material-symbols-outlined">open_in_new</span>
+                                </a>
+                            </div>
+                        {% endif %}
                     </div>
                 </article>
                 {% empty %}
