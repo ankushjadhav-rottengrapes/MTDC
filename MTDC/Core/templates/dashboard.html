@@ -439,6 +439,116 @@
             margin-bottom: 14px;
         }
 
+        .asset-summary {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .asset-pill {
+            min-height: 48px;
+            padding: 7px 6px;
+            border: 1px solid #eadcc7;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            gap: 2px;
+            color: #384150;
+            background: #fff8ea;
+            text-align: center;
+        }
+
+        .asset-pill strong {
+            color: var(--navy);
+            font-family: "JetBrains Mono", monospace;
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        .asset-pill span {
+            font-size: 10px;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .asset-groups {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .asset-group {
+            padding: 10px;
+            border: 1px solid #eadfce;
+            border-radius: 8px;
+            background: #fffbf5;
+        }
+
+        .asset-group-title {
+            margin: 0 0 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            color: #273248;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .asset-count {
+            min-width: 24px;
+            padding: 3px 6px;
+            border-radius: 999px;
+            color: #ffffff;
+            background: var(--navy);
+            font-family: "JetBrains Mono", monospace;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .asset-list {
+            display: grid;
+            gap: 6px;
+        }
+
+        .asset-row {
+            min-width: 0;
+            display: grid;
+            grid-template-columns: 24px minmax(0, 1fr);
+            gap: 8px;
+            align-items: center;
+            color: #4b5565;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .asset-row .material-symbols-outlined {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: grid;
+            place-items: center;
+            color: var(--saffron);
+            background: #fff0cf;
+            font-size: 18px;
+        }
+
+        .asset-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .asset-empty {
+            margin: 0;
+            color: #7b8492;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
         .meta-label {
             display: block;
             margin-bottom: 4px;
@@ -465,6 +575,9 @@
             border: 0;
             border-radius: 8px;
             font-weight: 800;
+            display: grid;
+            place-items: center;
+            text-decoration: none;
         }
 
         .details-btn {
@@ -477,6 +590,17 @@
             width: 46px;
             color: #ffffff;
             background: var(--saffron);
+        }
+
+        .empty-sidebar {
+            margin: 14px;
+            padding: 22px;
+            border: 1px dashed #d9c7ab;
+            border-radius: 8px;
+            color: #596273;
+            background: #ffffff;
+            font-weight: 700;
+            line-height: 1.5;
         }
 
         @media (max-width: 1180px) {
@@ -594,8 +718,8 @@
         <aside class="sidebar" aria-label="Property insights">
             <div class="sidebar-head">
                 <div>
-                    <h2>Property Insights</h2>
-                    <p>Total 42 Assets Found</p>
+                    <h2>{% if is_property_detail %}Selected Property{% else %}Property Insights{% endif %}</h2>
+                    <p>{{ property_count }} {% if property_count == 1 %}property{% else %}properties{% endif %} loaded from records</p>
                 </div>
                 <button class="icon-btn" type="button" aria-label="Download insights">
                     <span class="material-symbols-outlined">download</span>
@@ -603,86 +727,134 @@
             </div>
 
             <div class="cards">
+                {% for property in properties %}
                 <article class="asset-card">
                     <div class="asset-img">
-                        <img src="{% static 'images/lonar-lake.svg' %}" alt="Aerial view of Lonar lake">
-                        <span class="asset-id">ASSET ID: MTDC-LL-042</span>
+                        {% if property.cover_image %}
+                            <img src="{{ property.cover_image.image.url }}" alt="{{ property.cover_image.caption|default:property.name }}">
+                        {% else %}
+                            <img src="{% static 'images/tarkarli-coast.svg' %}" alt="{{ property.name }}">
+                        {% endif %}
+                        <span class="asset-id">PROPERTY ID: {{ property.property_id }}</span>
                     </div>
                     <div class="asset-body">
                         <div class="asset-title">
-                            <h3>Lonar Lake Development</h3>
-                            <span class="status">Completed</span>
+                            <h3>{{ property.name }}</h3>
+                            <span class="status{% if property.asset_total == 0 %} disputed{% elif property.layers.all|length == 0 %} survey{% endif %}">
+                                {% if property.asset_total == 0 %}No Assets{% elif property.layers.all|length == 0 %}Media Ready{% else %}Mapped{% endif %}
+                            </span>
                         </div>
                         <div class="asset-meta">
                             <div>
-                                <span class="meta-label">AREA</span>
-                                <span class="meta-value">124.50 Ha</span>
+                                <span class="meta-label">TOTAL FILES</span>
+                                <span class="meta-value">{{ property.asset_total }}</span>
                             </div>
                             <div>
-                                <span class="meta-label">DISTRICT</span>
-                                <span class="meta-value">Buldhana</span>
+                                <span class="meta-label">STATUS</span>
+                                <span class="meta-value">{% if property.is_active %}ACTIVE{% else %}INACTIVE{% endif %}</span>
                             </div>
                         </div>
-                        <div class="card-actions">
-                            <button class="details-btn" type="button">Details</button>
-                            <button class="view-btn" type="button" aria-label="View asset"><span class="material-symbols-outlined">visibility</span></button>
-                        </div>
-                    </div>
-                </article>
 
-                <article class="asset-card">
-                    <div class="asset-img">
-                        <img src="{% static 'images/aurangabad-heritage.svg' %}" alt="Heritage monument in Maharashtra">
-                        <span class="asset-id">ASSET ID: MTDC-AU-089</span>
-                    </div>
-                    <div class="asset-body">
-                        <div class="asset-title">
-                            <h3>Aurangabad Heritage Site</h3>
-                            <span class="status survey">In Survey</span>
+                        <div class="asset-summary" aria-label="Property asset counts">
+                            <div class="asset-pill"><strong>{{ property.documents.all|length }}</strong><span>Docs</span></div>
+                            <div class="asset-pill"><strong>{{ property.images.all|length }}</strong><span>Images</span></div>
+                            <div class="asset-pill"><strong>{{ property.videos.all|length }}</strong><span>Videos</span></div>
+                            <div class="asset-pill"><strong>{{ property.models_3d.all|length }}</strong><span>3D</span></div>
+                            <div class="asset-pill"><strong>{{ property.layers.all|length }}</strong><span>Layers</span></div>
                         </div>
-                        <div class="asset-meta">
-                            <div>
-                                <span class="meta-label">AREA</span>
-                                <span class="meta-value">45.20 Ha</span>
-                            </div>
-                            <div>
-                                <span class="meta-label">DISTRICT</span>
-                                <span class="meta-value">Aurangabad</span>
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <button class="details-btn" type="button">Details</button>
-                            <button class="view-btn" type="button" aria-label="View asset"><span class="material-symbols-outlined">visibility</span></button>
-                        </div>
-                    </div>
-                </article>
 
-                <article class="asset-card">
-                    <div class="asset-img">
-                        <img src="{% static 'images/tarkarli-coast.svg' %}" alt="Coastal tourism destination">
-                        <span class="asset-id">ASSET ID: MTDC-TK-112</span>
-                    </div>
-                    <div class="asset-body">
-                        <div class="asset-title">
-                            <h3>Tarkarli Coastal Asset</h3>
-                            <span class="status disputed">Disputed</span>
+                        <div class="asset-groups">
+                            <section class="asset-group">
+                                <h4 class="asset-group-title">Documents <span class="asset-count">{{ property.documents.all|length }}</span></h4>
+                                <div class="asset-list">
+                                    {% for document in property.documents.all|slice:":3" %}
+                                        <div class="asset-row">
+                                            <span class="material-symbols-outlined">description</span>
+                                            <span class="asset-name">{{ document.title }}</span>
+                                        </div>
+                                    {% empty %}
+                                        <p class="asset-empty">No documents uploaded yet.</p>
+                                    {% endfor %}
+                                </div>
+                            </section>
+
+                            <section class="asset-group">
+                                <h4 class="asset-group-title">Images <span class="asset-count">{{ property.images.all|length }}</span></h4>
+                                <div class="asset-list">
+                                    {% for image in property.images.all|slice:":3" %}
+                                        <div class="asset-row">
+                                            <span class="material-symbols-outlined">image</span>
+                                            <span class="asset-name">{{ image.caption|default:"Property image" }}</span>
+                                        </div>
+                                    {% empty %}
+                                        <p class="asset-empty">No images uploaded yet.</p>
+                                    {% endfor %}
+                                </div>
+                            </section>
+
+                            <section class="asset-group">
+                                <h4 class="asset-group-title">Videos <span class="asset-count">{{ property.videos.all|length }}</span></h4>
+                                <div class="asset-list">
+                                    {% for video in property.videos.all|slice:":3" %}
+                                        <div class="asset-row">
+                                            <span class="material-symbols-outlined">movie</span>
+                                            <span class="asset-name">{{ video.title }}</span>
+                                        </div>
+                                    {% empty %}
+                                        <p class="asset-empty">No videos uploaded yet.</p>
+                                    {% endfor %}
+                                </div>
+                            </section>
+
+                            <section class="asset-group">
+                                <h4 class="asset-group-title">3D Models <span class="asset-count">{{ property.models_3d.all|length }}</span></h4>
+                                <div class="asset-list">
+                                    {% for model in property.models_3d.all|slice:":3" %}
+                                        <div class="asset-row">
+                                            <span class="material-symbols-outlined">deployed_code</span>
+                                            <span class="asset-name">{{ model.title }}</span>
+                                        </div>
+                                    {% empty %}
+                                        <p class="asset-empty">No 3D models uploaded yet.</p>
+                                    {% endfor %}
+                                </div>
+                            </section>
+
+                            <section class="asset-group">
+                                <h4 class="asset-group-title">GIS Layers <span class="asset-count">{{ property.layers.all|length }}</span></h4>
+                                <div class="asset-list">
+                                    {% for layer in property.layers.all|slice:":3" %}
+                                        <div class="asset-row">
+                                            <span class="material-symbols-outlined">layers</span>
+                                            <span class="asset-name">{{ layer.get_layer_type_display }} - {{ layer.layer_name }}</span>
+                                        </div>
+                                    {% empty %}
+                                        <p class="asset-empty">No GIS layers linked yet.</p>
+                                    {% endfor %}
+                                </div>
+                            </section>
                         </div>
-                        <div class="asset-meta">
-                            <div>
-                                <span class="meta-label">AREA</span>
-                                <span class="meta-value">18.75 Ha</span>
+
+                        {% if property.description %}
+                            <div class="asset-group">
+                                <h4 class="asset-group-title">Tourism Note</h4>
+                                <p class="asset-empty">{{ property.description|truncatechars:160 }}</p>
                             </div>
-                            <div>
-                                <span class="meta-label">DISTRICT</span>
-                                <span class="meta-value">Sindhudurg</span>
-                            </div>
-                        </div>
+                        {% endif %}
+
                         <div class="card-actions">
-                            <button class="details-btn" type="button">Details</button>
-                            <button class="view-btn" type="button" aria-label="View asset"><span class="material-symbols-outlined">visibility</span></button>
+                            <a class="details-btn" href="{{ property.dashboard_url }}" target="_blank" rel="noopener">Open property</a>
+                            <a class="view-btn" href="{{ property.dashboard_url }}" target="_blank" rel="noopener" aria-label="Open {{ property.name }}">
+                                <span class="material-symbols-outlined">open_in_new</span>
+                            </a>
                         </div>
                     </div>
                 </article>
+                {% empty %}
+                    <div class="empty-sidebar">
+                        No active properties found for this view. Add properties and related documents, images, videos, 3D models, or GIS layers from the admin panel.
+                    </div>
+                {% endfor %}
             </div>
         </aside>
     </main>
@@ -696,11 +868,13 @@
         const urlParams = new URLSearchParams(window.location.search);
         const selectedPropertyName = urlParams.get('property') || '';
         const selectedPropertyLayer = urlParams.get('layer') || '';
-        const selectedPropertyId = Number(urlParams.get('property_id'));
+        const selectedPropertyIdParam = urlParams.get('property_id');
+        const selectedPropertyId = selectedPropertyIdParam !== null ? Number(selectedPropertyIdParam) : NaN;
         const selectedPropertyLon = Number(urlParams.get('lon'));
         const selectedPropertyLat = Number(urlParams.get('lat'));
-        const hasSelectedProperty = selectedPropertyName && Number.isFinite(selectedPropertyLon) && Number.isFinite(selectedPropertyLat);
-        const hasSelectedPropertyId = Number.isInteger(selectedPropertyId);
+        const hasSelectedPropertyCoordinate = selectedPropertyName && Number.isFinite(selectedPropertyLon) && Number.isFinite(selectedPropertyLat);
+        const hasSelectedPropertyId = selectedPropertyIdParam !== null && Number.isInteger(selectedPropertyId);
+        const hasSelectedProperty = hasSelectedPropertyCoordinate;
 
         const googleAttribution = 'Google';
         const baseLayers = {
@@ -755,7 +929,7 @@
         const pointMtdcLayer = new ol.layer.Tile({
             source: pointMtdcSource,
             opacity: 1,
-            visible: !hasSelectedProperty,
+            visible: !hasSelectedPropertyCoordinate,
             zIndex: 10
         });
 
@@ -1051,9 +1225,9 @@
             openPropertyDashboard(hoveredPropertyName, hoveredLayerName, hoveredPropertyId, hoveredPointCoordinate);
         });
 
-        if (hasSelectedProperty) {
-            const selectedCoordinate = ol.proj.fromLonLat([selectedPropertyLon, selectedPropertyLat]);
-
+        const focusSelectedProperty = (selectedCoordinate) => {
+            pointMtdcLayer.setVisible(false);
+            areaMtdcLayer.setVisible(true);
             map.getView().setCenter(selectedCoordinate);
             map.getView().setZoom(14);
 
@@ -1062,6 +1236,10 @@
                 .catch(() => {
                     map.getView().animate({ center: selectedCoordinate, zoom: 16, duration: 550 });
                 });
+        };
+
+        if (hasSelectedPropertyCoordinate) {
+            focusSelectedProperty(ol.proj.fromLonLat([selectedPropertyLon, selectedPropertyLat]));
         }
 
         document.querySelectorAll('.layer-options button').forEach((button) => {
