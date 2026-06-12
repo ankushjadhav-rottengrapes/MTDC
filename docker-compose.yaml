@@ -8,9 +8,12 @@ services:
       --workers 4
       --threads 2
       --timeout 120
+      --access-logfile -
+      --error-logfile -
     env_file:
       - .env
     volumes:
       - /var/www/media/mtdc:/app/MTDC/MTDC/media
+      - /var/www/static/mtdc:/app/MTDC/MTDC/staticfiles
     network_mode: host
     restart: always
