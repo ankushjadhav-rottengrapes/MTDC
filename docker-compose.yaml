@@ -11,6 +11,6 @@ services:
     env_file:
       - .env
     volumes:
-      - /var/www/media/mtdc:/app/MTDC/media
+      - /var/www/media/mtdc:/app/MTDC/MTDC/media
     network_mode: host
     restart: always
