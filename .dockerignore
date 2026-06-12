@@ -6,6 +6,7 @@ __pycache__
 *.pyc
 .venv
 venv
+myenv
 .vscode
 .idea
 django-server.*.log
