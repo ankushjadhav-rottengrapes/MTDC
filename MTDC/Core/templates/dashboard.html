@@ -286,7 +286,7 @@
         .content {
             height: calc(100vh - 176px);
             display: grid;
-            grid-template-columns: minmax(0, 4fr) minmax(300px, 1fr);
+            grid-template-columns: 280px minmax(0, 4fr) minmax(300px, 1fr);
             background: #f9eedb;
         }
 
@@ -336,6 +336,7 @@
             position: relative;
             min-width: 0;
             background: #d8e4df;
+            border-left: 1px solid #cfc4b2;
             border-right: 1px solid #cfc4b2;
         }
 
@@ -458,6 +459,174 @@
         .sidebar {
             overflow-y: auto;
             background: #fffaf1;
+        }
+
+        .analytics-sidebar {
+            overflow-y: auto;
+            padding: 14px;
+            background: #f6f0e6;
+        }
+
+        .analytics-panel {
+            display: grid;
+            gap: 14px;
+        }
+
+        .analytics-header {
+            padding: 16px;
+            border: 1px solid #ddd0bd;
+            border-radius: 8px;
+            color: #ffffff;
+            background: linear-gradient(135deg, #12243d, #0f5da8);
+            box-shadow: 0 12px 26px rgba(14, 35, 64, 0.16);
+        }
+
+        .analytics-kicker {
+            margin: 0 0 8px;
+            color: #ffe79a;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .analytics-header h2 {
+            margin: 0;
+            font-size: 22px;
+            line-height: 1.12;
+        }
+
+        .analytics-total {
+            margin-top: 16px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: end;
+        }
+
+        .analytics-total span {
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .analytics-total strong {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 34px;
+            line-height: 0.9;
+        }
+
+        .analytics-card {
+            padding: 14px;
+            border: 1px solid #ddd0bd;
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 10px 24px rgba(45, 31, 7, 0.1);
+        }
+
+        .analytics-card h3 {
+            margin: 0 0 12px;
+            color: var(--navy);
+            font-size: 15px;
+            line-height: 1.2;
+        }
+
+        .analytics-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .analytics-row {
+            display: grid;
+            grid-template-columns: 28px minmax(0, 1fr) auto;
+            gap: 9px;
+            align-items: center;
+        }
+
+        .analytics-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            color: var(--blue);
+            background: #e7f1fb;
+        }
+
+        .analytics-icon .material-symbols-outlined {
+            font-size: 18px;
+        }
+
+        .analytics-label {
+            min-width: 0;
+        }
+
+        .analytics-label span {
+            display: block;
+            overflow: hidden;
+            color: #263244;
+            font-size: 13px;
+            font-weight: 800;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .analytics-meter {
+            height: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #efe4d4;
+        }
+
+        .analytics-meter i {
+            width: var(--meter, 0%);
+            height: 100%;
+            display: block;
+            border-radius: inherit;
+            background: var(--saffron);
+            transition: width 0.25s ease;
+        }
+
+        .analytics-value {
+            min-width: 34px;
+            padding: 5px 8px;
+            border-radius: 999px;
+            color: var(--navy);
+            background: #fff1cf;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 12px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .ownership-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .ownership-tile {
+            min-height: 82px;
+            padding: 12px;
+            border: 1px solid #eadfce;
+            border-radius: 8px;
+            display: grid;
+            align-content: space-between;
+            background: #fffbf5;
+        }
+
+        .ownership-tile span {
+            color: #586274;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .ownership-tile strong {
+            color: var(--navy);
+            font-family: "JetBrains Mono", monospace;
+            font-size: 24px;
+            line-height: 1;
         }
 
         .sidebar-head {
@@ -986,7 +1155,7 @@
             }
 
             .content {
-                grid-template-columns: minmax(0, 1fr) 320px;
+                grid-template-columns: 250px minmax(0, 1fr) 320px;
             }
         }
 
@@ -1011,9 +1180,15 @@
                 min-height: 0;
             }
 
+            .analytics-sidebar,
+            .sidebar {
+                max-height: none;
+            }
+
             .map-panel {
                 height: 58vh;
                 border-right: 0;
+                border-left: 0;
                 border-bottom: 1px solid #cfc4b2;
             }
 
@@ -1123,6 +1298,85 @@
     </section>
 
     <main class="content">
+        <aside class="analytics-sidebar" aria-label="Property analytics">
+            <div class="analytics-panel">
+                <section class="analytics-header" aria-label="Property summary">
+                    <p class="analytics-kicker">Analytics</p>
+                    <h2>Property Summary</h2>
+                    <div class="analytics-total">
+                        <span>Total Properties</span>
+                        <strong id="analytics-total-properties">{{ property_count }}</strong>
+                    </div>
+                </section>
+
+                <section class="analytics-card" aria-label="Region wise properties">
+                    <h3>Region Wise Properties</h3>
+                    <div class="analytics-list">
+                        <div class="analytics-row" data-analytics-key="pune">
+                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">location_city</span></span>
+                            <span class="analytics-label"><span>Pune</span><span class="analytics-meter"><i></i></span></span>
+                            <span class="analytics-value">0</span>
+                        </div>
+                        <div class="analytics-row" data-analytics-key="mumbai">
+                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">apartment</span></span>
+                            <span class="analytics-label"><span>Mumbai</span><span class="analytics-meter"><i></i></span></span>
+                            <span class="analytics-value">0</span>
+                        </div>
+                        <div class="analytics-row" data-analytics-key="nashik">
+                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">terrain</span></span>
+                            <span class="analytics-label"><span>Nashik</span><span class="analytics-meter"><i></i></span></span>
+                            <span class="analytics-value">0</span>
+                        </div>
+                        <div class="analytics-row" data-analytics-key="nagpur">
+                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">domain</span></span>
+                            <span class="analytics-label"><span>Nagpur</span><span class="analytics-meter"><i></i></span></span>
+                            <span class="analytics-value">0</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="analytics-card" aria-label="Ownership details">
+                    <h3>Ownership Details</h3>
+                    <div class="ownership-grid">
+                        <div class="ownership-tile">
+                            <span>PPP</span>
+                            <strong data-analytics-key="ppp">0</strong>
+                        </div>
+                        <div class="ownership-tile">
+                            <span>Lease</span>
+                            <strong data-analytics-key="lease">0</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="analytics-card" aria-label="Zone wise properties">
+                    <h3>Zone Wise Properties</h3>
+                    <div class="analytics-list">
+                        <div class="analytics-row" data-analytics-key="commercial">
+                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">storefront</span></span>
+                            <span class="analytics-label"><span>Commercial Zone</span><span class="analytics-meter"><i></i></span></span>
+                            <span class="analytics-value">0</span>
+                        </div>
+                        <div class="analytics-row" data-analytics-key="residential">
+                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">home_work</span></span>
+                            <span class="analytics-label"><span>Residential Zone</span><span class="analytics-meter"><i></i></span></span>
+                            <span class="analytics-value">0</span>
+                        </div>
+                        <div class="analytics-row" data-analytics-key="public">
+                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">account_balance</span></span>
+                            <span class="analytics-label"><span>Public Zone</span><span class="analytics-meter"><i></i></span></span>
+                            <span class="analytics-value">0</span>
+                        </div>
+                        <div class="analytics-row" data-analytics-key="semi-public">
+                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">groups</span></span>
+                            <span class="analytics-label"><span>Semi-Public Zone</span><span class="analytics-meter"><i></i></span></span>
+                            <span class="analytics-value">0</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </aside>
+
         <section class="map-panel" aria-label="Satellite basemap">
             <div id="mtdc-map"></div>
             <div id="mtdc-hover-label" class="map-hover-label" hidden></div>
@@ -1148,7 +1402,7 @@
 
             <div class="cards">
                 {% for property in properties %}
-                <article class="asset-card" data-property-id="{{ property.property_id }}" data-property-name="{{ property.name }}">
+                <article class="asset-card" data-property-id="{{ property.property_id }}" data-property-name="{{ property.name }}" data-property-layer="{{ property.map_layer }}">
                     <div class="asset-img">
                         {% if property.cover_image %}
                             <img src="{{ property.cover_image.url }}" alt="{{ property.name }}">
@@ -1722,14 +1976,92 @@
         const propertyCards = Array.from(document.querySelectorAll('.asset-card[data-property-id]'));
         const propertySearchEmpty = document.getElementById('property-search-empty');
         const propertySidebarCount = document.getElementById('property-sidebar-count');
+        const analyticsTotalProperties = document.getElementById('analytics-total-properties');
         const initialPropertyCountLabel = propertySidebarCount?.textContent || '';
+
+        const analyticsRules = {
+            pune: ['pune'],
+            mumbai: ['mumbai', 'bombay'],
+            nashik: ['nashik', 'nasik'],
+            nagpur: ['nagpur'],
+            ppp: ['ppp', 'public private partnership'],
+            lease: ['lease', 'leased'],
+            commercial: ['commercial'],
+            residential: ['residential'],
+            public: ['public zone'],
+            'semi-public': ['semi-public', 'semi public', 'semipublic']
+        };
+
+        const getAnalyticsText = (card) => normalizeText(
+            ` ${card.dataset.propertyId || ''} ${card.dataset.propertyName || ''} ${card.dataset.propertyLayer || ''} ${card.textContent || ''} `
+        ).toLowerCase();
+
+        const hasAnalyticsMatch = (text, key) => {
+            if (key === 'public' && hasAnalyticsMatch(text, 'semi-public')) {
+                return false;
+            }
+
+            return (analyticsRules[key] || []).some((term) => text.includes(term));
+        };
+
+        const setAnalyticsRowValue = (key, value, maxValue) => {
+            const row = document.querySelector(`.analytics-row[data-analytics-key="${key}"]`);
+            if (!row) {
+                return;
+            }
+
+            const valueElement = row.querySelector('.analytics-value');
+            const meter = row.querySelector('.analytics-meter i');
+            const percentage = maxValue > 0 ? Math.round((value / maxValue) * 100) : 0;
+
+            if (valueElement) {
+                valueElement.textContent = value;
+            }
+
+            if (meter) {
+                meter.style.setProperty('--meter', `${percentage}%`);
+            }
+        };
+
+        const updateAnalytics = () => {
+            const visibleCards = propertyCards.filter((card) => !card.hidden);
+            const counts = Object.keys(analyticsRules).reduce((accumulator, key) => {
+                accumulator[key] = 0;
+                return accumulator;
+            }, {});
+
+            visibleCards.forEach((card) => {
+                const analyticsText = getAnalyticsText(card);
+
+                Object.keys(counts).forEach((key) => {
+                    if (hasAnalyticsMatch(analyticsText, key)) {
+                        counts[key] += 1;
+                    }
+                });
+            });
+
+            if (analyticsTotalProperties) {
+                analyticsTotalProperties.textContent = visibleCards.length;
+            }
+
+            ['pune', 'mumbai', 'nashik', 'nagpur', 'commercial', 'residential', 'public', 'semi-public'].forEach((key) => {
+                setAnalyticsRowValue(key, counts[key], visibleCards.length);
+            });
+
+            ['ppp', 'lease'].forEach((key) => {
+                const tileValue = document.querySelector(`.ownership-tile strong[data-analytics-key="${key}"]`);
+                if (tileValue) {
+                    tileValue.textContent = counts[key];
+                }
+            });
+        };
 
         const filterPropertyCards = () => {
             const query = normalizeText(propertySearchInput?.value || '').toLowerCase();
             let visibleCount = 0;
 
             propertyCards.forEach((card) => {
-                const searchableText = `${card.dataset.propertyId || ''} ${card.dataset.propertyName || ''}`.toLowerCase();
+                const searchableText = `${card.dataset.propertyId || ''} ${card.dataset.propertyName || ''} ${card.dataset.propertyLayer || ''}`.toLowerCase();
                 const isMatch = !query || searchableText.includes(query);
                 card.hidden = !isMatch;
                 if (isMatch) {
@@ -1746,11 +2078,15 @@
                     ? `${visibleCount} ${visibleCount === 1 ? 'property' : 'properties'} matched`
                     : initialPropertyCountLabel;
             }
+
+            updateAnalytics();
         };
 
         if (propertySearchInput) {
             propertySearchInput.addEventListener('input', filterPropertyCards);
         }
+
+        updateAnalytics();
 
         const assetModal = document.getElementById('asset-viewer-modal');
         const assetModalTitle = document.getElementById('asset-modal-title');

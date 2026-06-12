@@ -101,6 +101,7 @@ def dashboard(request, property_id=None):
             + len(property_card.models_3d.all())
         )
         map_details = map_details_by_property_id.get(property_card.property_id)
+        property_card.map_layer = map_details["layer"] if map_details else ""
         property_card.dashboard_url = f"/property/{property_card.property_id}/"
 
     selected_property_map_details = None
