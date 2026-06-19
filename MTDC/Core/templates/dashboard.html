@@ -1599,9 +1599,16 @@
         const selectedPropertyId = selectedPropertyIdParam !== null ? Number(selectedPropertyIdParam) : Number(selectedPropertyMapData?.property_id);
         const selectedPropertyLon = urlParams.has('lon') ? Number(urlParams.get('lon')) : Number(selectedPropertyMapData?.lon);
         const selectedPropertyLat = urlParams.has('lat') ? Number(urlParams.get('lat')) : Number(selectedPropertyMapData?.lat);
+        const selectedPropertyExtent = Array.isArray(selectedPropertyMapData?.area_extent)
+            ? selectedPropertyMapData.area_extent.map((value) => Number(value))
+            : null;
         const hasSelectedPropertyCoordinate = selectedPropertyName && Number.isFinite(selectedPropertyLon) && Number.isFinite(selectedPropertyLat);
+        const hasSelectedPropertyExtent = selectedPropertyExtent?.length === 4
+            && selectedPropertyExtent.every((value) => Number.isFinite(value))
+            && selectedPropertyExtent[0] <= selectedPropertyExtent[2]
+            && selectedPropertyExtent[1] <= selectedPropertyExtent[3];
         const hasSelectedPropertyId = Number.isInteger(selectedPropertyId);
-        const hasSelectedProperty = hasSelectedPropertyCoordinate;
+        const hasSelectedProperty = hasSelectedPropertyId || hasSelectedPropertyCoordinate || hasSelectedPropertyExtent;
         const stateBoundaryExtent = JSON.parse(
             document.getElementById('state-boundary-extent-data').textContent
         );
@@ -1649,7 +1656,7 @@
         const pointMtdcLayer = new ol.layer.Tile({
             source: pointMtdcSource,
             opacity: 1,
-            visible: !hasSelectedPropertyCoordinate,
+            visible: !hasSelectedProperty,
             zIndex: 10
         });
 
@@ -1739,7 +1746,7 @@
         });
 
         const fitStateBoundary = () => {
-            if (!stateBoundaryExtent || hasSelectedPropertyCoordinate) {
+            if (!stateBoundaryExtent || hasSelectedProperty) {
                 return;
             }
 
@@ -1982,9 +1989,33 @@
             openPropertyDashboard(hoveredPropertyName, hoveredLayerName, hoveredPropertyId, hoveredPointCoordinate);
         });
 
-        const focusSelectedProperty = (selectedCoordinate) => {
+        const fitSelectedPropertyExtent = () => {
+            const projectedExtent = ol.proj.transformExtent(
+                selectedPropertyExtent,
+                'EPSG:4326',
+                'EPSG:3857'
+            );
+
+            map.getView().fit(projectedExtent, {
+                padding: [70, 70, 70, 70],
+                duration: 0,
+                maxZoom: 20
+            });
+        };
+
+        const focusSelectedProperty = (selectedCoordinate = null) => {
             pointMtdcLayer.setVisible(false);
             areaMtdcLayer.setVisible(true);
+
+            if (hasSelectedPropertyExtent) {
+                fitSelectedPropertyExtent();
+                return;
+            }
+
+            if (!selectedCoordinate) {
+                return;
+            }
+
             map.getView().setCenter(selectedCoordinate);
             map.getView().setZoom(14);
 
@@ -1995,7 +2026,9 @@
                 });
         };
 
-        if (hasSelectedPropertyCoordinate) {
+        if (hasSelectedPropertyExtent) {
+            focusSelectedProperty();
+        } else if (hasSelectedPropertyCoordinate) {
             focusSelectedProperty(ol.proj.fromLonLat([selectedPropertyLon, selectedPropertyLat]));
         }
 

@@ -17,6 +17,8 @@ def get_property_map_details(property_ids):
     if not property_ids:
         return {}
 
+    details_by_property_id = {}
+
     with connection.cursor() as cursor:
         cursor.execute(
             """
@@ -31,16 +33,55 @@ def get_property_map_details(property_ids):
             """,
             [property_ids],
         )
-        return {
+        details_by_property_id = {
             row[0]: {
                 "property": row[1] or "",
                 "layer": row[2] or "",
                 "lon": row[3],
                 "lat": row[4],
+                "area_extent": None,
             }
             for row in cursor.fetchall()
         }
 
+        cursor.execute(
+            """
+            SELECT
+                property_id,
+                COALESCE(MIN(NULLIF(BTRIM(name::text), '')), '') AS name,
+                COALESCE(MIN(NULLIF(BTRIM(layer::text), '')), '') AS layer,
+                ST_XMin(ST_Extent(ST_Transform(geom, 4326))) AS min_lon,
+                ST_YMin(ST_Extent(ST_Transform(geom, 4326))) AS min_lat,
+                ST_XMax(ST_Extent(ST_Transform(geom, 4326))) AS max_lon,
+                ST_YMax(ST_Extent(ST_Transform(geom, 4326))) AS max_lat
+            FROM public.area_mtdc
+            WHERE property_id = ANY(%s)
+            GROUP BY property_id
+            """,
+            [property_ids],
+        )
+
+        for row in cursor.fetchall():
+            details = details_by_property_id.setdefault(
+                row[0],
+                {
+                    "property": row[1] or "",
+                    "layer": row[2] or "",
+                    "lon": None,
+                    "lat": None,
+                    "area_extent": None,
+                },
+            )
+            if not details["property"]:
+                details["property"] = row[1] or ""
+            if not details["layer"]:
+                details["layer"] = row[2] or ""
+
+            extent = row[3:7]
+            if all(value is not None for value in extent):
+                details["area_extent"] = list(extent)
+
+    return details_by_property_id
 
 def get_state_boundary_extent():
     with connection.cursor() as cursor:
@@ -119,6 +160,7 @@ def dashboard(request, property_id=None):
                 "property_id": int(selected_property_id),
                 "lon": selected_property_map_details["lon"],
                 "lat": selected_property_map_details["lat"],
+                "area_extent": selected_property_map_details["area_extent"],
             }
 
     state_boundary_extent = get_state_boundary_extent()
