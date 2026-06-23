@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .models import master_mtdc
+from .models import master_mtdc, PropertyCover
 
 
 @login_required
@@ -17,6 +17,14 @@ def dashboard(request, property_id=None):
         properties = properties.filter(property_id=int(selected_property_id))
 
     property_cards = list(properties)
+
+    covers = PropertyCover.objects.filter(
+        property_id__in=[p.property_id for p in property_cards]
+    )
+    cover_map = {c.property_id: c.cover_image.url for c in covers}
+
+    for prop in property_cards:
+        prop.cover_url = cover_map.get(prop.property_id)
 
     context = {
         "properties": property_cards,

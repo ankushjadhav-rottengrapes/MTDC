@@ -1464,98 +1464,24 @@
 
             <div class="cards">
                 {% for property in properties %}
-                <article class="asset-card" data-property-id="{{ property.property_id }}" data-property-name="{{ property.name }}" data-property-layer="{{ property.map_layer }}">
+                <article class="asset-card" data-property-id="{{ property.property_id }}" data-property-name="{{ property.property_name }}">
                     <div class="asset-img">
-                        {% if property.cover_image %}
-                            <img src="{{ property.cover_image.url }}" alt="{{ property.name }}">
+                        {% if property.cover_url %}
+                            <img src="{{ property.cover_url }}" alt="{{ property.property_name }}">
                         {% else %}
-                            <img src="{% static 'images/tarkarli-coast.svg' %}" alt="{{ property.name }}">
+                            <img src="{% static 'images/tarkarli-coast.svg' %}" alt="{{ property.property_name }}">
                         {% endif %}
-                        <span class="asset-id">PROPERTY ID: {{ property.property_id }}</span>
                     </div>
                     <div class="asset-body">
                         <div class="asset-title">
-                            <h3>{{ property.name }}</h3>
+                            <h3>{{ property.property_name }}</h3>
+                            {% if property.category %}<span class="status">{{ property.category }}</span>{% endif %}
                         </div>
-
-                        {% if is_property_detail %}
-                            <div class="asset-summary" aria-label="Property asset counts">
-                                <div class="asset-pill"><strong>{{ property.documents.all|length }}</strong><span>Docs</span></div>
-                                <div class="asset-pill"><strong>{{ property.images.all|length }}</strong><span>Images</span></div>
-                                <div class="asset-pill"><strong>{{ property.videos.all|length }}</strong><span>Videos</span></div>
-                                <div class="asset-pill"><strong>{{ property.models_3d.all|length }}</strong><span>3D</span></div>
-                            </div>
-
-                            <div class="asset-groups">
-                                <section class="asset-group asset-category-row">
-                                    <span class="asset-category-name">Documents</span>
-                                    <span class="asset-count">{{ property.documents.all|length }}</span>
-                                    <button class="asset-view-btn" type="button" data-category="documents" data-property-id="{{ property.property_id }}" aria-label="View documents">
-                                        <span class="material-symbols-outlined">visibility</span>
-                                    </button>
-                                </section>
-
-                                <section class="asset-group asset-category-row">
-                                    <span class="asset-category-name">Images</span>
-                                    <span class="asset-count">{{ property.images.all|length }}</span>
-                                    <button class="asset-view-btn" type="button" data-category="images" data-property-id="{{ property.property_id }}" aria-label="View images">
-                                        <span class="material-symbols-outlined">visibility</span>
-                                    </button>
-                                </section>
-
-                                <section class="asset-group asset-category-row">
-                                    <span class="asset-category-name">Videos</span>
-                                    <span class="asset-count">{{ property.videos.all|length }}</span>
-                                    <button class="asset-view-btn" type="button" data-category="videos" data-property-id="{{ property.property_id }}" aria-label="View videos">
-                                        <span class="material-symbols-outlined">visibility</span>
-                                    </button>
-                                </section>
-
-                                <section class="asset-group asset-category-row">
-                                    <span class="asset-category-name">3D Models</span>
-                                    <span class="asset-count">{{ property.models_3d.all|length }}</span>
-                                    <button class="asset-view-btn" type="button" data-category="models3d" data-property-id="{{ property.property_id }}" aria-label="View 3D models">
-                                        <span class="material-symbols-outlined">visibility</span>
-                                    </button>
-                                </section>
-                            </div>
-
-                            <div class="property-asset-data" data-property-id="{{ property.property_id }}" data-property-name="{{ property.name }}" hidden>
-                                {% for document in property.documents.all %}
-                                    <span class="asset-data-item" data-category="documents" data-group="Uploaded documents" data-title="{{ document.title }}" data-url="{{ document.file.url }}" data-kind="document"></span>
-                                {% endfor %}
-                                {% for image in property.images.all %}
-                                    <span class="asset-data-item" data-category="images" data-group="Uploaded images" data-title="{{ image.caption|default:'Property image' }}" data-url="{{ image.image.url }}" data-kind="image"></span>
-                                {% endfor %}
-                                {% for video in property.videos.all %}
-                                    <span class="asset-data-item" data-category="videos" data-group="Uploaded videos" data-title="{{ video.title }}" data-url="{{ video.video.url }}" data-kind="video"></span>
-                                {% endfor %}
-                                {% for model in property.models_3d.all %}
-                                    <span class="asset-data-item" data-category="models3d" data-group="Uploaded 3D models" data-title="{{ model.title }}" data-url="{{ model.file.url }}" data-kind="model"></span>
-                                {% endfor %}
-                            </div>
-
-                            {% if property.description %}
-                                <div class="asset-group">
-                                    <h4 class="asset-group-title">Tourism Note</h4>
-                                    <p class="asset-empty">{{ property.description|truncatechars:160 }}</p>
-                                </div>
-                            {% endif %}
-                        {% endif %}
-
-                        {% if not is_property_detail %}
-                            <div class="card-actions">
-                                <a class="details-btn" href="{{ property.dashboard_url }}" target="_blank" rel="noopener">Open property</a>
-                                <a class="view-btn" href="{{ property.dashboard_url }}" target="_blank" rel="noopener" aria-label="Open {{ property.name }}">
-                                    <span class="material-symbols-outlined">open_in_new</span>
-                                </a>
-                            </div>
-                        {% endif %}
                     </div>
                 </article>
                 {% empty %}
                     <div class="empty-sidebar">
-                        No active properties found for this view. Add properties and related documents, images, videos, or 3D models from the admin panel.
+                        No properties found.
                     </div>
                 {% endfor %}
                 <div id="property-search-empty" class="empty-sidebar" hidden>
