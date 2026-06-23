@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import (
+    master_mtdc,
     Property,
     Property3DModel,
     PropertyDocument,
@@ -89,3 +90,9 @@ class Property3DModelAdmin(admin.ModelAdmin):
     search_fields = ("title", "property__name", "property__property_id")
     autocomplete_fields = ("property",)
     readonly_fields = ("uploaded_at",)
+
+
+@admin.register(master_mtdc)
+class master_mtdc_admin(admin.ModelAdmin):
+    list_display = ("property_id", "property_name", "category")
+    search_fields = ("property_id", "property_name", "category")
