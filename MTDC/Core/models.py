@@ -18,3 +18,24 @@ class master_mtdc(models.Model):
 
     def __str__(self):
         return f"{self.property_id} - {self.property_name}"
+
+
+def property_cover_upload_path(instance, filename):
+    from pathlib import Path
+    from uuid import uuid4
+    ext = Path(filename).suffix.lower()
+    return f"properties/{instance.property_id}/cover/{uuid4().hex}{ext}"
+
+
+class PropertyCover(models.Model):
+    property_id = models.IntegerField(unique=True)
+    cover_image = models.ImageField(upload_to=property_cover_upload_path)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "core_propertycover"
+        verbose_name = "Property Cover Photo"
+        verbose_name_plural = "Property Cover Photos"
+
+    def __str__(self):
+        return f"Cover for property {self.property_id}"
