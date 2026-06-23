@@ -39,3 +39,49 @@ class PropertyCover(models.Model):
 
     def __str__(self):
         return f"Cover for property {self.property_id}"
+
+
+def property_image_upload_path(instance, filename):
+    from pathlib import Path
+    from uuid import uuid4
+    ext = Path(filename).suffix.lower()
+    return f"properties/{instance.property_id}/images/{uuid4().hex}{ext}"
+
+
+def property_document_upload_path(instance, filename):
+    from pathlib import Path
+    from uuid import uuid4
+    ext = Path(filename).suffix.lower()
+    return f"properties/{instance.property_id}/documents/{uuid4().hex}{ext}"
+
+
+class PropertyImage(models.Model):
+    property_id = models.IntegerField()
+    image = models.ImageField(upload_to=property_image_upload_path)
+    caption = models.CharField(max_length=255, blank=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "core_propertyimage"
+        ordering = ["-uploaded_at"]
+        verbose_name = "Property Image"
+        verbose_name_plural = "Property Images"
+
+    def __str__(self):
+        return f"Image for property {self.property_id} - {self.caption or 'No caption'}"
+
+
+class PropertyDocument(models.Model):
+    property_id = models.IntegerField()
+    title = models.CharField(max_length=255)
+    file = models.FileField(upload_to=property_document_upload_path)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "core_propertydocument"
+        ordering = ["-uploaded_at"]
+        verbose_name = "Property Document"
+        verbose_name_plural = "Property Documents"
+
+    def __str__(self):
+        return f"Document for property {self.property_id} - {self.title}"
