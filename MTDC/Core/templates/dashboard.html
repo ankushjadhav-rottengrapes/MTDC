@@ -1533,10 +1533,10 @@
     <script src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js"></script>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <script>
-        const GEOSERVER_URL = 'http://purandar-airport.rottengrapes.tech/geoserver';
+        const GEOSERVER_URL = 'https://purandar-airport.rottengrapes.tech/geoserver';
         const GEOSERVER_WORKSPACE = 'mtdc';
         const STATE_BOUNDARY_LAYER_NAME = `${GEOSERVER_WORKSPACE}:state_bd`;
-        const POINT_LAYER_NAME = `${GEOSERVER_WORKSPACE}:master_mtdc`;
+        const POINT_LAYER_NAME = `${GEOSERVER_WORKSPACE}:pt_mtdc`;
         const AREA_LAYER_NAME = `${GEOSERVER_WORKSPACE}:area_mtdc`;
         const urlParams = new URLSearchParams(window.location.search);
         const selectedPropertyMapData = JSON.parse(
@@ -1605,7 +1605,7 @@
         const pointMtdcLayer = new ol.layer.Tile({
             source: pointMtdcSource,
             opacity: 1,
-            visible: true,
+            visible: !hasSelectedProperty,
             zIndex: 10
         });
 
@@ -1663,8 +1663,6 @@
 
         const selectedAreaFilter = hasSelectedProperty ? buildAreaFilter() : '';
 
-        const propertyDetailCqlFilter = hasSelectedPropertyId ? `property_id=${selectedPropertyId}` : '';
-
         const areaMtdcSource = new ol.source.TileWMS({
             url: `${GEOSERVER_URL}/${GEOSERVER_WORKSPACE}/wms`,
             params: {
@@ -1687,35 +1685,9 @@
             zIndex: 20
         });
 
-        const propertyDetailSource = propertyDetailCqlFilter ? new ol.source.TileWMS({
-            url: `${GEOSERVER_URL}/${GEOSERVER_WORKSPACE}/wms`,
-            params: {
-                LAYERS: POINT_LAYER_NAME,
-                TILED: true,
-                VERSION: '1.1.1',
-                FORMAT: 'image/png',
-                TRANSPARENT: true,
-                CQL_FILTER: propertyDetailCqlFilter
-            },
-            serverType: 'geoserver',
-            crossOrigin: 'anonymous',
-            transition: 0
-        }) : null;
-
-        const propertyDetailLayer = propertyDetailSource ? new ol.layer.Tile({
-            source: propertyDetailSource,
-            opacity: 1,
-            visible: true,
-            zIndex: 25
-        }) : null;
-
         const map = new ol.Map({
             target: 'mtdc-map',
-            layers: [
-                baseLayers.satellite, stateBoundaryLayer, areaMtdcLayer, pointMtdcLayer,
-                ...(propertyDetailLayer ? [propertyDetailLayer] : [])
-            ],
-
+            layers: [baseLayers.satellite, stateBoundaryLayer, areaMtdcLayer, pointMtdcLayer],
             view: new ol.View({
                 center: ol.proj.fromLonLat([76.75, 18.85]),
                 zoom: 6
@@ -1772,7 +1744,7 @@
             }
 
             const properties = payload.features[0].properties || {};
-            return properties.property_name || properties.name || '';
+            return properties.name || '';
         };
 
         const getFeatureProperties = (payload) => {
@@ -2007,35 +1979,6 @@
             focusSelectedProperty();
         } else if (hasSelectedPropertyCoordinate) {
             focusSelectedProperty(ol.proj.fromLonLat([selectedPropertyLon, selectedPropertyLat]));
-        } else if (propertyDetailCqlFilter) {
-            const wfsUrl = `${GEOSERVER_URL}/${GEOSERVER_WORKSPACE}/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=${POINT_LAYER_NAME}&outputFormat=application/json&CQL_FILTER=${encodeURIComponent(propertyDetailCqlFilter)}&maxFeatures=1`;
-            fetch(wfsUrl)
-                .then((r) => r.ok ? r.json() : null)
-                .then((payload) => {
-                    if (!payload || !payload.features || payload.features.length === 0) return;
-                    const features = new ol.format.GeoJSON().readFeatures(payload, {
-                        dataProjection: 'EPSG:4326',
-                        featureProjection: 'EPSG:3857'
-                    });
-                    if (features.length === 0) return;
-                    const geom = features[0].getGeometry();
-                    const extent = geom.getExtent();
-                    const isPoint = geom.getType() === 'Point' || geom.getType() === 'MultiPoint';
-                    if (isPoint) {
-                        map.getView().animate({
-                            center: ol.extent.getCenter(extent),
-                            zoom: 15,
-                            duration: 700
-                        });
-                    } else {
-                        map.getView().fit(extent, {
-                            padding: [70, 70, 70, 70],
-                            duration: 700,
-                            maxZoom: 18
-                        });
-                    }
-                })
-                .catch(() => {});
         }
 
         document.querySelectorAll('.layer-options button').forEach((button) => {
@@ -2166,14 +2109,6 @@
         }
 
         updateAnalytics();
-
-        document.querySelectorAll('.asset-card[data-property-id]').forEach((card) => {
-            card.style.cursor = 'pointer';
-            card.addEventListener('click', () => {
-                const pid = card.dataset.propertyId;
-                if (pid) window.open(`/property/${pid}/`, '_blank');
-            });
-        });
 
         const assetModal = document.getElementById('asset-viewer-modal');
         const assetModalTitle = document.getElementById('asset-modal-title');

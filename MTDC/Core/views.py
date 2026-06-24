@@ -26,17 +26,11 @@ def dashboard(request, property_id=None):
     for prop in property_cards:
         prop.cover_url = cover_map.get(prop.property_id)
 
-    is_detail = bool(selected_property_id and selected_property_id.isdigit())
-
-    selected_property_map_details = None
-    if is_detail:
-        selected_property_map_details = {"property_id": int(selected_property_id)}
-
     context = {
         "properties": property_cards,
         "property_count": len(property_cards),
-        "is_property_detail": is_detail,
+        "is_property_detail": bool(selected_property_id and selected_property_id.isdigit()),
         "state_boundary_extent_coords": None,
-        "selected_property_map_details": selected_property_map_details,
+        "selected_property_map_details": None,
     }
     return render(request, "dashboard.html", context)
