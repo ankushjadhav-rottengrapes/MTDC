@@ -1974,6 +1974,16 @@
         const analyticsTotalProperties = document.getElementById('analytics-total-properties');
         const initialPropertyCountLabel = propertySidebarCount?.textContent || '';
 
+        propertyCards.forEach((card) => {
+            const propertyId = card.dataset.propertyId;
+            if (!propertyId) {
+                return;
+            }
+            card.addEventListener('click', () => {
+                window.open(`/property/${propertyId}/`, '_blank');
+            });
+        });
+
         const analyticsRules = {
             pune: ['pune'],
             mumbai: ['mumbai', 'bombay'],
