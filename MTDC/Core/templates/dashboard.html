@@ -1536,8 +1536,7 @@
         const GEOSERVER_URL = 'https://purandar-airport.rottengrapes.tech/geoserver';
         const GEOSERVER_WORKSPACE = 'mtdc';
         const STATE_BOUNDARY_LAYER_NAME = `${GEOSERVER_WORKSPACE}:state_bd`;
-        const POINT_LAYER_NAME = `${GEOSERVER_WORKSPACE}:pt_mtdc`;
-        const AREA_LAYER_NAME = `${GEOSERVER_WORKSPACE}:area_mtdc`;
+        const MASTER_LAYER_NAME = `${GEOSERVER_WORKSPACE}:master_mtdc`;
         const urlParams = new URLSearchParams(window.location.search);
         const selectedPropertyMapData = JSON.parse(
             document.getElementById('selected-property-map-data').textContent
@@ -1587,27 +1586,6 @@
                 preload: Infinity
             })
         };
-
-        const pointMtdcSource = new ol.source.TileWMS({
-            url: `${GEOSERVER_URL}/${GEOSERVER_WORKSPACE}/wms`,
-            params: {
-                LAYERS: POINT_LAYER_NAME,
-                TILED: true,
-                VERSION: '1.1.1',
-                FORMAT: 'image/png',
-                TRANSPARENT: true
-            },
-            serverType: 'geoserver',
-            crossOrigin: 'anonymous',
-            transition: 0
-        });
-
-        const pointMtdcLayer = new ol.layer.Tile({
-            source: pointMtdcSource,
-            opacity: 1,
-            visible: !hasSelectedProperty,
-            zIndex: 10
-        });
 
         const stateBoundarySource = new ol.source.TileWMS({
             url: `${GEOSERVER_URL}/${GEOSERVER_WORKSPACE}/wms`,
@@ -1663,10 +1641,10 @@
 
         const selectedAreaFilter = hasSelectedProperty ? buildAreaFilter() : '';
 
-        const areaMtdcSource = new ol.source.TileWMS({
+        const masterMtdcSource = new ol.source.TileWMS({
             url: `${GEOSERVER_URL}/${GEOSERVER_WORKSPACE}/wms`,
             params: {
-                LAYERS: AREA_LAYER_NAME,
+                LAYERS: MASTER_LAYER_NAME,
                 TILED: true,
                 VERSION: '1.1.1',
                 FORMAT: 'image/png',
@@ -1678,16 +1656,16 @@
             transition: 0
         });
 
-        const areaMtdcLayer = new ol.layer.Tile({
-            source: areaMtdcSource,
+        const masterMtdcLayer = new ol.layer.Tile({
+            source: masterMtdcSource,
             opacity: 1,
-            visible: hasSelectedProperty,
+            visible: true,
             zIndex: 20
         });
 
         const map = new ol.Map({
             target: 'mtdc-map',
-            layers: [baseLayers.satellite, stateBoundaryLayer, areaMtdcLayer, pointMtdcLayer],
+            layers: [baseLayers.satellite, stateBoundaryLayer, masterMtdcLayer],
             view: new ol.View({
                 center: ol.proj.fromLonLat([76.75, 18.85]),
                 zoom: 6
@@ -1739,12 +1717,9 @@
         };
 
         const extractFeatureName = (payload) => {
-            if (!payload || !Array.isArray(payload.features) || payload.features.length === 0) {
-                return '';
-            }
+            const properties = getFeatureProperties(payload);
 
-            const properties = payload.features[0].properties || {};
-            return properties.name || '';
+            return properties.property_name || properties.name || properties.title || properties.layer || '';
         };
 
         const getFeatureProperties = (payload) => {
@@ -1848,7 +1823,7 @@
             });
 
             for (const coordinate of candidateCoordinates) {
-                const payload = await getFeatureInfo(areaMtdcSource, coordinate, AREA_LAYER_NAME);
+                const payload = await getFeatureInfo(masterMtdcSource, coordinate, MASTER_LAYER_NAME);
                 const featureCount = payload?.features?.length || 0;
 
                 if (featureCount > 0) {
@@ -1881,14 +1856,14 @@
             }
 
             const viewResolution = map.getView().getResolution();
-            const infoUrl = pointMtdcSource.getFeatureInfoUrl(
+            const infoUrl = masterMtdcSource.getFeatureInfoUrl(
                 event.coordinate,
                 viewResolution,
                 'EPSG:3857',
                 {
                     INFO_FORMAT: 'application/json',
                     FEATURE_COUNT: 1,
-                    QUERY_LAYERS: POINT_LAYER_NAME
+                    QUERY_LAYERS: MASTER_LAYER_NAME
                 }
             );
 
@@ -1953,8 +1928,7 @@
         };
 
         const focusSelectedProperty = (selectedCoordinate = null) => {
-            pointMtdcLayer.setVisible(false);
-            areaMtdcLayer.setVisible(true);
+            masterMtdcLayer.setVisible(true);
 
             if (hasSelectedPropertyExtent) {
                 fitSelectedPropertyExtent();
