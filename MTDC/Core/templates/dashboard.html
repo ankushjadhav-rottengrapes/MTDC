@@ -1562,25 +1562,74 @@
                     <button class="accordion-trigger" type="button">
                         <span class="material-symbols-outlined">description</span>
                         <span class="accordion-trigger-label">Property Documents</span>
+                        <span class="accordion-trigger-label" style="font-size:11px;color:var(--muted);">{{ property_documents|length }}</span>
                         <span class="material-symbols-outlined accordion-chevron">expand_more</span>
                     </button>
-                    <div class="accordion-body">No documents uploaded yet.</div>
+                    <div class="accordion-body">
+                        {% if property_documents %}
+                            <div style="display:grid;gap:6px;">
+                            {% for doc in property_documents %}
+                                <a href="{{ doc.file.url }}" target="_blank" rel="noopener"
+                                   style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
+                                    <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">description</span>
+                                    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ doc.title }}</span>
+                                    <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
+                                </a>
+                            {% endfor %}
+                            </div>
+                        {% else %}
+                            <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No documents uploaded yet.</p>
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="accordion-item">
                     <button class="accordion-trigger" type="button">
                         <span class="material-symbols-outlined">image</span>
                         <span class="accordion-trigger-label">Property Images</span>
+                        <span class="accordion-trigger-label" style="font-size:11px;color:var(--muted);">{{ property_images|length }}</span>
                         <span class="material-symbols-outlined accordion-chevron">expand_more</span>
                     </button>
-                    <div class="accordion-body">No images uploaded yet.</div>
+                    <div class="accordion-body">
+                        {% if property_images %}
+                            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;">
+                            {% for img in property_images %}
+                                <a href="{{ img.image.url }}" target="_blank" rel="noopener" style="display:block;border-radius:8px;overflow:hidden;border:1px solid var(--line);">
+                                    <img src="{{ img.image.url }}" alt="{{ img.caption|default:property.property_name }}"
+                                         style="width:100%;height:80px;object-fit:cover;display:block;">
+                                    {% if img.caption %}
+                                        <p style="margin:0;padding:5px 8px;font-size:11px;font-weight:700;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ img.caption }}</p>
+                                    {% endif %}
+                                </a>
+                            {% endfor %}
+                            </div>
+                        {% else %}
+                            <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No images uploaded yet.</p>
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="accordion-item">
                     <button class="accordion-trigger" type="button">
                         <span class="material-symbols-outlined">movie</span>
                         <span class="accordion-trigger-label">Property Videos</span>
+                        <span class="accordion-trigger-label" style="font-size:11px;color:var(--muted);">{{ property_videos|length }}</span>
                         <span class="material-symbols-outlined accordion-chevron">expand_more</span>
                     </button>
-                    <div class="accordion-body">No videos uploaded yet.</div>
+                    <div class="accordion-body">
+                        {% if property_videos %}
+                            <div style="display:grid;gap:6px;">
+                            {% for video in property_videos %}
+                                <a href="{{ video.youtube_url }}" target="_blank" rel="noopener"
+                                   style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
+                                    <span class="material-symbols-outlined" style="color:#ff0000;font-size:18px;">smart_display</span>
+                                    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ video.title|default:video.youtube_url }}</span>
+                                    <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
+                                </a>
+                            {% endfor %}
+                            </div>
+                        {% else %}
+                            <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No videos uploaded yet.</p>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
             {% endif %}

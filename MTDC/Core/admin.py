@@ -39,11 +39,16 @@ class PropertyImageAdmin(admin.ModelAdmin):
     list_filter = ("uploaded_at",)
 
 
+@admin.register(PropertyVideo)
+class PropertyVideoAdmin(admin.ModelAdmin):
+    list_display = ("property", "title", "youtube_url", "uploaded_at")
+    search_fields = ("property__property_name", "title")
+    list_filter = ("uploaded_at",)
+
+
+
 @admin.register(PropertyDocument)
 class PropertyDocumentAdmin(admin.ModelAdmin):
     list_display = ("property_id", "title", "uploaded_at")
     search_fields = ("property_id", "title")
     list_filter = ("uploaded_at",)
-
-
-admin.site.register(PropertyVideo)

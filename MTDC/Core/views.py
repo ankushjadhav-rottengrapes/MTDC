@@ -4,7 +4,7 @@ import struct
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .models import master_mtdc, PropertyCover
+from .models import master_mtdc, PropertyCover, PropertyImage, PropertyDocument, PropertyVideo
 
 
 def _read_wkb_uint32(raw, offset, endian):
@@ -155,11 +155,24 @@ def dashboard(request, property_id=None):
     for prop in property_cards:
         prop.cover_url = cover_map.get(prop.property_id)
 
+    property_images = []
+    property_documents = []
+    property_videos = []
+
+    if selected_property_id and selected_property_id.isdigit():
+        pid = int(selected_property_id)
+        property_images = list(PropertyImage.objects.filter(property_id=pid))
+        property_documents = list(PropertyDocument.objects.filter(property_id=pid))
+        property_videos = list(PropertyVideo.objects.filter(property_id=pid))
+
     context = {
         "properties": property_cards,
         "property_count": len(property_cards),
         "is_property_detail": bool(selected_property_id and selected_property_id.isdigit()),
         "state_boundary_extent_coords": None,
         "selected_property_map_details": selected_property_map_details,
+        "property_images": property_images,
+        "property_documents": property_documents,
+        "property_videos": property_videos,
     }
     return render(request, "dashboard.html", context)
