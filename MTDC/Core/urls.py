@@ -20,5 +20,6 @@ urlpatterns = [
         name='logout',
     ),
     path('', views.dashboard, name='dashboard'),
+    path('analytics/', views.analytics, name='analytics'),
     path('property/<int:property_id>/', views.dashboard, name='property_detail'),
 ]

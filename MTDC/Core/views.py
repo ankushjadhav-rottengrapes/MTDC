@@ -341,3 +341,9 @@ def dashboard(request, property_id=None):
         "zone_breakdown_data": zone_breakdown_data,
     }
     return render(request, "dashboard.html", context)
+
+
+@login_required
+def analytics(request):
+    context = {}
+    return render(request, "analytics.html", context)
