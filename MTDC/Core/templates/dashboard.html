@@ -293,7 +293,7 @@
         .content {
             height: calc(100vh - 176px);
             display: grid;
-            grid-template-columns: 280px minmax(0, 4fr) minmax(300px, 1fr);
+            grid-template-columns: 310px minmax(0, 4fr) minmax(300px, 1fr);
             background: #f9eedb;
         }
 
@@ -712,6 +712,25 @@
             border-color: rgba(15, 93, 168, 0.45);
             box-shadow: 0 0 0 2px rgba(15, 93, 168, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
             transform: translateY(-1px);
+        }
+
+        .zone-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .zone-tile {
+            min-height: 66px;
+            padding: 8px 10px;
+        }
+
+        .zone-tile span {
+            font-size: 11px;
+        }
+
+        .zone-tile strong {
+            font-size: 18px;
         }
 
         .ownership-breakdown {
@@ -1494,7 +1513,7 @@
             }
 
             .content {
-                grid-template-columns: 250px minmax(0, 1fr) 320px;
+                grid-template-columns: 280px minmax(0, 1fr) 320px;
             }
 
             .content.is-property-detail {
@@ -1695,12 +1714,12 @@
 
                 <section class="analytics-card" aria-label="Zone wise properties">
                     <h3>Zone Wise Properties</h3>
-                    <div class="ownership-grid">
-                        <button class="ownership-tile ownership-toggle is-active" type="button" data-zone-metric="rp">
+                    <div class="zone-grid">
+                        <button class="ownership-tile zone-tile ownership-toggle is-active" type="button" data-zone-metric="rp">
                             <span>RP Zone</span>
                             <strong data-zone-count="rp">{{ zone_breakdown_data.rp.count }}</strong>
                         </button>
-                        <button class="ownership-tile ownership-toggle" type="button" data-zone-metric="dp">
+                        <button class="ownership-tile zone-tile ownership-toggle" type="button" data-zone-metric="dp">
                             <span>DP Zone</span>
                             <strong data-zone-count="dp">{{ zone_breakdown_data.dp.count }}</strong>
                         </button>
@@ -2878,6 +2897,7 @@
     </script>
 </body>
 </html>
+
 
 
 
