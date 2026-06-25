@@ -291,18 +291,21 @@ def dashboard(request, property_id=None):
     if property_id is None and selected_property_id and selected_property_id.isdigit():
         return redirect(f"/property/{int(selected_property_id)}/")
 
-    properties = master_mtdc.objects.all().order_by("property_id")
-    property_cards = list(properties)
-    ownership_breakdown_data = _build_ownership_data(property_cards)
-    zone_breakdown_data = _build_zone_breakdown_data(property_cards)
+    all_properties = master_mtdc.objects.all().order_by("property_id")
+    analytics_properties = list(all_properties)
+    ownership_breakdown_data = _build_ownership_data(analytics_properties)
+    zone_breakdown_data = _build_zone_breakdown_data(analytics_properties)
     selected_property_map_details = None
     region_property_counts, max_region_property_count = _fetch_region_property_counts()
 
+    properties = all_properties
     if selected_property_id and selected_property_id.isdigit():
         selected_property_id_int = int(selected_property_id)
         properties = properties.filter(property_id=selected_property_id_int)
         selected_property_obj = properties.first()
         selected_property_map_details = _build_selected_property_map_data(selected_property_obj)
+
+    property_cards = list(properties)
 
     covers = PropertyCover.objects.filter(
         property_id__in=[p.property_id for p in property_cards]
