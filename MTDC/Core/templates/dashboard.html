@@ -1686,10 +1686,7 @@
 
                     <div class="ownership-breakdown">
                         <div class="ownership-breakdown-head">
-                            <h4>Region Breakdown</h4>
-                            <div class="ownership-breakdown-subhead">
-                                <span id="ownership-breakdown-title" class="ownership-breakdown-pill">PPP</span>
-                            </div>
+                            <h4 id="ownership-breakdown-title">PPP Region Breakdown</h4>
                         </div>
                         <div class="ownership-breakdown-table" id="ownership-breakdown-table" role="table" aria-label="Region ownership breakdown"></div>
                     </div>
@@ -2409,7 +2406,7 @@
 
             const header = document.createElement('div');
             header.className = 'ownership-breakdown-head-row';
-            header.innerHTML = '<span>Region</span><span>' + data.metricLabel + '</span>';
+            header.innerHTML = '<span>Region</span><span>Count</span>';
             ownershipBreakdownTable.appendChild(header);
 
             data.rows.forEach(([region, value]) => {
@@ -2787,6 +2784,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 
