@@ -583,6 +583,25 @@
             gap: 10px;
         }
 
+        .region-analytics-list {
+            max-height: 176px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        .region-analytics-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .region-analytics-list::-webkit-scrollbar-thumb {
+            border-radius: 999px;
+            background: rgba(15, 93, 168, 0.35);
+        }
+
+        .region-analytics-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
         .analytics-row {
             display: grid;
             grid-template-columns: 28px minmax(0, 1fr) auto;
@@ -1436,27 +1455,16 @@
 
                 <section class="analytics-card" aria-label="Region wise properties">
                     <h3>Region Wise Properties</h3>
-                    <div class="analytics-list">
-                        <div class="analytics-row" data-analytics-key="pune">
-                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">location_city</span></span>
-                            <span class="analytics-label"><span>Pune</span><span class="analytics-meter"><i></i></span></span>
-                            <span class="analytics-value">0</span>
+                    <div class="analytics-list region-analytics-list">
+                        {% for region in region_property_counts %}
+                        <div class="analytics-row">
+                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">place</span></span>
+                            <span class="analytics-label"><span>{{ region.region }}</span><span class="analytics-meter"><i style="--meter: {% widthratio region.property_count max_region_property_count 100 %}%"></i></span></span>
+                            <span class="analytics-value">{{ region.property_count }}</span>
                         </div>
-                        <div class="analytics-row" data-analytics-key="mumbai">
-                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">apartment</span></span>
-                            <span class="analytics-label"><span>Mumbai</span><span class="analytics-meter"><i></i></span></span>
-                            <span class="analytics-value">0</span>
-                        </div>
-                        <div class="analytics-row" data-analytics-key="nashik">
-                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">terrain</span></span>
-                            <span class="analytics-label"><span>Nashik</span><span class="analytics-meter"><i></i></span></span>
-                            <span class="analytics-value">0</span>
-                        </div>
-                        <div class="analytics-row" data-analytics-key="nagpur">
-                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">domain</span></span>
-                            <span class="analytics-label"><span>Nagpur</span><span class="analytics-meter"><i></i></span></span>
-                            <span class="analytics-value">0</span>
-                        </div>
+                        {% empty %}
+                        <div class="analytics-empty">No region data found.</div>
+                        {% endfor %}
                     </div>
                 </section>
 
@@ -2129,10 +2137,6 @@
         });
 
         const analyticsRules = {
-            pune: ['pune'],
-            mumbai: ['mumbai', 'bombay'],
-            nashik: ['nashik', 'nasik'],
-            nagpur: ['nagpur'],
             ppp: ['ppp', 'public private partnership'],
             lease: ['lease', 'leased'],
             small: ['small property', 'small properties', 'small'],
@@ -2194,7 +2198,7 @@
                 analyticsTotalProperties.textContent = visibleCards.length;
             }
 
-            ['pune', 'mumbai', 'nashik', 'nagpur', 'commercial', 'residential', 'public', 'semi-public'].forEach((key) => {
+            ['commercial', 'residential', 'public', 'semi-public'].forEach((key) => {
                 setAnalyticsRowValue(key, counts[key], visibleCards.length);
             });
 
@@ -2490,3 +2494,4 @@
     </script>
 </body>
 </html>
+

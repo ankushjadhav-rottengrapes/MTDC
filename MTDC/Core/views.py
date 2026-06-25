@@ -1,10 +1,38 @@
 import binascii
 import struct
 
+from django.db import connection
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from .models import master_mtdc, PropertyCover, PropertyImage, PropertyDocument, PropertyVideo
+
+def _fetch_region_property_counts():
+    query = """
+        SELECT
+            BTRIM(region) AS region,
+            COUNT(DISTINCT property_id) AS property_count
+        FROM public.mtdc_pdf_data
+        WHERE NULLIF(BTRIM(region), '') IS NOT NULL
+        GROUP BY BTRIM(region)
+        ORDER BY BTRIM(region);
+    """
+
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+    region_property_counts = [
+        {
+            "region": row[0],
+            "property_count": int(row[1]),
+        }
+        for row in rows
+    ]
+
+    max_region_property_count = max((item["property_count"] for item in region_property_counts), default=0)
+
+    return region_property_counts, max(max_region_property_count, 1)
 
 
 def _read_wkb_uint32(raw, offset, endian):
@@ -138,6 +166,7 @@ def dashboard(request, property_id=None):
 
     properties = master_mtdc.objects.all().order_by("property_id")
     selected_property_map_details = None
+    region_property_counts, max_region_property_count = _fetch_region_property_counts()
 
     if selected_property_id and selected_property_id.isdigit():
         selected_property_id_int = int(selected_property_id)
@@ -174,5 +203,7 @@ def dashboard(request, property_id=None):
         "property_images": property_images,
         "property_documents": property_documents,
         "property_videos": property_videos,
+        "region_property_counts": region_property_counts,
+        "max_region_property_count": max_region_property_count,
     }
     return render(request, "dashboard.html", context)
