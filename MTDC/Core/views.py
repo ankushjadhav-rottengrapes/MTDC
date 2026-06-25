@@ -1,4 +1,5 @@
 import binascii
+import re
 import struct
 from collections import Counter
 
@@ -77,6 +78,53 @@ def _display_ownership_category(category):
         "lease": "Lease Renewal",
         "small": "Small Properties",
     }.get(metric, category or "")
+
+
+def _normalize_zone_value(zone):
+    value = re.sub(r"\s+", " ", (zone or "")).strip()
+    if not value or value == "-":
+        return ""
+    return value
+
+
+def _zone_key(zone):
+    value = _normalize_zone_value(zone).lower()
+    value = re.sub(r"[^a-z0-9]+", "-", value)
+    return value.strip("-")
+
+
+def _fetch_zone_property_counts():
+    query = """
+        SELECT
+            zone_name,
+            COUNT(DISTINCT property_id) AS property_count
+        FROM (
+            SELECT property_id, BTRIM(rp_zone) AS zone_name
+            FROM master_mtdc
+            WHERE NULLIF(BTRIM(rp_zone), '') IS NOT NULL
+              AND BTRIM(rp_zone) <> '-'
+            UNION ALL
+            SELECT property_id, BTRIM(dp_zone) AS zone_name
+            FROM master_mtdc
+            WHERE NULLIF(BTRIM(dp_zone), '') IS NOT NULL
+              AND BTRIM(dp_zone) <> '-'
+        ) zone_union
+        GROUP BY zone_name
+        ORDER BY COUNT(DISTINCT property_id) DESC, zone_name ASC;
+    """
+
+    with connection.cursor() as cursor:
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+    return [
+        {
+            "zone": row[0],
+            "zone_key": _zone_key(row[0]),
+            "property_count": int(row[1]),
+        }
+        for row in rows
+    ]
 
 
 def _fetch_region_property_counts():
@@ -241,6 +289,7 @@ def dashboard(request, property_id=None):
     ownership_breakdown_data = _build_ownership_data(property_cards)
     selected_property_map_details = None
     region_property_counts, max_region_property_count = _fetch_region_property_counts()
+    zone_property_counts = _fetch_zone_property_counts()
 
     if selected_property_id and selected_property_id.isdigit():
         selected_property_id_int = int(selected_property_id)
@@ -279,5 +328,6 @@ def dashboard(request, property_id=None):
         "region_property_counts": region_property_counts,
         "max_region_property_count": max_region_property_count,
         "ownership_breakdown_data": ownership_breakdown_data,
+        "zone_property_counts": zone_property_counts,
     }
     return render(request, "dashboard.html", context)
