@@ -2362,17 +2362,25 @@
 
             ownershipBreakdownTable.replaceChildren();
 
-            const header = document.createElement('div');
-            header.className = 'ownership-breakdown-head-row';
-            header.innerHTML = '<span>Region</span><span>Count</span>';
-            ownershipBreakdownTable.appendChild(header);
+            const rows = (data.rows || []).filter(([, value]) => Number(value) > 0);
+            if (!rows.length) {
+                const empty = document.createElement('div');
+                empty.className = 'analytics-empty';
+                empty.textContent = `No ${data.metricLabel} data found.`;
+                ownershipBreakdownTable.appendChild(empty);
+            } else {
+                const header = document.createElement('div');
+                header.className = 'ownership-breakdown-head-row';
+                header.innerHTML = '<span>Region</span><span>Count</span>';
+                ownershipBreakdownTable.appendChild(header);
 
-            data.rows.forEach(([region, value]) => {
-                const row = document.createElement('div');
-                row.className = 'ownership-breakdown-row';
-                row.innerHTML = '<span class="ownership-breakdown-region">' + region + '</span><span class="ownership-breakdown-value">' + value + '</span>';
-                ownershipBreakdownTable.appendChild(row);
-            });
+                rows.forEach(([region, value]) => {
+                    const row = document.createElement('div');
+                    row.className = 'ownership-breakdown-row';
+                    row.innerHTML = '<span class="ownership-breakdown-region">' + region + '</span><span class="ownership-breakdown-value">' + value + '</span>';
+                    ownershipBreakdownTable.appendChild(row);
+                });
+            }
 
             ownershipTiles.forEach((tile) => {
                 tile.classList.toggle('is-active', tile.dataset.ownershipMetric === metric);
@@ -2454,6 +2462,21 @@
             return '';
         };
 
+        const normalizeZoneValue = (value) => {
+            const text = normalizeText(value || '').replace(/\s+/g, ' ').trim();
+            if (!text) {
+                return '';
+            }
+            const lowered = text.toLowerCase();
+            if (['-', 'null', 'none', 'n/a', 'na', '_', '[]', '[null]'].includes(lowered)) {
+                return '';
+            }
+            if (/^[-_\[\](){}\u2013\u2014\s]+$/.test(text)) {
+                return '';
+            }
+            return text;
+        };
+
         const getAnalyticsText = (card) => normalizeText(
             ` ${card.dataset.propertyId || ''} ${card.dataset.propertyName || ''} ${card.dataset.propertyLayer || ''} ${card.textContent || ''} `
         ).toLowerCase();
@@ -2510,8 +2533,8 @@
             visibleCards.forEach((card) => {
                 const analyticsText = getAnalyticsText(card);
                 const ownershipMetric = normalizeOwnershipMetric(card.dataset.propertyCategory || card.dataset.propertyLayer || '');
-                const rpZone = (card.dataset.propertyRpZone || '').trim();
-                const dpZone = (card.dataset.propertyDpZone || '').trim();
+                const rpZone = normalizeZoneValue(card.dataset.propertyRpZone || '');
+                const dpZone = normalizeZoneValue(card.dataset.propertyDpZone || '');
 
                 if (ownershipMetric && Object.prototype.hasOwnProperty.call(ownershipCounts, ownershipMetric)) {
                     ownershipCounts[ownershipMetric] += 1;
@@ -2523,12 +2546,12 @@
                     }
                 });
 
-                if (rpZone && rpZone !== '-') {
+                if (rpZone) {
                     zoneCounts.rp.count += 1;
                     zoneCounts.rp.rows[rpZone] = (zoneCounts.rp.rows[rpZone] || 0) + 1;
                 }
 
-                if (dpZone && dpZone !== '-') {
+                if (dpZone) {
                     zoneCounts.dp.count += 1;
                     zoneCounts.dp.rows[dpZone] = (zoneCounts.dp.rows[dpZone] || 0) + 1;
                 }

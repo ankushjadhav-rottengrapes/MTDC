@@ -65,7 +65,11 @@ def _build_ownership_data(properties):
             "title": metric["title"],
             "metricLabel": metric["metricLabel"],
             "count": metric["count"],
-            "rows": [[region, metric["regions"].get(region, 0)] for region in ordered_regions],
+            "rows": [
+                [region, metric["regions"].get(region, 0)]
+                for region in ordered_regions
+                if metric["regions"].get(region, 0) > 0
+            ],
         }
 
     return breakdown
@@ -82,7 +86,11 @@ def _display_ownership_category(category):
 
 def _normalize_zone_value(zone):
     value = re.sub(r"\s+", " ", (zone or "")).strip()
-    if not value or value == "-":
+    if not value:
+        return ""
+    if value.lower() in {"-", "null", "none", "n/a", "na", "_", "[]", "[null]"}:
+        return ""
+    if re.fullmatch(r"[-_\[\](){}\u2013\u2014\s]+", value):
         return ""
     return value
 
