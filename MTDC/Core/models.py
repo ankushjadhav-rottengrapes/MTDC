@@ -6,6 +6,8 @@ class master_mtdc(models.Model):
     property_name = models.CharField(max_length=255)
     category = models.CharField(max_length=255, blank=True)
     region = models.CharField(max_length=100, blank=True)
+    rp_zone = models.CharField(max_length=255, blank=True)
+    dp_zone = models.CharField(max_length=255, blank=True)
     pt_geom = models.TextField(null=True, blank=True)
     pl_geom = models.TextField(null=True, blank=True)
     poly_geom = models.TextField(null=True, blank=True)
@@ -109,3 +111,4 @@ class PropertyVideo(models.Model):
 
     def __str__(self):
         return f"Video for property {self.property_id} - {self.title or self.youtube_url}"
+
