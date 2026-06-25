@@ -1672,15 +1672,15 @@
                     <div class="ownership-grid">
                         <button class="ownership-tile ownership-toggle is-active" type="button" data-ownership-metric="ppp">
                             <span>PPP</span>
-                            <strong data-analytics-key="ppp">0</strong>
+                            <strong data-analytics-key="ppp">{{ ownership_breakdown_data.ppp.count }}</strong>
                         </button>
                         <button class="ownership-tile ownership-toggle" type="button" data-ownership-metric="lease">
-                            <span>Lease</span>
-                            <strong data-analytics-key="lease">0</strong>
+                            <span>Lease Renewal</span>
+                            <strong data-analytics-key="lease">{{ ownership_breakdown_data.lease.count }}</strong>
                         </button>
                         <button class="ownership-tile ownership-toggle" type="button" data-ownership-metric="small">
                             <span>Small<br>Properties</span>
-                            <strong data-analytics-key="small">0</strong>
+                            <strong data-analytics-key="small">{{ ownership_breakdown_data.small.count }}</strong>
                         </button>
                     </div>
 
@@ -1690,6 +1690,7 @@
                         </div>
                         <div class="ownership-breakdown-table" id="ownership-breakdown-table" role="table" aria-label="Region ownership breakdown"></div>
                     </div>
+                    {{ ownership_breakdown_data|json_script:"ownership-breakdown-data" }}
                 </section>
 
                 <section class="analytics-card" aria-label="Zone wise properties">
@@ -1745,7 +1746,7 @@
 
             <div class="cards">
                 {% for property in properties %}
-                <article class="asset-card" data-property-id="{{ property.property_id }}" data-property-name="{{ property.property_name }}">
+                <article class="asset-card" data-property-id="{{ property.property_id }}" data-property-name="{{ property.property_name }}" data-property-category="{{ property.category|default:"" }}" data-property-region="{{ property.region|default:"" }}">
                     <div class="asset-img">
                         {% if property.cover_url %}
                             <img src="{{ property.cover_url }}" alt="{{ property.property_name }}">
@@ -1756,7 +1757,7 @@
                     <div class="asset-body">
                         <div class="asset-title">
                             <h3>{{ property.property_name }}</h3>
-                            {% if property.category %}<span class="status">{{ property.category }}</span>{% endif %}
+                            {% if property.display_category %}<span class="status">{{ property.display_category }}</span>{% endif %}
                         </div>
                     </div>
                 </article>
@@ -2342,50 +2343,7 @@
             });
         });
 
-        const ownershipBreakdownData = {
-            ppp: {
-                title: 'PPP',
-                metricLabel: 'PPP',
-                rows: [
-                    ['Ratnagiri', 4],
-                    ['Pune', 2],
-                    ['Nashik', 1],
-                    ['Raigad', 1],
-                    ['Nagpur', 0],
-                    ['Thane', 0],
-                    ['Dharashiv', 0],
-                    ['Hingoli', 0]
-                ]
-            },
-            lease: {
-                title: 'Lease',
-                metricLabel: 'Lease',
-                rows: [
-                    ['Ratnagiri', 8],
-                    ['Pune', 1],
-                    ['Nashik', 0],
-                    ['Raigad', 2],
-                    ['Nagpur', 1],
-                    ['Thane', 1],
-                    ['Dharashiv', 0],
-                    ['Hingoli', 0]
-                ]
-            },
-            small: {
-                title: 'Small Properties',
-                metricLabel: 'Small Properties',
-                rows: [
-                    ['Ratnagiri', 12],
-                    ['Pune', 1],
-                    ['Nashik', 3],
-                    ['Raigad', 1],
-                    ['Nagpur', 0],
-                    ['Thane', 0],
-                    ['Dharashiv', 1],
-                    ['Hingoli', 1]
-                ]
-            }
-        };
+        const ownershipBreakdownData = JSON.parse(document.getElementById('ownership-breakdown-data').textContent);
 
         const ownershipBreakdownTitle = document.getElementById('ownership-breakdown-title');
         const ownershipBreakdownTable = document.getElementById('ownership-breakdown-table');
@@ -2436,6 +2394,23 @@
             'semi-public': ['semi-public', 'semi public', 'semipublic']
         };
 
+        const normalizeOwnershipMetric = (value) => {
+            const text = normalizeText(value || '').toLowerCase();
+            if (!text) {
+                return '';
+            }
+            if (text.includes('ppp') || text.includes('public private partnership')) {
+                return 'ppp';
+            }
+            if (text.includes('lease')) {
+                return 'lease';
+            }
+            if (text.includes('small')) {
+                return 'small';
+            }
+            return '';
+        };
+
         const getAnalyticsText = (card) => normalizeText(
             ` ${card.dataset.propertyId || ''} ${card.dataset.propertyName || ''} ${card.dataset.propertyLayer || ''} ${card.textContent || ''} `
         ).toLowerCase();
@@ -2473,9 +2448,19 @@
                 accumulator[key] = 0;
                 return accumulator;
             }, {});
+            const ownershipCounts = {
+                ppp: 0,
+                lease: 0,
+                small: 0
+            };
 
             visibleCards.forEach((card) => {
                 const analyticsText = getAnalyticsText(card);
+                const ownershipMetric = normalizeOwnershipMetric(card.dataset.propertyCategory || card.dataset.propertyLayer || '');
+
+                if (ownershipMetric && Object.prototype.hasOwnProperty.call(ownershipCounts, ownershipMetric)) {
+                    ownershipCounts[ownershipMetric] += 1;
+                }
 
                 Object.keys(counts).forEach((key) => {
                     if (hasAnalyticsMatch(analyticsText, key)) {
@@ -2495,7 +2480,7 @@
             ['ppp', 'lease', 'small'].forEach((key) => {
                 const tileValue = document.querySelector(`.ownership-tile strong[data-analytics-key="${key}"]`);
                 if (tileValue) {
-                    tileValue.textContent = counts[key];
+                    tileValue.textContent = ownershipCounts[key];
                 }
             });
         };

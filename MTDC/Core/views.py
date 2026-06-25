@@ -1,11 +1,83 @@
 import binascii
 import struct
+from collections import Counter
 
 from django.db import connection
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from .models import master_mtdc, PropertyCover, PropertyImage, PropertyDocument, PropertyVideo
+
+OWNERSHIP_REGION_ORDER = [
+    "Ratnagiri",
+    "Pune",
+    "Nashik",
+    "Raigad",
+    "Nagpur",
+    "Thane",
+    "Dharashiv",
+    "Hingoli",
+]
+
+
+def _normalize_ownership_category(category):
+    value = (category or "").strip().lower()
+    if not value:
+        return ""
+    if "ppp" in value or "public private partnership" in value:
+        return "ppp"
+    if "lease" in value:
+        return "lease"
+    if "small" in value:
+        return "small"
+    return value
+
+
+def _build_ownership_data(properties):
+    metrics = {
+        "ppp": {"title": "PPP", "metricLabel": "PPP", "count": 0, "regions": Counter()},
+        "lease": {"title": "Lease Renewal", "metricLabel": "Lease Renewal", "count": 0, "regions": Counter()},
+        "small": {"title": "Small Properties", "metricLabel": "Small Properties", "count": 0, "regions": Counter()},
+    }
+
+    extra_regions = []
+    for prop in properties:
+        metric = _normalize_ownership_category(getattr(prop, "category", ""))
+        if metric not in metrics:
+            continue
+
+        region = (getattr(prop, "region", "") or "").strip()
+        if not region:
+            region = "Unspecified"
+        metrics[metric]["count"] += 1
+        metrics[metric]["regions"][region] += 1
+        if region not in OWNERSHIP_REGION_ORDER and region not in extra_regions and region != "Unspecified":
+            extra_regions.append(region)
+
+    ordered_regions = OWNERSHIP_REGION_ORDER + sorted(extra_regions)
+    if any(metric["regions"].get("Unspecified") for metric in metrics.values()):
+        ordered_regions.append("Unspecified")
+
+    breakdown = {}
+    for key, metric in metrics.items():
+        breakdown[key] = {
+            "title": metric["title"],
+            "metricLabel": metric["metricLabel"],
+            "count": metric["count"],
+            "rows": [[region, metric["regions"].get(region, 0)] for region in ordered_regions],
+        }
+
+    return breakdown
+
+
+def _display_ownership_category(category):
+    metric = _normalize_ownership_category(category)
+    return {
+        "ppp": "PPP",
+        "lease": "Lease Renewal",
+        "small": "Small Properties",
+    }.get(metric, category or "")
+
 
 def _fetch_region_property_counts():
     query = """
@@ -165,6 +237,8 @@ def dashboard(request, property_id=None):
         return redirect(f"/property/{int(selected_property_id)}/")
 
     properties = master_mtdc.objects.all().order_by("property_id")
+    property_cards = list(properties)
+    ownership_breakdown_data = _build_ownership_data(property_cards)
     selected_property_map_details = None
     region_property_counts, max_region_property_count = _fetch_region_property_counts()
 
@@ -174,8 +248,6 @@ def dashboard(request, property_id=None):
         selected_property_obj = properties.first()
         selected_property_map_details = _build_selected_property_map_data(selected_property_obj)
 
-    property_cards = list(properties)
-
     covers = PropertyCover.objects.filter(
         property_id__in=[p.property_id for p in property_cards]
     )
@@ -183,6 +255,7 @@ def dashboard(request, property_id=None):
 
     for prop in property_cards:
         prop.cover_url = cover_map.get(prop.property_id)
+        prop.display_category = _display_ownership_category(getattr(prop, "category", ""))
 
     property_images = []
     property_documents = []
@@ -205,5 +278,6 @@ def dashboard(request, property_id=None):
         "property_videos": property_videos,
         "region_property_counts": region_property_counts,
         "max_region_property_count": max_region_property_count,
+        "ownership_breakdown_data": ownership_breakdown_data,
     }
     return render(request, "dashboard.html", context)
