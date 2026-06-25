@@ -702,6 +702,175 @@
             line-height: 1;
         }
 
+        .ownership-toggle {
+            width: 100%;
+            text-align: left;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .ownership-toggle.is-active {
+            border-color: rgba(15, 93, 168, 0.45);
+            box-shadow: 0 0 0 2px rgba(15, 93, 168, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transform: translateY(-1px);
+        }
+
+        .ownership-breakdown {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e9edf3;
+        }
+
+        .ownership-breakdown-head {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .ownership-breakdown-head h4 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .ownership-breakdown-head span {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .ownership-breakdown-table {
+            display: grid;
+            gap: 0;
+            max-height: 232px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .ownership-breakdown-table::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .ownership-breakdown-table::-webkit-scrollbar-thumb {
+            border-radius: 999px;
+            background: rgba(15, 93, 168, 0.35);
+        }
+
+        .ownership-breakdown-table::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .ownership-breakdown-row,
+        .ownership-breakdown-head-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .ownership-breakdown-head-row {
+            padding-bottom: 8px;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .ownership-breakdown-row {
+            min-height: 36px;
+            padding: 8px 0;
+            border-top: 1px solid #e9edf3;
+            color: #1f2937;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .ownership-breakdown-row:first-of-type {
+            border-top: 0;
+        }
+
+        .ownership-breakdown-region {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .ownership-breakdown-value {
+            justify-self: end;
+            min-width: 32px;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .region-ownership-table {
+            display: grid;
+            gap: 0;
+        }
+
+        .region-ownership-head,
+        .region-ownership-row {
+            display: grid;
+            grid-template-columns: minmax(112px, 1.6fr) repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            align-items: center;
+        }
+
+        .region-ownership-head {
+            padding: 4px 0 10px;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .region-ownership-head span:first-child {
+            color: var(--navy);
+        }
+
+        .region-ownership-row {
+            min-height: 38px;
+            padding: 8px 0;
+            border-top: 1px solid #e9edf3;
+            color: #1f2937;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .region-ownership-row:first-of-type {
+            border-top: 0;
+        }
+
+        .region-ownership-region {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .region-ownership-value {
+            justify-self: center;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .region-ownership-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .region-ownership-pill::before {
+            content: "";
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--pill-color, #0f5da8);
+            box-shadow: 0 0 0 4px rgba(15, 93, 168, 0.12);
+        }
+
         .sidebar-head {
             position: sticky;
             top: 0;
@@ -1468,21 +1637,29 @@
                     </div>
                 </section>
 
-                <section class="analytics-card" aria-label="Ownership details">
+                                <section class="analytics-card" aria-label="Ownership details">
                     <h3>Ownership Details</h3>
                     <div class="ownership-grid">
-                        <div class="ownership-tile">
+                        <button class="ownership-tile ownership-toggle is-active" type="button" data-ownership-metric="ppp">
                             <span>PPP</span>
                             <strong data-analytics-key="ppp">0</strong>
-                        </div>
-                        <div class="ownership-tile">
+                        </button>
+                        <button class="ownership-tile ownership-toggle" type="button" data-ownership-metric="lease">
                             <span>Lease</span>
                             <strong data-analytics-key="lease">0</strong>
-                        </div>
-                        <div class="ownership-tile">
+                        </button>
+                        <button class="ownership-tile ownership-toggle" type="button" data-ownership-metric="small">
                             <span>Small<br>Properties</span>
                             <strong data-analytics-key="small">0</strong>
+                        </button>
+                    </div>
+
+                    <div class="ownership-breakdown">
+                        <div class="ownership-breakdown-head">
+                            <h4 id="ownership-breakdown-title">Region Breakdown - PPP</h4>
+                            <span>Click a tile above to switch</span>
                         </div>
+                        <div class="ownership-breakdown-table" id="ownership-breakdown-table" role="table" aria-label="Region ownership breakdown"></div>
                     </div>
                 </section>
 
@@ -2136,6 +2313,90 @@
             });
         });
 
+        const ownershipBreakdownData = {
+            ppp: {
+                title: 'Region Breakdown - PPP',
+                metricLabel: 'PPP',
+                rows: [
+                    ['Ratnagiri', 4],
+                    ['Pune', 2],
+                    ['Nashik', 1],
+                    ['Raigad', 1],
+                    ['Nagpur', 0],
+                    ['Thane', 0],
+                    ['Dharashiv', 0],
+                    ['Hingoli', 0]
+                ]
+            },
+            lease: {
+                title: 'Region Breakdown - Lease',
+                metricLabel: 'Lease',
+                rows: [
+                    ['Ratnagiri', 8],
+                    ['Pune', 1],
+                    ['Nashik', 0],
+                    ['Raigad', 2],
+                    ['Nagpur', 1],
+                    ['Thane', 1],
+                    ['Dharashiv', 0],
+                    ['Hingoli', 0]
+                ]
+            },
+            small: {
+                title: 'Region Breakdown - Small Properties',
+                metricLabel: 'Small Properties',
+                rows: [
+                    ['Ratnagiri', 12],
+                    ['Pune', 1],
+                    ['Nashik', 3],
+                    ['Raigad', 1],
+                    ['Nagpur', 0],
+                    ['Thane', 0],
+                    ['Dharashiv', 1],
+                    ['Hingoli', 1]
+                ]
+            }
+        };
+
+        const ownershipBreakdownTitle = document.getElementById('ownership-breakdown-title');
+        const ownershipBreakdownTable = document.getElementById('ownership-breakdown-table');
+        const ownershipTiles = Array.from(document.querySelectorAll('.ownership-toggle[data-ownership-metric]'));
+
+        const renderOwnershipBreakdown = (metric) => {
+            const data = ownershipBreakdownData[metric] || ownershipBreakdownData.ppp;
+
+            if (ownershipBreakdownTitle) {
+                ownershipBreakdownTitle.textContent = data.title;
+            }
+
+            if (!ownershipBreakdownTable) {
+                return;
+            }
+
+            ownershipBreakdownTable.replaceChildren();
+
+            const header = document.createElement('div');
+            header.className = 'ownership-breakdown-head-row';
+            header.innerHTML = '<span>Region</span><span>' + data.metricLabel + '</span>';
+            ownershipBreakdownTable.appendChild(header);
+
+            data.rows.forEach(([region, value]) => {
+                const row = document.createElement('div');
+                row.className = 'ownership-breakdown-row';
+                row.innerHTML = '<span class="ownership-breakdown-region">' + region + '</span><span class="ownership-breakdown-value">' + value + '</span>';
+                ownershipBreakdownTable.appendChild(row);
+            });
+
+            ownershipTiles.forEach((tile) => {
+                tile.classList.toggle('is-active', tile.dataset.ownershipMetric === metric);
+            });
+        };
+
+        ownershipTiles.forEach((tile) => {
+            tile.addEventListener('click', () => renderOwnershipBreakdown(tile.dataset.ownershipMetric));
+        });
+
+        renderOwnershipBreakdown('ppp');
         const analyticsRules = {
             ppp: ['ppp', 'public private partnership'],
             lease: ['lease', 'leased'],
@@ -2494,6 +2755,13 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
 
 
 
