@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 
-from .models import master_mtdc, PropertyCover, PropertyDocument, PropertyImage
+from .models import master_mtdc, PropertyCover, PropertyDocument, PropertyImage, PropertyVideo
 
 
 @admin.register(master_mtdc)
@@ -44,3 +44,6 @@ class PropertyDocumentAdmin(admin.ModelAdmin):
     list_display = ("property_id", "title", "uploaded_at")
     search_fields = ("property_id", "title")
     list_filter = ("uploaded_at",)
+
+
+admin.site.register(PropertyVideo)

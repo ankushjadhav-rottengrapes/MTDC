@@ -85,3 +85,26 @@ class PropertyDocument(models.Model):
 
     def __str__(self):
         return f"Document for property {self.property_id} - {self.title}"
+
+
+
+class PropertyVideo(models.Model):
+    property = models.ForeignKey(
+        master_mtdc,
+        on_delete=models.CASCADE,
+        related_name="videos",
+        db_column="property_id",
+        db_constraint=False,
+    )
+    youtube_url = models.URLField(max_length=500)
+    title = models.CharField(max_length=255, blank=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "core_propertyvideo"
+        ordering = ["-uploaded_at"]
+        verbose_name = "Property Video"
+        verbose_name_plural = "Property Videos"
+
+    def __str__(self):
+        return f"Video for property {self.property_id} - {self.title or self.youtube_url}"
