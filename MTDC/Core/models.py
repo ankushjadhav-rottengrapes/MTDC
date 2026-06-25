@@ -5,6 +5,7 @@ class master_mtdc(models.Model):
     property_id = models.IntegerField(primary_key=True)
     property_name = models.CharField(max_length=255)
     category = models.CharField(max_length=255, blank=True)
+    region = models.CharField(max_length=100, blank=True)
     pt_geom = models.TextField(null=True, blank=True)
     pl_geom = models.TextField(null=True, blank=True)
     poly_geom = models.TextField(null=True, blank=True)

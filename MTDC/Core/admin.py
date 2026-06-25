@@ -34,8 +34,8 @@ class PropertyDocumentForm(PropertyIdForm):
 
 
 class MasterMtdcAdmin(admin.ModelAdmin):
-    list_display = ("property_id", "property_name", "category")
-    search_fields = ("property_name", "category")
+    list_display = ("property_id", "property_name", "category", "region")
+    search_fields = ("property_name", "category", "region")
 
 
 class PropertyCoverAdmin(admin.ModelAdmin):
@@ -66,3 +66,4 @@ admin.site.register(PropertyCover, PropertyCoverAdmin)
 admin.site.register(PropertyImage, PropertyImageAdmin)
 admin.site.register(PropertyDocument, PropertyDocumentAdmin)
 admin.site.register(PropertyVideo, PropertyVideoAdmin)
+
