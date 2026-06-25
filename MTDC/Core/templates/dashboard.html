@@ -602,25 +602,6 @@
             background: transparent;
         }
 
-        .zone-analytics-list {
-            max-height: 162px;
-            overflow-y: auto;
-            padding-right: 6px;
-        }
-
-        .zone-analytics-list::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .zone-analytics-list::-webkit-scrollbar-thumb {
-            border-radius: 999px;
-            background: rgba(15, 93, 168, 0.35);
-        }
-
-        .zone-analytics-list::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
         .analytics-row {
             display: grid;
             grid-template-columns: 28px minmax(0, 1fr) auto;
@@ -1714,17 +1695,24 @@
 
                 <section class="analytics-card" aria-label="Zone wise properties">
                     <h3>Zone Wise Properties</h3>
-                    <div class="analytics-list zone-analytics-list">
-                        {% for zone in zone_property_counts %}
-                        <div class="analytics-row" data-zone-key="{{ zone.zone_key }}">
-                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">map</span></span>
-                            <span class="analytics-label"><span title="{{ zone.zone }}">{{ zone.zone }}</span><span class="analytics-meter"><i></i></span></span>
-                            <span class="analytics-value">{{ zone.property_count }}</span>
-                        </div>
-                        {% empty %}
-                        <div class="analytics-empty">No zone data found.</div>
-                        {% endfor %}
+                    <div class="ownership-grid">
+                        <button class="ownership-tile ownership-toggle is-active" type="button" data-zone-metric="rp">
+                            <span>RP Zone</span>
+                            <strong data-zone-count="rp">{{ zone_breakdown_data.rp.count }}</strong>
+                        </button>
+                        <button class="ownership-tile ownership-toggle" type="button" data-zone-metric="dp">
+                            <span>DP Zone</span>
+                            <strong data-zone-count="dp">{{ zone_breakdown_data.dp.count }}</strong>
+                        </button>
                     </div>
+
+                    <div class="ownership-breakdown">
+                        <div class="ownership-breakdown-head">
+                            <h4 id="zone-breakdown-title">RP Zone Breakdown</h4>
+                        </div>
+                        <div class="ownership-breakdown-table" id="zone-breakdown-table" role="table" aria-label="Zone property breakdown"></div>
+                    </div>
+                    {{ zone_breakdown_data|json_script:"zone-breakdown-data" }}
                 </section>
             </div>
         </aside>
@@ -2352,11 +2340,14 @@
         });
 
         const ownershipBreakdownData = JSON.parse(document.getElementById('ownership-breakdown-data').textContent);
+        const zoneBreakdownData = JSON.parse(document.getElementById('zone-breakdown-data').textContent);
 
         const ownershipBreakdownTitle = document.getElementById('ownership-breakdown-title');
         const ownershipBreakdownTable = document.getElementById('ownership-breakdown-table');
         const ownershipTiles = Array.from(document.querySelectorAll('.ownership-toggle[data-ownership-metric]'));
-        const zoneAnalyticsRows = Array.from(document.querySelectorAll('.analytics-row[data-zone-key]'));
+        const zoneBreakdownTitle = document.getElementById('zone-breakdown-title');
+        const zoneBreakdownTable = document.getElementById('zone-breakdown-table');
+        const zoneTiles = Array.from(document.querySelectorAll('.ownership-toggle[data-zone-metric]'));
 
         const renderOwnershipBreakdown = (metric) => {
             const data = ownershipBreakdownData[metric] || ownershipBreakdownData.ppp;
@@ -2393,6 +2384,49 @@
         });
 
         renderOwnershipBreakdown('ppp');
+
+        const renderZoneBreakdown = (metric) => {
+            const data = zoneBreakdownData[metric] || zoneBreakdownData.rp;
+
+            if (zoneBreakdownTitle) {
+                zoneBreakdownTitle.textContent = `${data.title} Breakdown`;
+            }
+
+            if (!zoneBreakdownTable) {
+                return;
+            }
+
+            zoneBreakdownTable.replaceChildren();
+
+            const header = document.createElement('div');
+            header.className = 'ownership-breakdown-head-row';
+            header.innerHTML = '<span>Zone</span><span>Count</span>';
+            zoneBreakdownTable.appendChild(header);
+
+            if (!data.rows.length) {
+                const empty = document.createElement('div');
+                empty.className = 'analytics-empty';
+                empty.textContent = `No ${data.metricLabel} data found.`;
+                zoneBreakdownTable.appendChild(empty);
+            } else {
+                data.rows.forEach(([zone, value]) => {
+                    const row = document.createElement('div');
+                    row.className = 'ownership-breakdown-row';
+                    row.innerHTML = '<span class="ownership-breakdown-region">' + zone + '</span><span class="ownership-breakdown-value">' + value + '</span>';
+                    zoneBreakdownTable.appendChild(row);
+                });
+            }
+
+            zoneTiles.forEach((tile) => {
+                tile.classList.toggle('is-active', tile.dataset.zoneMetric === metric);
+            });
+        };
+
+        zoneTiles.forEach((tile) => {
+            tile.addEventListener('click', () => renderZoneBreakdown(tile.dataset.zoneMetric));
+        });
+
+        renderZoneBreakdown('rp');
         const analyticsRules = {
             ppp: ['ppp', 'public private partnership'],
             lease: ['lease', 'leased'],
@@ -2419,19 +2453,6 @@
             }
             return '';
         };
-
-        const normalizeZoneValue = (value) => {
-            const text = normalizeText(value || '').replace(/\s+/g, ' ').trim();
-            if (!text || text === '-') {
-                return '';
-            }
-            return text;
-        };
-
-        const zoneKeyFromValue = (value) => normalizeZoneValue(value)
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-+|-+$/g, '');
 
         const getAnalyticsText = (card) => normalizeText(
             ` ${card.dataset.propertyId || ''} ${card.dataset.propertyName || ''} ${card.dataset.propertyLayer || ''} ${card.textContent || ''} `
@@ -2475,21 +2496,22 @@
                 lease: 0,
                 small: 0
             };
-            const zoneCounts = zoneAnalyticsRows.reduce((accumulator, row) => {
-                const key = row.dataset.zoneKey || '';
-                if (key) {
-                    accumulator[key] = 0;
+            const zoneCounts = {
+                rp: {
+                    count: 0,
+                    rows: {}
+                },
+                dp: {
+                    count: 0,
+                    rows: {}
                 }
-                return accumulator;
-            }, {});
+            };
 
             visibleCards.forEach((card) => {
                 const analyticsText = getAnalyticsText(card);
                 const ownershipMetric = normalizeOwnershipMetric(card.dataset.propertyCategory || card.dataset.propertyLayer || '');
-                const zones = [
-                    normalizeZoneValue(card.dataset.propertyRpZone),
-                    normalizeZoneValue(card.dataset.propertyDpZone)
-                ].filter(Boolean);
+                const rpZone = (card.dataset.propertyRpZone || '').trim();
+                const dpZone = (card.dataset.propertyDpZone || '').trim();
 
                 if (ownershipMetric && Object.prototype.hasOwnProperty.call(ownershipCounts, ownershipMetric)) {
                     ownershipCounts[ownershipMetric] += 1;
@@ -2501,12 +2523,15 @@
                     }
                 });
 
-                Array.from(new Set(zones)).forEach((zone) => {
-                    const zoneKey = zoneKeyFromValue(zone);
-                    if (zoneKey && Object.prototype.hasOwnProperty.call(zoneCounts, zoneKey)) {
-                        zoneCounts[zoneKey] += 1;
-                    }
-                });
+                if (rpZone && rpZone !== '-') {
+                    zoneCounts.rp.count += 1;
+                    zoneCounts.rp.rows[rpZone] = (zoneCounts.rp.rows[rpZone] || 0) + 1;
+                }
+
+                if (dpZone && dpZone !== '-') {
+                    zoneCounts.dp.count += 1;
+                    zoneCounts.dp.rows[dpZone] = (zoneCounts.dp.rows[dpZone] || 0) + 1;
+                }
             });
 
             if (analyticsTotalProperties) {
@@ -2517,25 +2542,33 @@
                 setAnalyticsRowValue(key, counts[key], visibleCards.length);
             });
 
-            zoneAnalyticsRows.forEach((row) => {
-                const valueElement = row.querySelector('.analytics-value');
-                const meter = row.querySelector('.analytics-meter i');
-                const count = zoneCounts[row.dataset.zoneKey] || 0;
-                const maxValue = Math.max(...Object.values(zoneCounts), 1);
-                if (valueElement) {
-                    valueElement.textContent = count;
-                }
-                if (meter) {
-                    meter.style.setProperty('--meter', `${Math.round((count / maxValue) * 100)}%`);
-                }
-            });
-
             ['ppp', 'lease', 'small'].forEach((key) => {
                 const tileValue = document.querySelector(`.ownership-tile strong[data-analytics-key="${key}"]`);
                 if (tileValue) {
                     tileValue.textContent = ownershipCounts[key];
                 }
             });
+
+            ['rp', 'dp'].forEach((key) => {
+                const zoneCountElement = document.querySelector(`.ownership-tile strong[data-zone-count="${key}"]`);
+                if (zoneCountElement) {
+                    zoneCountElement.textContent = zoneCounts[key].count;
+                }
+
+                zoneBreakdownData[key] = {
+                    ...zoneBreakdownData[key],
+                    count: zoneCounts[key].count,
+                    rows: Object.entries(zoneCounts[key].rows).sort((a, b) => {
+                        if (b[1] !== a[1]) {
+                            return b[1] - a[1];
+                        }
+                        return a[0].localeCompare(b[0]);
+                    })
+                };
+            });
+
+            const activeZoneMetric = zoneTiles.find((tile) => tile.classList.contains('is-active'))?.dataset.zoneMetric || 'rp';
+            renderZoneBreakdown(activeZoneMetric);
         };
 
         const filterPropertyCards = () => {

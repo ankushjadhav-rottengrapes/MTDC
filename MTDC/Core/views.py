@@ -93,38 +93,37 @@ def _zone_key(zone):
     return value.strip("-")
 
 
-def _fetch_zone_property_counts():
-    query = """
-        SELECT
-            zone_name,
-            COUNT(DISTINCT property_id) AS property_count
-        FROM (
-            SELECT property_id, BTRIM(rp_zone) AS zone_name
-            FROM master_mtdc
-            WHERE NULLIF(BTRIM(rp_zone), '') IS NOT NULL
-              AND BTRIM(rp_zone) <> '-'
-            UNION ALL
-            SELECT property_id, BTRIM(dp_zone) AS zone_name
-            FROM master_mtdc
-            WHERE NULLIF(BTRIM(dp_zone), '') IS NOT NULL
-              AND BTRIM(dp_zone) <> '-'
-        ) zone_union
-        GROUP BY zone_name
-        ORDER BY COUNT(DISTINCT property_id) DESC, zone_name ASC;
-    """
+def _build_zone_breakdown_data(properties):
+    breakdown = {
+        "rp": {"title": "RP Zone", "metricLabel": "RP Zone", "count": 0, "zones": Counter()},
+        "dp": {"title": "DP Zone", "metricLabel": "DP Zone", "count": 0, "zones": Counter()},
+    }
 
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        rows = cursor.fetchall()
+    for prop in properties:
+        rp_zone = _normalize_zone_value(getattr(prop, "rp_zone", ""))
+        dp_zone = _normalize_zone_value(getattr(prop, "dp_zone", ""))
 
-    return [
-        {
-            "zone": row[0],
-            "zone_key": _zone_key(row[0]),
-            "property_count": int(row[1]),
+        if rp_zone:
+            breakdown["rp"]["count"] += 1
+            breakdown["rp"]["zones"][rp_zone] += 1
+
+        if dp_zone:
+            breakdown["dp"]["count"] += 1
+            breakdown["dp"]["zones"][dp_zone] += 1
+
+    for key, metric in breakdown.items():
+        sorted_rows = sorted(
+            metric["zones"].items(),
+            key=lambda item: (-item[1], item[0].lower()),
+        )
+        breakdown[key] = {
+            "title": metric["title"],
+            "metricLabel": metric["metricLabel"],
+            "count": metric["count"],
+            "rows": [[zone, count] for zone, count in sorted_rows],
         }
-        for row in rows
-    ]
+
+    return breakdown
 
 
 def _fetch_region_property_counts():
@@ -287,9 +286,9 @@ def dashboard(request, property_id=None):
     properties = master_mtdc.objects.all().order_by("property_id")
     property_cards = list(properties)
     ownership_breakdown_data = _build_ownership_data(property_cards)
+    zone_breakdown_data = _build_zone_breakdown_data(property_cards)
     selected_property_map_details = None
     region_property_counts, max_region_property_count = _fetch_region_property_counts()
-    zone_property_counts = _fetch_zone_property_counts()
 
     if selected_property_id and selected_property_id.isdigit():
         selected_property_id_int = int(selected_property_id)
@@ -328,6 +327,6 @@ def dashboard(request, property_id=None):
         "region_property_counts": region_property_counts,
         "max_region_property_count": max_region_property_count,
         "ownership_breakdown_data": ownership_breakdown_data,
-        "zone_property_counts": zone_property_counts,
+        "zone_breakdown_data": zone_breakdown_data,
     }
     return render(request, "dashboard.html", context)
