@@ -721,10 +721,8 @@
         }
 
         .ownership-breakdown-head {
-            display: flex;
-            justify-content: space-between;
-            gap: 12px;
-            align-items: center;
+            display: grid;
+            gap: 4px;
             margin-bottom: 10px;
         }
 
@@ -735,10 +733,42 @@
             font-weight: 800;
         }
 
-        .ownership-breakdown-head span {
+        .ownership-breakdown-subhead {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .ownership-breakdown-subhead span {
             color: var(--muted);
             font-size: 11px;
             font-weight: 700;
+        }
+
+        .ownership-breakdown-pill {
+            display: inline-flex;
+            align-items: center;
+            min-height: 26px;
+            padding: 4px 10px;
+            border: 1px solid #dce7f3;
+            border-radius: 999px;
+            color: #0f5da8;
+            background: #edf5ff;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 640px) {
+            .ownership-breakdown-subhead {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .ownership-breakdown-subhead span:last-child {
+                line-height: 1.2;
+            }
         }
 
         .ownership-breakdown-table {
@@ -1637,7 +1667,7 @@
                     </div>
                 </section>
 
-                                <section class="analytics-card" aria-label="Ownership details">
+                <section class="analytics-card" aria-label="Ownership details">
                     <h3>Ownership Details</h3>
                     <div class="ownership-grid">
                         <button class="ownership-tile ownership-toggle is-active" type="button" data-ownership-metric="ppp">
@@ -1656,8 +1686,10 @@
 
                     <div class="ownership-breakdown">
                         <div class="ownership-breakdown-head">
-                            <h4 id="ownership-breakdown-title">Region Breakdown - PPP</h4>
-                            <span>Click a tile above to switch</span>
+                            <h4>Region Breakdown</h4>
+                            <div class="ownership-breakdown-subhead">
+                                <span id="ownership-breakdown-title" class="ownership-breakdown-pill">PPP</span>
+                            </div>
                         </div>
                         <div class="ownership-breakdown-table" id="ownership-breakdown-table" role="table" aria-label="Region ownership breakdown"></div>
                     </div>
@@ -2315,7 +2347,7 @@
 
         const ownershipBreakdownData = {
             ppp: {
-                title: 'Region Breakdown - PPP',
+                title: 'PPP',
                 metricLabel: 'PPP',
                 rows: [
                     ['Ratnagiri', 4],
@@ -2329,7 +2361,7 @@
                 ]
             },
             lease: {
-                title: 'Region Breakdown - Lease',
+                title: 'Lease',
                 metricLabel: 'Lease',
                 rows: [
                     ['Ratnagiri', 8],
@@ -2343,7 +2375,7 @@
                 ]
             },
             small: {
-                title: 'Region Breakdown - Small Properties',
+                title: 'Small Properties',
                 metricLabel: 'Small Properties',
                 rows: [
                     ['Ratnagiri', 12],
@@ -2755,6 +2787,11 @@
     </script>
 </body>
 </html>
+
+
+
+
+
 
 
 
