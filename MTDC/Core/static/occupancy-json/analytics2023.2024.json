@@ -1,0 +1,4725 @@
+{
+  "years": [
+    {
+      "year": "2025-26",
+      "months": [
+        {
+          "month": "April-23",
+          "summary": {
+            "available": 28193,
+            "occupied": 12481,
+            "occupancyPercent": 44.27
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 5546,
+                "percent": 31.6
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 1319,
+                  "percent": 48.85
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 873,
+                  "percent": 39.86
+                },
+                {
+                  "name": "nan",
+                  "occupied": 3,
+                  "percent": 9.68
+                },
+                {
+                  "name": "nan",
+                  "occupied": 876,
+                  "percent": 39.44
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 109,
+                  "percent": 7.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 109,
+                  "percent": 7.73
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 261,
+                  "percent": 25.59
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2,
+                  "percent": 6.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 263,
+                  "percent": 25.05
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 803,
+                  "percent": 34.32
+                },
+                {
+                  "name": "nan",
+                  "occupied": 13,
+                  "percent": 10.83
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 816,
+                  "percent": 32.38
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 99,
+                  "percent": 27.5
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 2104,
+                "percent": 56.56
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.33
+                },
+                {
+                  "name": "nan",
+                  "occupied": 282,
+                  "percent": 29.38
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 1153,
+                  "percent": 72.52
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 668,
+                  "percent": 58.6
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 4366,
+                "percent": 59.03
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 57,
+                  "percent": 63.33
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2373,
+                  "percent": 76.8
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 381,
+                  "percent": 52.92
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 540,
+                  "percent": 90.0
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 231,
+                  "percent": 70.0
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 256,
+                  "percent": 56.89
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 263,
+                  "percent": 23.69
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.33
+                },
+                {
+                  "name": "nan",
+                  "occupied": 264,
+                  "percent": 27.03
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 413,
+                "percent": 18.01
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 131,
+                  "percent": 15.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 1.11
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 132,
+                  "percent": 16.11
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 64,
+                  "percent": 42.67
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 85,
+                  "percent": 23.61
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 63,
+                "percent": 21.0
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 63,
+                  "percent": 21.0
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 27492,
+                "percent": 43.46
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 1.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 218,
+                  "percent": 34.7
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 779,
+                  "percent": 78.69
+                },
+                {
+                  "name": "nan",
+                  "occupied": 36,
+                  "percent": 30.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 815,
+                  "percent": 73.42
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 108,
+                  "percent": 15.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 4,
+                  "percent": 6.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 112,
+                  "percent": 14.36
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 112,
+                  "percent": 41.48
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 109,
+                  "percent": 24.22
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 12481,
+                  "percent": 44.27
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 113,
+                  "percent": 17.94
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 5,
+                  "percent": 2.36
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 12599,
+                  "percent": 43.3
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "May-23",
+          "summary": {
+            "available": 28812,
+            "occupied": 14996,
+            "occupancyPercent": 52.05
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 6766,
+                "percent": 38.58
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 1898,
+                  "percent": 70.3
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 1019,
+                  "percent": 45.03
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1020,
+                  "percent": 44.46
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 98,
+                  "percent": 7.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 98,
+                  "percent": 7.0
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 261,
+                  "percent": 25.59
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2,
+                  "percent": 6.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 263,
+                  "percent": 25.05
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 963,
+                  "percent": 41.15
+                },
+                {
+                  "name": "nan",
+                  "occupied": 16,
+                  "percent": 13.33
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 979,
+                  "percent": 38.85
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 148,
+                  "percent": 40.22
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 2308,
+                "percent": 60.04
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 2,
+                  "percent": 6.45
+                },
+                {
+                  "name": "nan",
+                  "occupied": 412,
+                  "percent": 41.53
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 1109,
+                  "percent": 67.5
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 785,
+                  "percent": 66.64
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 5852,
+                "percent": 75.51
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 85,
+                  "percent": 91.4
+                },
+                {
+                  "name": "nan",
+                  "occupied": 3050,
+                  "percent": 95.52
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 476,
+                  "percent": 63.98
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 629,
+                  "percent": 101.45
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 326,
+                  "percent": 95.6
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 384,
+                  "percent": 82.58
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 451,
+                  "percent": 39.32
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 451,
+                  "percent": 39.32
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 346,
+                "percent": 16.72
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 89,
+                  "percent": 15.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 89,
+                  "percent": 9.26
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 83,
+                  "percent": 53.55
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 85,
+                  "percent": 23.61
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 98,
+                "percent": 21.17
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 1.61
+                },
+                {
+                  "name": "nan",
+                  "occupied": 4,
+                  "percent": 6.45
+                },
+                {
+                  "name": "nan",
+                  "occupied": 93,
+                  "percent": 23.2
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 32457,
+                "percent": 50.33
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 1.61
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 135,
+                  "percent": 27.57
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 783,
+                  "percent": 76.54
+                },
+                {
+                  "name": "nan",
+                  "occupied": 21,
+                  "percent": 17.5
+                },
+                {
+                  "name": "nan",
+                  "occupied": 804,
+                  "percent": 70.34
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 108,
+                  "percent": 15.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 4,
+                  "percent": 6.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 112,
+                  "percent": 14.36
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 112,
+                  "percent": 41.48
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 109,
+                  "percent": 24.22
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 14996,
+                  "percent": 52.05
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 132,
+                  "percent": 20.59
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 4,
+                  "percent": 2.1
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 15134,
+                  "percent": 50.91
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "June-23",
+          "summary": {
+            "available": 27875,
+            "occupied": 11241,
+            "occupancyPercent": 40.33
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 5242,
+                "percent": 30.28
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 1363,
+                  "percent": 50.48
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 663,
+                  "percent": 30.27
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 663,
+                  "percent": 29.85
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 200,
+                  "percent": 14.81
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2,
+                  "percent": 6.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 202,
+                  "percent": 14.33
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 206,
+                  "percent": 20.2
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 206,
+                  "percent": 19.62
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 803,
+                  "percent": 34.32
+                },
+                {
+                  "name": "nan",
+                  "occupied": 33,
+                  "percent": 27.5
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 836,
+                  "percent": 33.17
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 65,
+                  "percent": 18.06
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 2222,
+                "percent": 69.52
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 8,
+                  "percent": 26.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 675,
+                  "percent": 98.39
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 882,
+                  "percent": 65.82
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 657,
+                  "percent": 57.63
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 3332,
+                "percent": 44.41
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 56,
+                  "percent": 62.22
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2002,
+                  "percent": 64.79
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 319,
+                  "percent": 44.31
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 394,
+                  "percent": 65.34
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 102,
+                  "percent": 30.91
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 193,
+                  "percent": 42.89
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 133,
+                  "percent": 11.98
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 133,
+                  "percent": 11.98
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 325,
+                "percent": 13.32
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 84,
+                  "percent": 10.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 4,
+                  "percent": 6.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 1.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 89,
+                  "percent": 9.57
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 85,
+                  "percent": 56.67
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 62,
+                  "percent": 17.22
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 84,
+                "percent": 18.67
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 5,
+                  "percent": 8.33
+                },
+                {
+                  "name": "nan",
+                  "occupied": 79,
+                  "percent": 20.26
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 24352,
+                "percent": 38.98
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 2,
+                  "percent": 6.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.33
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 129,
+                  "percent": 32.11
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 493,
+                  "percent": 49.8
+                },
+                {
+                  "name": "nan",
+                  "occupied": 19,
+                  "percent": 15.83
+                },
+                {
+                  "name": "nan",
+                  "occupied": 512,
+                  "percent": 46.13
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 82,
+                  "percent": 11.39
+                },
+                {
+                  "name": "nan",
+                  "occupied": 10,
+                  "percent": 16.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 92,
+                  "percent": 11.79
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 165,
+                  "percent": 59.14
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 86,
+                  "percent": 19.11
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 11241,
+                  "percent": 40.33
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 137,
+                  "percent": 22.83
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 1,
+                  "percent": 0.41
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 11382,
+                  "percent": 39.55
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "July-23",
+          "summary": {
+            "available": 27765,
+            "occupied": 9538,
+            "occupancyPercent": 34.35
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 7292,
+                "percent": 40.9
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 733,
+                  "percent": 26.27
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 681,
+                  "percent": 30.72
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 681,
+                  "percent": 30.29
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 947,
+                  "percent": 67.89
+                },
+                {
+                  "name": "nan",
+                  "occupied": 10,
+                  "percent": 32.26
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 957,
+                  "percent": 65.68
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 269,
+                  "percent": 25.52
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 269,
+                  "percent": 24.79
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 1252,
+                  "percent": 51.78
+                },
+                {
+                  "name": "nan",
+                  "occupied": 60,
+                  "percent": 48.39
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 1.61
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1312,
+                  "percent": 50.38
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 120,
+                  "percent": 35.09
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 2136,
+                "percent": 61.52
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 17,
+                  "percent": 54.84
+                },
+                {
+                  "name": "nan",
+                  "occupied": 899,
+                  "percent": 90.62
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 724,
+                  "percent": 56.96
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 496,
+                  "percent": 42.11
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 1451,
+                "percent": 20.53
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 31,
+                  "percent": 33.33
+                },
+                {
+                  "name": "nan",
+                  "occupied": 970,
+                  "percent": 38.63
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 171,
+                  "percent": 22.98
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 135,
+                  "percent": 21.77
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 35,
+                  "percent": 10.26
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 65,
+                  "percent": 13.98
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 22,
+                  "percent": 1.92
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 22,
+                  "percent": 1.92
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 336,
+                "percent": 16.94
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 95,
+                  "percent": 13.93
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 96,
+                  "percent": 12.9
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 65,
+                  "percent": 41.94
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 79,
+                  "percent": 21.24
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 196,
+                "percent": 39.52
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 20,
+                  "percent": 32.26
+                },
+                {
+                  "name": "nan",
+                  "occupied": 175,
+                  "percent": 43.42
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 19783,
+                "percent": 31.78
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 4.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 2.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 43,
+                  "percent": 6.11
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 50,
+                  "percent": 4.36
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 50,
+                  "percent": 4.36
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 76,
+                  "percent": 10.22
+                },
+                {
+                  "name": "nan",
+                  "occupied": 5,
+                  "percent": 8.06
+                },
+                {
+                  "name": "nan",
+                  "occupied": 81,
+                  "percent": 10.05
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 81,
+                  "percent": 29.03
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 28,
+                  "percent": 6.02
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 9538,
+                  "percent": 34.35
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 144,
+                  "percent": 30.97
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 1,
+                  "percent": 0.56
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 9684,
+                  "percent": 34.03
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "Aug-23",
+          "summary": {
+            "available": 27225,
+            "occupied": 10132,
+            "occupancyPercent": 37.22
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 7466,
+                "percent": 42.18
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 772,
+                  "percent": 27.67
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 591,
+                  "percent": 27.63
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 591,
+                  "percent": 27.24
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 928,
+                  "percent": 66.52
+                },
+                {
+                  "name": "nan",
+                  "occupied": 6,
+                  "percent": 19.35
+                },
+                {
+                  "name": "nan",
+                  "occupied": 3,
+                  "percent": 9.68
+                },
+                {
+                  "name": "nan",
+                  "occupied": 937,
+                  "percent": 64.31
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 265,
+                  "percent": 25.14
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 266,
+                  "percent": 24.52
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 1426,
+                  "percent": 58.97
+                },
+                {
+                  "name": "nan",
+                  "occupied": 57,
+                  "percent": 45.97
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1483,
+                  "percent": 56.95
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 140,
+                  "percent": 37.63
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 2276,
+                "percent": 65.55
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 19,
+                  "percent": 61.29
+                },
+                {
+                  "name": "nan",
+                  "occupied": 899,
+                  "percent": 90.62
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 772,
+                  "percent": 60.74
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 586,
+                  "percent": 49.75
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 1864,
+                "percent": 31.48
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 32,
+                  "percent": 34.41
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1167,
+                  "percent": 46.48
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 222,
+                  "percent": 29.84
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 188,
+                  "percent": 30.32
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 43,
+                  "percent": 12.61
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 112,
+                  "percent": 24.09
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 100,
+                  "percent": 8.72
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 8.72
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 356,
+                "percent": 18.83
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 108,
+                  "percent": 15.84
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 108,
+                  "percent": 15.84
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 80,
+                  "percent": 51.61
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 60,
+                  "percent": 16.13
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 264,
+                "percent": 53.23
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 32,
+                  "percent": 51.61
+                },
+                {
+                  "name": "nan",
+                  "occupied": 231,
+                  "percent": 57.32
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 21174,
+                "percent": 35.06
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 4.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 2.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 43,
+                  "percent": 6.11
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 80,
+                  "percent": 0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 3,
+                  "percent": 2.42
+                },
+                {
+                  "name": "nan",
+                  "occupied": 83,
+                  "percent": 7.24
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 92,
+                  "percent": 12.37
+                },
+                {
+                  "name": "nan",
+                  "occupied": 13,
+                  "percent": 20.97
+                },
+                {
+                  "name": "nan",
+                  "occupied": 105,
+                  "percent": 13.03
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 126,
+                  "percent": 45.16
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 28,
+                  "percent": 6.02
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 10132,
+                  "percent": 37.22
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 162,
+                  "percent": 27.5
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 5,
+                  "percent": 2.78
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 10300,
+                  "percent": 36.73
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "Sept-23",
+          "summary": {
+            "available": 27558,
+            "occupied": 8863,
+            "occupancyPercent": 32.16
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 5946,
+                "percent": 34.71
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 607,
+                  "percent": 22.48
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 538,
+                  "percent": 25.99
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 538,
+                  "percent": 25.61
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 565,
+                  "percent": 41.85
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.33
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 566,
+                  "percent": 40.14
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 234,
+                  "percent": 22.94
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 234,
+                  "percent": 22.29
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 1234,
+                  "percent": 52.74
+                },
+                {
+                  "name": "nan",
+                  "occupied": 43,
+                  "percent": 35.83
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 1.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1278,
+                  "percent": 50.71
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 107,
+                  "percent": 29.72
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 2011,
+                "percent": 59.27
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 9,
+                  "percent": 29.03
+                },
+                {
+                  "name": "nan",
+                  "occupied": 730,
+                  "percent": 73.59
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 836,
+                  "percent": 67.97
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 436,
+                  "percent": 38.25
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 2087,
+                "percent": 26.22
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 39,
+                  "percent": 43.33
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1194,
+                  "percent": 49.14
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 173,
+                  "percent": 9.4
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 261,
+                  "percent": 43.5
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 31,
+                  "percent": 9.39
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 107,
+                  "percent": 23.78
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 141,
+                  "percent": 12.7
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 141,
+                  "percent": 12.7
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 352,
+                "percent": 18.05
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 97,
+                  "percent": 14.7
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2,
+                  "percent": 6.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.33
+                },
+                {
+                  "name": "nan",
+                  "occupied": 100,
+                  "percent": 13.89
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 78,
+                  "percent": 52.0
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 74,
+                  "percent": 20.56
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 13,
+                "percent": 21.67
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 13,
+                  "percent": 21.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 57.0
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 18378,
+                "percent": 30.17
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 49,
+                  "percent": 6.67
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 66,
+                  "percent": 0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 0.83
+                },
+                {
+                  "name": "nan",
+                  "occupied": 67,
+                  "percent": 6.04
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 55,
+                  "percent": 7.64
+                },
+                {
+                  "name": "nan",
+                  "occupied": 4,
+                  "percent": 6.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 59,
+                  "percent": 7.56
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 97,
+                  "percent": 35.93
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 28,
+                  "percent": 6.02
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 8863,
+                  "percent": 32.16
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 112,
+                  "percent": 19.61
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 1,
+                  "percent": 0.57
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 8976,
+                  "percent": 31.66
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "Oct-23",
+          "summary": {
+            "available": 26909,
+            "occupied": 7215,
+            "occupancyPercent": 26.81
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 3192,
+                "percent": 17.99
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 441,
+                  "percent": 15.81
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 357,
+                  "percent": 16.54
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 357,
+                  "percent": 16.3
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 192,
+                  "percent": 13.76
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 193,
+                  "percent": 13.25
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 114,
+                  "percent": 10.81
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 114,
+                  "percent": 10.51
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 655,
+                  "percent": 27.09
+                },
+                {
+                  "name": "nan",
+                  "occupied": 20,
+                  "percent": 16.13
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 1.61
+                },
+                {
+                  "name": "nan",
+                  "occupied": 676,
+                  "percent": 25.96
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 71,
+                  "percent": 19.09
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 1767,
+                "percent": 50.9
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 4,
+                  "percent": 12.9
+                },
+                {
+                  "name": "nan",
+                  "occupied": 404,
+                  "percent": 40.73
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 842,
+                  "percent": 66.25
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 517,
+                  "percent": 43.89
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 2050,
+                "percent": 32.42
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 30,
+                  "percent": 32.26
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1365,
+                  "percent": 54.36
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 258,
+                  "percent": 43.8
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 119,
+                  "percent": 34.9
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 112,
+                  "percent": 24.09
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 83,
+                  "percent": 7.24
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 83,
+                  "percent": 7.05
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 536,
+                "percent": 27.02
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 171,
+                  "percent": 25.07
+                },
+                {
+                  "name": "nan",
+                  "occupied": 6,
+                  "percent": 19.35
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 177,
+                  "percent": 23.79
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 103,
+                  "percent": 66.45
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 79,
+                  "percent": 21.24
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 44,
+                "percent": 9.46
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 6,
+                  "percent": 9.68
+                },
+                {
+                  "name": "nan",
+                  "occupied": 38,
+                  "percent": 9.43
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 15062,
+                "percent": 24.89
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 103,
+                  "percent": 25.18
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 73,
+                  "percent": 6.36
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 73,
+                  "percent": 6.36
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 63,
+                  "percent": 8.47
+                },
+                {
+                  "name": "nan",
+                  "occupied": 6,
+                  "percent": 10.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 69,
+                  "percent": 8.58
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 77,
+                  "percent": 27.6
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 18,
+                  "percent": 3.87
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 7215,
+                  "percent": 26.81
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 73,
+                  "percent": 12.52
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 1,
+                  "percent": 0.54
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 7290,
+                  "percent": 26.28
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "Nov-23",
+          "summary": {
+            "available": 26586,
+            "occupied": 11453,
+            "occupancyPercent": 43.08
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 5131,
+                "percent": 32.09
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 1120,
+                  "percent": 41.48
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 543,
+                  "percent": 24.79
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 543,
+                  "percent": 24.45
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 247,
+                  "percent": 0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 247,
+                  "percent": 17.52
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 275,
+                  "percent": 26.96
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 275,
+                  "percent": 26.19
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 855,
+                  "percent": 36.54
+                },
+                {
+                  "name": "nan",
+                  "occupied": 30,
+                  "percent": 25.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 1.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 886,
+                  "percent": 35.16
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 109,
+                  "percent": 30.28
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 1999,
+                "percent": 58.26
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 9,
+                  "percent": 29.03
+                },
+                {
+                  "name": "nan",
+                  "occupied": 506,
+                  "percent": 51.01
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 877,
+                  "percent": 71.3
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 607,
+                  "percent": 51.53
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 3925,
+                "percent": 63.4
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 67,
+                  "percent": 74.44
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2174,
+                  "percent": 89.47
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 278,
+                  "percent": 38.61
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 193,
+                  "percent": 58.48
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 277,
+                  "percent": 61.56
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 467,
+                  "percent": 42.07
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.33
+                },
+                {
+                  "name": "nan",
+                  "occupied": 468,
+                  "percent": 45.41
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 764,
+                "percent": 39.77
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 259,
+                  "percent": 39.24
+                },
+                {
+                  "name": "nan",
+                  "occupied": 7,
+                  "percent": 23.33
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 266,
+                  "percent": 36.89
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 109,
+                  "percent": 72.67
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 123,
+                  "percent": 34.17
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 132,
+                "percent": 55.15
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 19,
+                  "percent": 31.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 113,
+                  "percent": 63.0
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 25315,
+                "percent": 42.65
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 58,
+                  "percent": 23.67
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 609,
+                  "percent": 61.52
+                },
+                {
+                  "name": "nan",
+                  "occupied": 63,
+                  "percent": 52.5
+                },
+                {
+                  "name": "nan",
+                  "occupied": 672,
+                  "percent": 60.54
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 156,
+                  "percent": 21.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 7,
+                  "percent": 11.67
+                },
+                {
+                  "name": "nan",
+                  "occupied": 163,
+                  "percent": 20.9
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 127,
+                  "percent": 47.04
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 146,
+                  "percent": 32.44
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 11453,
+                  "percent": 43.08
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 203,
+                  "percent": 35.55
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 1,
+                  "percent": 0.66
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 11657,
+                  "percent": 42.69
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "Dec-23",
+          "summary": {
+            "available": 27351,
+            "occupied": 16017,
+            "occupancyPercent": 58.56
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 8714,
+                "percent": 48.82
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 1491,
+                  "percent": 53.44
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 924,
+                  "percent": 40.83
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 924,
+                  "percent": 40.28
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 340,
+                  "percent": 24.37
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 340,
+                  "percent": 23.35
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 387,
+                  "percent": 36.72
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 387,
+                  "percent": 35.67
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 1832,
+                  "percent": 76.65
+                },
+                {
+                  "name": "nan",
+                  "occupied": 73,
+                  "percent": 58.87
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 1.61
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1906,
+                  "percent": 73.99
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 109,
+                  "percent": 30.28
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 2295,
+                "percent": 66.89
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 4,
+                  "percent": 12.9
+                },
+                {
+                  "name": "nan",
+                  "occupied": 506,
+                  "percent": 51.01
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 877,
+                  "percent": 71.3
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 908,
+                  "percent": 77.08
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 5366,
+                "percent": 75.26
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 81,
+                  "percent": 87.1
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2433,
+                  "percent": 96.89
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 505,
+                  "percent": 67.88
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 619,
+                  "percent": 99.84
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 311,
+                  "percent": 91.2
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 335,
+                  "percent": 72.04
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 533,
+                  "percent": 46.47
+                },
+                {
+                  "name": "nan",
+                  "occupied": 8,
+                  "percent": 25.81
+                },
+                {
+                  "name": "nan",
+                  "occupied": 541,
+                  "percent": 45.93
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 1001,
+                "percent": 48.43
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 359,
+                  "percent": 48.78
+                },
+                {
+                  "name": "nan",
+                  "occupied": 7,
+                  "percent": 77.78
+                },
+                {
+                  "name": "nan",
+                  "occupied": 15,
+                  "percent": 48.39
+                },
+                {
+                  "name": "nan",
+                  "occupied": 381,
+                  "percent": 49.1
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 116,
+                  "percent": 74.84
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 123,
+                  "percent": 34.17
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 271,
+                "percent": 39.74
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 102,
+                  "percent": 41.13
+                },
+                {
+                  "name": "nan",
+                  "occupied": 17,
+                  "percent": 27.42
+                },
+                {
+                  "name": "nan",
+                  "occupied": 152,
+                  "percent": 40.86
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 35365,
+                "percent": 57.16
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 392,
+                  "percent": 64.66
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 609,
+                  "percent": 61.52
+                },
+                {
+                  "name": "nan",
+                  "occupied": 63,
+                  "percent": 52.5
+                },
+                {
+                  "name": "nan",
+                  "occupied": 672,
+                  "percent": 60.54
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 218,
+                  "percent": 29.3
+                },
+                {
+                  "name": "nan",
+                  "occupied": 7,
+                  "percent": 11.29
+                },
+                {
+                  "name": "nan",
+                  "occupied": 225,
+                  "percent": 27.92
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 173,
+                  "percent": 62.01
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 215,
+                  "percent": 46.24
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 16017,
+                  "percent": 58.56
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 260,
+                  "percent": 46.18
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 118,
+                  "percent": 29.35
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 16395,
+                  "percent": 57.78
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "Jan-24",
+          "summary": {
+            "available": 27401,
+            "occupied": 12003,
+            "occupancyPercent": 43.8
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 4453,
+                "percent": 25.03
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 695,
+                  "percent": 24.91
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 429,
+                  "percent": 18.96
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 429,
+                  "percent": 18.7
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 340,
+                  "percent": 24.37
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 340,
+                  "percent": 23.35
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 168,
+                  "percent": 15.94
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 168,
+                  "percent": 15.48
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 872,
+                  "percent": 36.53
+                },
+                {
+                  "name": "nan",
+                  "occupied": 36,
+                  "percent": 29.03
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 908,
+                  "percent": 35.29
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 68,
+                  "percent": 18.28
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 2206,
+                "percent": 71.74
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.45
+                },
+                {
+                  "name": "nan",
+                  "occupied": 506,
+                  "percent": 79.31
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 877,
+                  "percent": 71.3
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 822,
+                  "percent": 69.78
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 4081,
+                "percent": 68.56
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 70,
+                  "percent": 75.27
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2172,
+                  "percent": 86.5
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 411,
+                  "percent": 55.24
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 603,
+                  "percent": 97.26
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 294,
+                  "percent": 86.22
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 335,
+                  "percent": 72.04
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 195,
+                  "percent": 17.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 697,
+                "percent": 34.8
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 221,
+                  "percent": 32.4
+                },
+                {
+                  "name": "nan",
+                  "occupied": 3,
+                  "percent": 9.68
+                },
+                {
+                  "name": "nan",
+                  "occupied": 5,
+                  "percent": 16.13
+                },
+                {
+                  "name": "nan",
+                  "occupied": 229,
+                  "percent": 30.78
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 116,
+                  "percent": 74.84
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 123,
+                  "percent": 34.17
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 151,
+                "percent": 32.47
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 13,
+                  "percent": 20.97
+                },
+                {
+                  "name": "nan",
+                  "occupied": 138,
+                  "percent": 34.24
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 26691,
+                "percent": 43.16
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 1.61
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 392,
+                  "percent": 50.65
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 557,
+                  "percent": 54.45
+                },
+                {
+                  "name": "nan",
+                  "occupied": 62,
+                  "percent": 50.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 619,
+                  "percent": 53.97
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 218,
+                  "percent": 29.3
+                },
+                {
+                  "name": "nan",
+                  "occupied": 7,
+                  "percent": 11.29
+                },
+                {
+                  "name": "nan",
+                  "occupied": 225,
+                  "percent": 27.92
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 104,
+                  "percent": 37.28
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 104,
+                  "percent": 22.37
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 12003,
+                  "percent": 43.8
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 193,
+                  "percent": 32.88
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 5,
+                  "percent": 2.7
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 12201,
+                  "percent": 43.21
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "Feb-24",
+          "summary": {
+            "available": 24499,
+            "occupied": 9888,
+            "occupancyPercent": 40.36
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 3633,
+                "percent": 23.24
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 853,
+                  "percent": 32.68
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 386,
+                  "percent": 19.57
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 386,
+                  "percent": 19.27
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 90,
+                  "percent": 9.4
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 90,
+                  "percent": 8.87
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 155,
+                  "percent": 15.72
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.45
+                },
+                {
+                  "name": "nan",
+                  "occupied": 156,
+                  "percent": 15.37
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 718,
+                  "percent": 32.58
+                },
+                {
+                  "name": "nan",
+                  "occupied": 11,
+                  "percent": 9.48
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 729,
+                  "percent": 30.66
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 58,
+                  "percent": 16.67
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 1707,
+                "percent": 57.71
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.45
+                },
+                {
+                  "name": "nan",
+                  "occupied": 236,
+                  "percent": 36.99
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 744,
+                  "percent": 62.57
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 726,
+                  "percent": 65.88
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 3522,
+                "percent": 53.12
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 48,
+                  "percent": 55.17
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1916,
+                  "percent": 81.57
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 306,
+                  "percent": 43.97
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 549,
+                  "percent": 94.66
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 162,
+                  "percent": 52.6
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 335,
+                  "percent": 72.04
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 103,
+                  "percent": 9.6
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 103,
+                  "percent": 9.6
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 550,
+                "percent": 28.31
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 173,
+                  "percent": 27.12
+                },
+                {
+                  "name": "nan",
+                  "occupied": 5,
+                  "percent": 8.62
+                },
+                {
+                  "name": "nan",
+                  "occupied": 4,
+                  "percent": 13.79
+                },
+                {
+                  "name": "nan",
+                  "occupied": 182,
+                  "percent": 25.1
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 86,
+                  "percent": 59.31
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 100,
+                  "percent": 28.74
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 82,
+                "percent": 17.52
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 6,
+                  "percent": 10.34
+                },
+                {
+                  "name": "nan",
+                  "occupied": 75,
+                  "percent": 19.79
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 21556,
+                "percent": 39.59
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 287,
+                  "percent": 44.98
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 375,
+                  "percent": 375.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 31,
+                  "percent": 31.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 406,
+                  "percent": 37.84
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 138,
+                  "percent": 19.83
+                },
+                {
+                  "name": "nan",
+                  "occupied": 9,
+                  "percent": 15.52
+                },
+                {
+                  "name": "nan",
+                  "occupied": 147,
+                  "percent": 19.5
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 76,
+                  "percent": 29.12
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 77,
+                  "percent": 24.14
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 9888,
+                  "percent": 40.36
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 111,
+                  "percent": 19.14
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 6,
+                  "percent": 4.03
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 10005,
+                  "percent": 39.66
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "March-24",
+          "summary": {
+            "available": 25815,
+            "occupied": 12047,
+            "occupancyPercent": 46.67
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 5637,
+                "percent": 33.81
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 1376,
+                  "percent": 49.32
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 774,
+                  "percent": 37.61
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 775,
+                  "percent": 37.1
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 126,
+                  "percent": 12.32
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 126,
+                  "percent": 11.61
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 227,
+                  "percent": 21.54
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 227,
+                  "percent": 20.92
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 938,
+                  "percent": 39.3
+                },
+                {
+                  "name": "nan",
+                  "occupied": 29,
+                  "percent": 23.39
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 967,
+                  "percent": 37.58
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 71,
+                  "percent": 19.09
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 2215,
+                "percent": 70.05
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 3.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 506,
+                  "percent": 74.19
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 993,
+                  "percent": 78.13
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 715,
+                  "percent": 60.7
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 4444,
+                "percent": 64.59
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 72,
+                  "percent": 77.42
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2241,
+                  "percent": 89.25
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 440,
+                  "percent": 59.14
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 613,
+                  "percent": 98.87
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 261,
+                  "percent": 76.54
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 205,
+                  "percent": 44.09
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 304,
+                  "percent": 26.5
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2,
+                  "percent": 6.45
+                },
+                {
+                  "name": "nan",
+                  "occupied": 306,
+                  "percent": 32.96
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 490,
+                "percent": 23.95
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 140,
+                  "percent": 20.53
+                },
+                {
+                  "name": "nan",
+                  "occupied": 5,
+                  "percent": 8.06
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 145,
+                  "percent": 18.71
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 91,
+                  "percent": 58.71
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 109,
+                  "percent": 29.3
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 53,
+                "percent": 11.39
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 1.61
+                },
+                {
+                  "name": "nan",
+                  "occupied": 52,
+                  "percent": 12.9
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 26292,
+                "percent": 45.23
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1,
+                  "percent": 4.84
+                },
+                {
+                  "name": "nan",
+                  "occupied": 191,
+                  "percent": 34.69
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 643,
+                  "percent": 62.85
+                },
+                {
+                  "name": "nan",
+                  "occupied": 35,
+                  "percent": 28.23
+                },
+                {
+                  "name": "nan",
+                  "occupied": 678,
+                  "percent": 59.11
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 84,
+                  "percent": 11.29
+                },
+                {
+                  "name": "nan",
+                  "occupied": 4,
+                  "percent": 6.45
+                },
+                {
+                  "name": "nan",
+                  "occupied": 88,
+                  "percent": 10.92
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 93,
+                  "percent": 33.33
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 77,
+                  "percent": 68.75
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 12047,
+                  "percent": 46.67
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 149,
+                  "percent": 24.03
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 2,
+                  "percent": 1.34
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 12198,
+                  "percent": 45.72
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "23-24",
+          "summary": {
+            "available": 324971,
+            "occupied": 135280,
+            "occupancyPercent": 41.63
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 68085,
+                "percent": 32.98
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 12414,
+                  "percent": 37.79
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 7778,
+                  "percent": 29.95
+                },
+                {
+                  "name": "nan",
+                  "occupied": 5,
+                  "percent": 1.34
+                },
+                {
+                  "name": "nan",
+                  "occupied": 7783,
+                  "percent": 29.54
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 3842,
+                  "percent": 26.76
+                },
+                {
+                  "name": "nan",
+                  "occupied": 20,
+                  "percent": 5.46
+                },
+                {
+                  "name": "nan",
+                  "occupied": 3,
+                  "percent": 0.9
+                },
+                {
+                  "name": "nan",
+                  "occupied": 3865,
+                  "percent": 25.67
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 2822,
+                  "percent": 22.74
+                },
+                {
+                  "name": "nan",
+                  "occupied": 6,
+                  "percent": 1.65
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2828,
+                  "percent": 22.14
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 12351,
+                  "percent": 43.61
+                },
+                {
+                  "name": "nan",
+                  "occupied": 421,
+                  "percent": 28.84
+                },
+                {
+                  "name": "nan",
+                  "occupied": 5,
+                  "percent": 0.75
+                },
+                {
+                  "name": "nan",
+                  "occupied": 12777,
+                  "percent": 41.96
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 1165,
+                  "percent": 26.81
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 24908,
+                "percent": 60.9
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 76,
+                  "percent": 20.77
+                },
+                {
+                  "name": "nan",
+                  "occupied": 6223,
+                  "percent": 57.5
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 10686,
+                  "percent": 67.78
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 7923,
+                  "percent": 56.81
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 42636,
+                "percent": 47.94
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 668,
+                  "percent": 60.84
+                },
+                {
+                  "name": "nan",
+                  "occupied": 23057,
+                  "percent": 72.85
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 3940,
+                  "percent": 40.41
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 4531,
+                  "percent": 67.8
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 2108,
+                  "percent": 52.5
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 2716,
+                  "percent": 49.2
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 2795,
+                  "percent": 19.03
+                },
+                {
+                  "name": "nan",
+                  "occupied": 13,
+                  "percent": 3.04
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2808,
+                  "percent": 18.58
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 6166,
+                "percent": 24.48
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 1927,
+                  "percent": 22.27
+                },
+                {
+                  "name": "nan",
+                  "occupied": 41,
+                  "percent": 7.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 26,
+                  "percent": 7.74
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1994,
+                  "percent": 20.83
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 1076,
+                  "percent": 64.05
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 1102,
+                  "percent": 25.3
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 1570,
+                "percent": 25.98
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 105,
+                  "percent": 18.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 136,
+                  "percent": 18.58
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1328,
+                  "percent": 28.09
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 292736,
+                "percent": 39.98
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 7,
+                  "percent": 2.41
+                },
+                {
+                  "name": "nan",
+                  "occupied": 3,
+                  "percent": 1.03
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2,
+                  "percent": 0.86
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2043,
+                  "percent": 26.99
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 5117,
+                  "percent": 41.63
+                },
+                {
+                  "name": "nan",
+                  "occupied": 334,
+                  "percent": 25.15
+                },
+                {
+                  "name": "nan",
+                  "occupied": 5451,
+                  "percent": 40.02
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 1398,
+                  "percent": 15.96
+                },
+                {
+                  "name": "nan",
+                  "occupied": 80,
+                  "percent": 10.99
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1478,
+                  "percent": 15.58
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 1343,
+                  "percent": 40.77
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 1025,
+                  "percent": 20.41
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 135280,
+                  "percent": 41.63
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 1789,
+                  "percent": 25.23
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 153,
+                  "percent": 6.71
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 137232,
+                  "percent": 40.97
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "month": "Final Occupancy Sheet",
+          "summary": {
+            "available": 320878,
+            "occupied": 135237,
+            "occupancyPercent": 42.15
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 68085,
+                "percent": 32.98
+              },
+              "resorts": [
+                {
+                  "name": "Mahabaleshwar",
+                  "occupied": 12414,
+                  "percent": 37.79
+                },
+                {
+                  "name": "Karla",
+                  "occupied": 7778,
+                  "percent": 29.95
+                },
+                {
+                  "name": "nan",
+                  "occupied": 5,
+                  "percent": 1.34
+                },
+                {
+                  "name": "nan",
+                  "occupied": 7783,
+                  "percent": 29.54
+                },
+                {
+                  "name": "Malshej Ghat",
+                  "occupied": 3842,
+                  "percent": 26.76
+                },
+                {
+                  "name": "nan",
+                  "occupied": 20,
+                  "percent": 5.46
+                },
+                {
+                  "name": "nan",
+                  "occupied": 3,
+                  "percent": 0.9
+                },
+                {
+                  "name": "nan",
+                  "occupied": 3865,
+                  "percent": 25.67
+                },
+                {
+                  "name": "Panshet",
+                  "occupied": 2822,
+                  "percent": 22.74
+                },
+                {
+                  "name": "nan",
+                  "occupied": 6,
+                  "percent": 1.65
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2828,
+                  "percent": 22.14
+                },
+                {
+                  "name": "Bhimashankar",
+                  "occupied": 12351,
+                  "percent": 43.61
+                },
+                {
+                  "name": "nan",
+                  "occupied": 421,
+                  "percent": 28.84
+                },
+                {
+                  "name": "nan",
+                  "occupied": 5,
+                  "percent": 0.75
+                },
+                {
+                  "name": "nan",
+                  "occupied": 12777,
+                  "percent": 41.96
+                },
+                {
+                  "name": "Koyana",
+                  "occupied": 1165,
+                  "percent": 26.81
+                }
+              ]
+            },
+            {
+              "name": "R.O Nashik",
+              "summary": {
+                "occupied": 25200,
+                "percent": 61.11
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 76,
+                  "percent": 20.77
+                },
+                {
+                  "name": "nan",
+                  "occupied": 6281,
+                  "percent": 56.52
+                },
+                {
+                  "name": "Shirdi",
+                  "occupied": 10920,
+                  "percent": 68.9
+                },
+                {
+                  "name": "Gp Nashik",
+                  "occupied": 7923,
+                  "percent": 56.97
+                }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 42429,
+                "percent": 49.27
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 668,
+                  "percent": 60.84
+                },
+                {
+                  "name": "nan",
+                  "occupied": 23057,
+                  "percent": 72.85
+                },
+                {
+                  "name": "Harihareshwar",
+                  "occupied": 4072,
+                  "percent": 58.56
+                },
+                {
+                  "name": "Tarkarli",
+                  "occupied": 4531,
+                  "percent": 67.8
+                },
+                {
+                  "name": "Tarkarli IISDA",
+                  "occupied": 2101,
+                  "percent": 52.19
+                },
+                {
+                  "name": "Velneshwar",
+                  "occupied": 2384,
+                  "percent": 43.55
+                },
+                {
+                  "name": "Kunkeshwar",
+                  "occupied": 2795,
+                  "percent": 19.03
+                },
+                {
+                  "name": "nan",
+                  "occupied": 13,
+                  "percent": 3.04
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2808,
+                  "percent": 18.58
+                }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 6229,
+                "percent": 24.92
+              },
+              "resorts": [
+                {
+                  "name": "Ajanta (Fardapur)",
+                  "occupied": 1927,
+                  "percent": 22.27
+                },
+                {
+                  "name": "nan",
+                  "occupied": 41,
+                  "percent": 7.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 26,
+                  "percent": 7.74
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1984,
+                  "percent": 21.54
+                },
+                {
+                  "name": "Ajanta \"T\" Junction",
+                  "occupied": 1070,
+                  "percent": 58.47
+                },
+                {
+                  "name": "Lonar",
+                  "occupied": 1181,
+                  "percent": 26.94
+                }
+              ]
+            },
+            {
+              "name": "R.O Amaravati",
+              "summary": {
+                "occupied": 1568,
+                "percent": 27.54
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 105,
+                  "percent": 18.0
+                },
+                {
+                  "name": "nan",
+                  "occupied": 136,
+                  "percent": 18.58
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1327,
+                  "percent": 30.3
+                }
+              ]
+            },
+            {
+              "name": "R.O Nagpur",
+              "summary": {
+                "occupied": 293322,
+                "percent": 40.57
+              },
+              "resorts": [
+                {
+                  "name": "nan",
+                  "occupied": 7,
+                  "percent": 2.41
+                },
+                {
+                  "name": "nan",
+                  "occupied": 3,
+                  "percent": 1.03
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2,
+                  "percent": 0.86
+                },
+                {
+                  "name": "nan",
+                  "occupied": 2335,
+                  "percent": 32.0
+                },
+                {
+                  "name": "Tadoba",
+                  "occupied": 5117,
+                  "percent": 41.63
+                },
+                {
+                  "name": "nan",
+                  "occupied": 334,
+                  "percent": 25.15
+                },
+                {
+                  "name": "nan",
+                  "occupied": 5960,
+                  "percent": 44.01
+                },
+                {
+                  "name": "Bodhalkasa",
+                  "occupied": 1398,
+                  "percent": 15.96
+                },
+                {
+                  "name": "nan",
+                  "occupied": 80,
+                  "percent": 10.99
+                },
+                {
+                  "name": "nan",
+                  "occupied": 1478,
+                  "percent": 15.58
+                },
+                {
+                  "name": "nan",
+                  "occupied": 0,
+                  "percent": 0.0
+                },
+                {
+                  "name": "Wardha",
+                  "occupied": 1343,
+                  "percent": 40.77
+                },
+                {
+                  "name": "Pench Sillari",
+                  "occupied": 897,
+                  "percent": 20.43
+                },
+                {
+                  "name": "Rooms Occupancy",
+                  "occupied": 135237,
+                  "percent": 42.15
+                },
+                {
+                  "name": "Dormitory Occupancy",
+                  "occupied": 1789,
+                  "percent": 25.23
+                },
+                {
+                  "name": "Conference Occupancy",
+                  "occupied": 153,
+                  "percent": 6.71
+                },
+                {
+                  "name": "Grand Total",
+                  "occupied": 137189,
+                  "percent": 41.47
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
