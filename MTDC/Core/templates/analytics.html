@@ -445,7 +445,6 @@
             }
         }
 
-        /* Analytics Dashboard Improvements */
         .filters-bar {
             display: flex;
             flex-wrap: wrap;
@@ -615,11 +614,10 @@
             100% { transform: rotate(360deg); }
         }
     </style>
-    <!-- Highcharts Core & Exporting Modules -->
     <script src="{% static 'js/highcharts.js' %}"></script>
-    <script src="{% static 'js/modules/exporting.js' %}"></script>
-    <script src="{% static 'js/modules/export-data.js' %}"></script>
-    <script src="{% static 'js/modules/accessibility.js' %}"></script>
+    <script src="{% static 'js/exporting.js' %}"></script>
+    <script src="{% static 'js/export-data.js' %}"></script>
+    <script src="{% static 'js/accessibility.js' %}"></script>
 </head>
 <body>
     <header class="site-header">
@@ -668,15 +666,14 @@
                 <p>Comprehensive occupancy analytics and insights for MTDC properties</p>
             </div>
 
-            <!-- Interactive Filters -->
             <div class="filters-bar">
                 <div class="filter-group">
                     <label class="filter-label" for="year-select">Select Year</label>
                     <select id="year-select" class="filter-select">
-                        <option value="2025-26" selected>2025-26</option>
-                        <option value="2023-24">2023-24</option>
-                        <option value="2021-22">2021-22</option>
-                        <option value="2022-23">2021-22</option>
+                        <option value="2021-2022">2021-22</option>
+                        <option value="2022-2023">2022-23</option>
+                        <option value="2023-2024">2023-24</option>
+                        <option value="2025-2026"selected>2025-26</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -693,14 +690,12 @@
                 </div>
             </div>
 
-            <!-- Loading and Error Notifications -->
             <div id="loading-overlay" class="loading-overlay" style="display: none;">
                 <div class="spinner"></div>
                 <div>Fetching and preparing analytics data...</div>
             </div>
             <div id="error-container" style="display: none;"></div>
 
-            <!-- Dynamic KPI Cards -->
             <div class="analytics-grid" id="kpi-grid">
                 <div class="analytics-card">
                     <h3>Total Resorts</h3>
@@ -727,7 +722,6 @@
                 </div>
             </div>
 
-            <!-- Charts Container Grid -->
             <div id="charts-dashboard" style="margin-top: 24px;">
                 <div class="analytics-grid">
                     <div class="analytics-card" style="grid-column: span 2;">
@@ -758,7 +752,6 @@
                     </div>
                 </div>
 
-                <!-- Detailed Resort List Table -->
                 <div class="analytics-card" style="margin-top: 24px; grid-column: span 3;">
                     <div class="resort-table-header-row">
                         <h3 style="margin: 0;">Detailed Resort Breakdown</h3>
@@ -793,34 +786,8 @@
         </div>
     </footer>
 
-    <!-- Client-side logic for dynamic data loading, filtering and Highcharts rendering -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Smart Fallbacks for flat-file previewing (e.g. double clicking the HTML file directly)
-            let staticBaseUrl = "{% static 'occupancy-json/' %}";
-            if (staticBaseUrl.startsWith('{%') || staticBaseUrl.includes('static')) {
-                staticBaseUrl = "../static/occupancy-json/";
-                
-                // Fix images
-                document.querySelectorAll('img').forEach(img => {
-                    let src = img.getAttribute('src');
-                    if (src && src.startsWith('{%')) {
-                        const match = src.match(/'([^']+)'/);
-                        if (match) {
-                            img.src = "../static/" + match[1];
-                        }
-                    }
-                });
-
-                // Fix profile values
-                const avatar = document.querySelector('.profile-avatar');
-                if (avatar && avatar.textContent.includes('{{')) avatar.textContent = 'V';
-                const profileName = document.querySelector('.profile-name');
-                if (profileName && profileName.textContent.includes('{%')) profileName.textContent = 'Vishal';
-                const profileRole = document.querySelector('.profile-role');
-                if (profileRole && profileRole.textContent.includes('{%')) profileRole.textContent = 'Admin';
-            }
-            
             // State variables
             let originalData = null;
             let filteredResorts = [];
@@ -847,7 +814,6 @@
                 });
             } else {
                 console.warn('Highcharts library is not loaded. Charts will be disabled.');
-                // Show a warning banner to the user that charts are disabled
                 const warningBanner = document.createElement('div');
                 warningBanner.className = 'dashboard-alert';
                 warningBanner.style.backgroundColor = '#fff9e6';
@@ -857,10 +823,8 @@
                     <span class="material-symbols-outlined" style="color: #856404; font-size: 24px; vertical-align: middle; margin-right: 8px;">warning</span>
                     <div><strong>Offline Mode:</strong> Interactive charts could not be loaded because Highcharts library is unavailable. KPI cards and the detailed breakdown table remain active.</div>
                 `;
-                // Insert warning banner after analytics-header
                 document.querySelector('.analytics-container').insertBefore(warningBanner, document.getElementById('loading-overlay'));
                 
-                // Replace chart containers with a nice notice
                 document.querySelectorAll('.chart-container').forEach(container => {
                     container.innerHTML = `
                         <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--muted); font-size: 14px; font-weight: 600; border: 1px dashed var(--line); border-radius: 8px; background: var(--cream-2);">
@@ -869,7 +833,6 @@
                     `;
                 });
             }
-
 
             // DOM Selectors
             const yearSelect = document.getElementById('year-select');
@@ -902,31 +865,28 @@
             // Initial load
             loadDataForYear();
 
-            // Function to load the JSON file based on the selected year
+            // Function to load the dynamic JSON response directly via Django views
             async function loadDataForYear() {
-                const year = yearSelect.value;
-                
-                // Derive filename dynamically (e.g. 2025-26 -> analytics2025.2026.json)
-                const parts = year.split('-');
-                const startYear = parts[0];
-                const endYear = startYear.substring(0, 2) + parts[1];
-                const filename = `analytics${startYear}.${endYear}.json`;
-                const fileUrl = `${staticBaseUrl}${filename}`;
-
+                const selectedYear = yearSelect.value;
                 showLoading();
 
                 try {
-                    const response = await fetch(fileUrl);
+                    // Send AJAX fetch request matching your Django URL patterns
+                    const response = await fetch(`?year=${selectedYear}&format=json`, {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    });
                     if (!response.ok) {
-                        throw new Error(`Data file not found for ${year} (${filename}). It may not be uploaded yet.`);
+                        throw new Error(`Data file backend endpoint issue for selection: ${selectedYear}.`);
                     }
-                    const data = await response.json();
-                    originalData = data;
+                    const rawJson = await response.json();
                     
-                    // Populate filter dropdowns based on new JSON
-                    populateFilters(data);
+                    // Transform your flat model metrics to old dashboard structural schema definitions
+                    originalData = transformFlatData(rawJson, selectedYear);
                     
-                    // Reset selected filters to 'all' on year change
+                    populateFilters(originalData);
+                    
                     regionSelect.value = 'all';
                     monthSelect.value = 'all';
                     resortSearch.value = '';
@@ -936,6 +896,79 @@
                 } catch (error) {
                     showError(error.message);
                 }
+            }
+
+            // Data translation layer turning flat response arrays into expected component trees
+            function transformFlatData(backendResponse, fallbackYear) {
+                const flatRecords = backendResponse.data || [];
+                const financialYearName = backendResponse.financial_year || fallbackYear;
+                const monthsMap = {};
+
+                flatRecords.forEach(record => {
+                    const mName = record.month;
+                    const rName = record.region;
+
+                    if (!monthsMap[mName]) {
+                        monthsMap[mName] = { month: mName, regions: {}, totalOccupied: 0, totalAvailable: 0 };
+                    }
+                    if (!monthsMap[mName].regions[rName]) {
+                        monthsMap[mName].regions[rName] = { name: rName, resorts: {}, totalOccupied: 0, totalAvailable: 0 };
+                    }
+
+                    const available = Number(record.rooms_available) || 0;
+                    const occupied = Number(record.rooms_occupied) || 0;
+                    const resName = record.resort;
+
+                    // Aggregate at Resort level across multiple rows (e.g. distinct room types)
+                    if (!monthsMap[mName].regions[rName].resorts[resName]) {
+                        monthsMap[mName].regions[rName].resorts[resName] = { name: resName, occupied: 0, available: 0 };
+                    }
+                    
+                    monthsMap[mName].regions[rName].resorts[resName].occupied += occupied;
+                    monthsMap[mName].regions[rName].resorts[resName].available += available;
+
+                    monthsMap[mName].regions[rName].totalOccupied += occupied;
+                    monthsMap[mName].regions[rName].totalAvailable += available;
+                    monthsMap[mName].totalOccupied += occupied;
+                    monthsMap[mName].totalAvailable += available;
+                });
+
+                const nestedMonths = Object.values(monthsMap).map(m => {
+                    const regionsArray = Object.values(m.regions).map(r => {
+                        const resortsArray = Object.values(r.resorts).map(res => {
+                            return {
+                                name: res.name,
+                                occupied: res.occupied,
+                                percent: res.available > 0 ? (res.occupied / res.available) * 100 : 0
+                            };
+                        });
+
+                        return {
+                            name: r.name,
+                            summary: {
+                                occupied: r.totalOccupied,
+                                occupancyPercent: r.totalAvailable > 0 ? (r.totalOccupied / r.totalAvailable) * 100 : 0
+                            },
+                            resorts: resortsArray
+                        };
+                    });
+
+                    return {
+                        month: m.month,
+                        summary: {
+                            available: m.totalAvailable,
+                            occupied: m.totalOccupied
+                        },
+                        regions: regionsArray
+                    };
+                });
+
+                return {
+                    years: [{
+                        year: financialYearName,
+                        months: nestedMonths
+                    }]
+                };
             }
 
             function showLoading() {
@@ -965,13 +998,10 @@
                 kpiGrid.style.opacity = '1';
             }
 
-            // Populate region and month filters based on the JSON content
             function populateFilters(data) {
-                // Find year dataset
-                const yearData = data.years[0]; // Assuming one year block per file
+                const yearData = data.years[0];
                 if (!yearData || !yearData.months) return;
 
-                // Extract all unique regions and months
                 const regions = new Set();
                 const months = new Set();
 
@@ -980,7 +1010,6 @@
                     m.regions.forEach(r => regions.add(r.name));
                 });
 
-                // Populate Region dropdown
                 const currentRegionVal = regionSelect.value;
                 regionSelect.innerHTML = '<option value="all">All Regions</option>';
                 Array.from(regions).sort().forEach(r => {
@@ -991,10 +1020,8 @@
                 });
                 if (regions.has(currentRegionVal)) regionSelect.value = currentRegionVal;
 
-                // Populate Month dropdown
                 const currentMonthVal = monthSelect.value;
                 monthSelect.innerHTML = '<option value="all">All Months</option>';
-                // Keep the calendar sequence of months as they appear in the JSON
                 Array.from(months).forEach(m => {
                     const opt = document.createElement('option');
                     opt.value = m;
@@ -1004,7 +1031,6 @@
                 if (months.has(currentMonthVal)) monthSelect.value = currentMonthVal;
             }
 
-            // Apply dropdown filters, compute KPIs, and trigger chart renders
             function applyFilters() {
                 if (!originalData) return;
 
@@ -1013,13 +1039,11 @@
                 const yearData = originalData.years[0];
                 if (!yearData || !yearData.months) return;
 
-                // 1. Process and filter months list
                 let months = yearData.months;
                 if (selectedMonth !== 'all') {
                     months = months.filter(m => m.month === selectedMonth);
                 }
 
-                // 2. Aggregate Resort level data
                 const resortAggregation = {};
                 let totalOccupied = 0;
                 let totalAvailable = 0;
@@ -1032,10 +1056,8 @@
                     let monthAvailable = 0;
 
                     m.regions.forEach(reg => {
-                        // Skip if region filter is active and doesn't match
                         if (selectedRegion !== 'all' && reg.name !== selectedRegion) return;
 
-                        // Calculate region availability from region summary: occupied / percent
                         const regOccupied = reg.summary.occupied;
                         const regPercent = reg.summary.occupancyPercent;
                         const regAvailable = regPercent > 0 ? (regOccupied / regPercent) * 100 : 0;
@@ -1045,7 +1067,6 @@
                         
                         regionOccupiedMap[reg.name] = (regionOccupiedMap[reg.name] || 0) + regOccupied;
 
-                        // Track resort-level data
                         reg.resorts.forEach(res => {
                             const resOccupied = res.occupied;
                             const resPercent = res.percent;
@@ -1064,13 +1085,10 @@
                         });
                     });
 
-                    // Availability math helper
                     if (selectedRegion === 'all') {
-                        // If all regions, use the actual monthly summary availability
                         totalAvailable += m.summary.available;
                         monthAvailable = m.summary.available;
                     } else {
-                        // If specific region, sum calculated region availability
                         let calcRegionAvail = 0;
                         m.regions.forEach(reg => {
                             if (reg.name === selectedRegion) {
@@ -1090,9 +1108,7 @@
                     });
                 });
 
-                // Calculate Region availability totals
                 if (selectedRegion === 'all') {
-                    // For contribution & comparison, calculate regional available sum over all selected months
                     months.forEach(m => {
                         m.regions.forEach(reg => {
                             const regOccupied = reg.summary.occupied;
@@ -1105,7 +1121,6 @@
                     regionAvailableMap[selectedRegion] = totalAvailable;
                 }
 
-                // Convert resort aggregation to array
                 filteredResorts = Object.values(resortAggregation).map(res => {
                     return {
                         name: res.name,
@@ -1116,16 +1131,13 @@
                     };
                 });
 
-                // Compute final KPIs
                 const averageOccupancy = totalAvailable > 0 ? (totalOccupied / totalAvailable) * 100 : 0;
                 
-                // Update KPI Cards
                 kpiResortsCount.textContent = filteredResorts.length;
                 kpiAvailableNights.textContent = Math.round(totalAvailable).toLocaleString();
                 kpiOccupiedNights.textContent = Math.round(totalOccupied).toLocaleString();
                 kpiOccupancyRate.textContent = averageOccupancy.toFixed(1) + '%';
 
-                // Prepare region data list
                 const regionsList = Object.keys(regionOccupiedMap).map(rName => {
                     const occ = regionOccupiedMap[rName];
                     const avail = regionAvailableMap[rName] || 0;
@@ -1137,7 +1149,6 @@
                     };
                 });
 
-                // Trigger all chart renderings
                 if (hasHighcharts) {
                     renderOccupancyTrendsChart(monthlyTrends);
                     renderRegionContributionChart(regionsList);
@@ -1146,11 +1157,9 @@
                     renderMonthlyRegionComparisonChart(months, selectedRegion);
                 }
                 
-                // Render table
                 applySearch();
             }
 
-            // Search filter functionality
             function applySearch() {
                 const searchVal = resortSearch.value.trim().toLowerCase();
                 let results = filteredResorts;
@@ -1162,7 +1171,6 @@
                     );
                 }
 
-                // Apply sorting
                 results.sort((a, b) => {
                     let valA = a[currentSortColumn];
                     let valB = b[currentSortColumn];
@@ -1181,7 +1189,6 @@
                 renderResortsTable(results);
             }
 
-            // Handle Column sorting
             function sortTable(column) {
                 if (currentSortColumn === column) {
                     currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
@@ -1190,7 +1197,6 @@
                     currentSortDirection = column === 'name' || column === 'region' ? 'asc' : 'desc';
                 }
 
-                // Update headers symbols
                 const columns = ['name', 'region', 'occupied', 'occupancy'];
                 const colLabels = {
                     name: 'Resort Name',
@@ -1213,7 +1219,6 @@
                 applySearch();
             }
 
-            // Render table DOM rows
             function renderResortsTable(resorts) {
                 const tbody = document.getElementById('resorts-table-body');
                 if (resorts.length === 0) {
@@ -1239,11 +1244,6 @@
                 `).join('');
             }
 
-            /* =========================================================
-               HIGHER-LEVEL CHARTS RENDER FUNCTIONS
-               ========================================================= */
-
-            // 1. Mixed Occupancy trends (Available vs Occupied Columns + Occupancy Line)
             function renderOccupancyTrendsChart(data) {
                 const categories = data.map(d => d.month);
                 const availableData = data.map(d => Math.round(d.available));
@@ -1251,242 +1251,90 @@
                 const percentData = data.map(d => Number(d.occupancyPercent.toFixed(1)));
 
                 Highcharts.chart('occupancy-trends-chart', {
-                    chart: {
-                        zoomType: 'xy'
-                    },
-                    xAxis: [{
-                        categories: categories,
-                        crosshair: true
+                    chart: { zoomType: 'xy' },
+                    xAxis: [{ categories: categories, crosshair: true }],
+                    yAxis: [{
+                        labels: { format: '{value}' },
+                        title: { text: 'Room Nights', style: { color: '#0f5da8' } }
+                    }, {
+                        title: { text: 'Occupancy Rate (%)', style: { color: '#f5821f' } },
+                        labels: { format: '{value}%' },
+                        opposite: true, min: 0, max: 100
                     }],
-                    yAxis: [{ // Primary yAxis (Room nights)
-                        labels: {
-                            format: '{value}'
-                        },
-                        title: {
-                            text: 'Room Nights',
-                            style: {
-                                color: '#0f5da8'
-                            }
-                        }
-                    }, { // Secondary yAxis (Percentage)
-                        title: {
-                            text: 'Occupancy Rate (%)',
-                            style: {
-                                color: '#f5821f'
-                            }
-                        },
-                        labels: {
-                            format: '{value}%'
-                        },
-                        opposite: true,
-                        min: 0,
-                        max: 100
-                    }],
-                    tooltip: {
-                        shared: true
-                    },
-                    legend: {
-                        align: 'center',
-                        verticalAlign: 'bottom',
-                        y: 0,
-                        backgroundColor: '#ffffff'
-                    },
+                    tooltip: { shared: true },
+                    legend: { align: 'center', verticalAlign: 'bottom', y: 0, backgroundColor: '#ffffff' },
                     series: [{
-                        name: 'Available Room-Nights',
-                        type: 'column',
-                        data: availableData,
-                        color: '#e4d8c6',
-                        tooltip: {
-                            valueSuffix: ' nights'
-                        }
+                        name: 'Available Room-Nights', type: 'column', data: availableData, color: '#e4d8c6', tooltip: { valueSuffix: ' nights' }
                     }, {
-                        name: 'Occupied Room-Nights',
-                        type: 'column',
-                        data: occupiedData,
-                        color: '#0f5da8',
-                        tooltip: {
-                            valueSuffix: ' nights'
-                        }
+                        name: 'Occupied Room-Nights', type: 'column', data: occupiedData, color: '#0f5da8', tooltip: { valueSuffix: ' nights' }
                     }, {
-                        name: 'Occupancy Rate',
-                        type: 'line',
-                        yAxis: 1,
-                        data: percentData,
-                        color: '#f5821f',
-                        lineWidth: 3,
-                        marker: {
-                            lineWidth: 2,
-                            lineColor: '#f5821f',
-                            fillColor: '#ffffff',
-                            radius: 5
-                        },
-                        tooltip: {
-                            valueSuffix: '%'
-                        }
+                        name: 'Occupancy Rate', type: 'line', yAxis: 1, data: percentData, color: '#f5821f', lineWidth: 3,
+                        marker: { lineWidth: 2, lineColor: '#f5821f', fillColor: '#ffffff', radius: 5 },
+                        tooltip: { valueSuffix: '%' }
                     }]
                 });
             }
 
-            // 2. Region Contribution Pie/Donut Chart
             function renderRegionContributionChart(regions) {
-                const chartData = regions.map(reg => {
-                    return {
-                        name: reg.name,
-                        y: reg.occupied
-                    };
-                });
-
+                const chartData = regions.map(reg => ({ name: reg.name, y: reg.occupied }));
                 Highcharts.chart('region-contribution-chart', {
-                    chart: {
-                        type: 'pie'
-                    },
-                    tooltip: {
-                        pointFormat: '{series.name}: <b>{point.y} nights ({point.percentage:.1f}%)</b>'
-                    },
-                    accessibility: {
-                        point: {
-                            valueSuffix: '%'
-                        }
-                    },
+                    chart: { type: 'pie' },
+                    tooltip: { pointFormat: '{series.name}: <b>{point.y} nights ({point.percentage:.1f}%)</b>' },
+                    accessibility: { point: { valueSuffix: '%' } },
                     plotOptions: {
                         pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
+                            allowPointSelect: true, cursor: 'pointer',
                             dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                                distance: -30,
-                                filter: {
-                                    property: 'percentage',
-                                    operator: '>',
-                                    value: 4
-                                },
-                                style: {
-                                    fontSize: '11px',
-                                    textOutline: 'none'
-                                }
+                                enabled: true, format: '<b>{point.name}</b>: {point.percentage:.1f} %', distance: -30,
+                                filter: { property: 'percentage', operator: '>', value: 4 },
+                                style: { fontSize: '11px', textOutline: 'none' }
                             },
-                            showInLegend: true,
-                            innerSize: '50%' // Donut shape
+                            showInLegend: true, innerSize: '50%'
                         }
                     },
-                    series: [{
-                        name: 'Contribution',
-                        colorByPoint: true,
-                        data: chartData
-                    }]
+                    series: [{ name: 'Contribution', colorByPoint: true, data: chartData }]
                 });
             }
 
-            // 3. Region Occupancy Rate Comparison (Column Chart)
             function renderRegionOccupancyChart(regions) {
                 const categories = regions.map(reg => reg.name);
                 const dataPoints = regions.map(reg => reg.occupancyPercent);
 
                 Highcharts.chart('region-occupancy-chart', {
-                    chart: {
-                        type: 'column'
-                    },
-                    xAxis: {
-                        categories: categories,
-                        crosshair: true
-                    },
-                    yAxis: {
-                        min: 0,
-                        max: 100,
-                        title: {
-                            text: 'Occupancy Rate (%)'
-                        },
-                        labels: {
-                            format: '{value}%'
-                        }
-                    },
+                    chart: { type: 'column' },
+                    xAxis: { categories: categories, crosshair: true },
+                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)' }, labels: { format: '{value}%' } },
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                            '<td style="padding:0"><b>{point.y:.1f}%</b></td></tr>',
-                        footerFormat: '</table>',
-                        shared: true,
-                        useHTML: true
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0"><b>{point.y:.1f}%</b></td></tr>',
+                        footerFormat: '</table>', shared: true, useHTML: true
                     },
-                    plotOptions: {
-                        column: {
-                            pointPadding: 0.2,
-                            borderWidth: 0,
-                            colorByPoint: true,
-                            colors: ['#0f8b69', '#0f5da8', '#f5821f', '#13233b']
-                        }
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    series: [{
-                        name: 'Occupancy Rate',
-                        data: dataPoints
-                    }]
+                    plotOptions: { column: { pointPadding: 0.2, borderWidth: 0, colorByPoint: true, colors: ['#0f8b69', '#0f5da8', '#f5821f', '#13233b'] } },
+                    legend: { enabled: false },
+                    series: [{ name: 'Occupancy Rate', data: dataPoints }]
                 });
             }
 
-            // 4. Horizontal Bar Chart of Top 10 Resorts
             function renderTopResortsChart(resorts) {
-                // Sort by occupancy and take top 10
-                const topResorts = [...resorts]
-                    .sort((a, b) => b.occupancy - a.occupancy)
-                    .slice(0, 10);
-
+                const topResorts = [...resorts].sort((a, b) => b.occupancy - a.occupancy).slice(0, 10);
                 const categories = topResorts.map(res => res.name);
                 const dataPoints = topResorts.map(res => res.occupancy);
 
                 Highcharts.chart('resorts-occupancy-chart', {
-                    chart: {
-                        type: 'bar'
-                    },
-                    xAxis: {
-                        categories: categories,
-                        title: {
-                            text: null
-                        }
-                    },
-                    yAxis: {
-                        min: 0,
-                        max: 100,
-                        title: {
-                            text: 'Occupancy Rate (%)',
-                            align: 'high'
-                        },
-                        labels: {
-                            overflow: 'justify',
-                            format: '{value}%'
-                        }
-                    },
-                    tooltip: {
-                        valueSuffix: '%'
-                    },
-                    plotOptions: {
-                        bar: {
-                            dataLabels: {
-                                enabled: true,
-                                format: '{point.y:.1f}%'
-                            },
-                            color: '#f5821f'
-                        }
-                    },
-                    legend: {
-                        enabled: false
-                    },
-                    series: [{
-                        name: 'Occupancy',
-                        data: dataPoints
-                    }]
+                    chart: { type: 'bar' },
+                    xAxis: { categories: categories, title: { text: null } },
+                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)', align: 'high' }, labels: { overflow: 'justify', format: '{value}%' } },
+                    tooltip: { valueSuffix: '%' },
+                    plotOptions: { bar: { dataLabels: { enabled: true, format: '{point.y:.1f}%' }, color: '#f5821f' } },
+                    legend: { enabled: false },
+                    series: [{ name: 'Occupancy', data: dataPoints }]
                 });
             }
 
-            // 5. Monthly comparison per region (Grouped Column)
             function renderMonthlyRegionComparisonChart(months, activeRegion) {
                 const categories = months.map(m => m.month);
-                
-                // Collect all regions
                 const regionNames = new Set();
+                
                 months.forEach(m => {
                     m.regions.forEach(r => {
                         if (activeRegion !== 'all' && r.name !== activeRegion) return;
@@ -1499,45 +1347,23 @@
                         const reg = m.regions.find(r => r.name === rName);
                         return reg ? reg.summary.occupied : 0;
                     });
-                    return {
-                        name: rName,
-                        data: data
-                    };
+                    return { name: rName, data: data };
                 });
 
                 Highcharts.chart('monthly-region-chart', {
-                    chart: {
-                        type: 'column'
-                    },
-                    xAxis: {
-                        categories: categories,
-                        crosshair: true
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Occupied Nights'
-                        }
-                    },
+                    chart: { type: 'column' },
+                    xAxis: { categories: categories, crosshair: true },
+                    yAxis: { min: 0, title: { text: 'Occupied Nights' } },
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                            '<td style="padding:0"><b>{point.y} nights</b></td></tr>',
-                        footerFormat: '</table>',
-                        shared: true,
-                        useHTML: true
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0"><b>{point.y} nights</b></td></tr>',
+                        footerFormat: '</table>', shared: true, useHTML: true
                     },
-                    plotOptions: {
-                        column: {
-                            pointPadding: 0.2,
-                            borderWidth: 0
-                        }
-                    },
+                    plotOptions: { column: { pointPadding: 0.2, borderWidth: 0 } },
                     series: series
                 });
             }
         });
     </script>
-    
 </body>
 </html>
