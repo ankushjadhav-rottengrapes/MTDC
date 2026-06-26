@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 
-from .models import master_mtdc, PropertyCover, PropertyDocument, PropertyImage, PropertyVideo
+from .models import master_mtdc, OccupancyJson, PropertyCover, PropertyDocument, PropertyImage, PropertyVideo
 
 
 class PropertyIdForm(forms.ModelForm):
@@ -61,10 +61,16 @@ class PropertyVideoAdmin(admin.ModelAdmin):
     list_filter = ("uploaded_at",)
 
 
+class OccupancyJsonAdmin(admin.ModelAdmin):
+    list_display = ("year", "created_at", "updated_at")
+    search_fields = ("year",)
+    readonly_fields = ("created_at", "updated_at")
+
+
 admin.site.register(master_mtdc, MasterMtdcAdmin)
 admin.site.register(PropertyCover, PropertyCoverAdmin)
 admin.site.register(PropertyImage, PropertyImageAdmin)
 admin.site.register(PropertyDocument, PropertyDocumentAdmin)
 admin.site.register(PropertyVideo, PropertyVideoAdmin)
-
+admin.site.register(OccupancyJson, OccupancyJsonAdmin)
 
