@@ -112,3 +112,19 @@ class PropertyVideo(models.Model):
     def __str__(self):
         return f"Video for property {self.property_id} - {self.title or self.youtube_url}"
 
+
+class OccupancyJson(models.Model):
+    year = models.CharField(max_length=20, unique=True)
+    data = models.JSONField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = "core_occupancyjson"
+        ordering = ["year"]
+        verbose_name = "Occupancy JSON"
+        verbose_name_plural = "Occupancy JSONs"
+
+    def __str__(self):
+        return self.year
+
