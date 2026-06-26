@@ -1,0 +1,170 @@
+{
+  "years": [
+    {
+      "year": "2022-23",
+      "months": [
+        {
+          "month": "Apr",
+          "summary": {
+            "available": 23973,
+            "occupied": 9936,
+            "occupancyPercent": 41.45
+          },
+          "regions": [
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 361,
+                "occupancyPercent": 14.0
+              },
+              "resorts": [
+                { "name": "H.R. Aurangabad", "occupied": 145, "percent": 8.93 },
+                { "name": "Ajanta (Fardapur)", "occupied": 106, "percent": 13.0 },
+                { "name": "Ajanta T Junction", "occupied": 40, "percent": 26.67 },
+                { "name": "Lonar", "occupied": 70, "percent": 29.17 }
+              ]
+            },
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 3096,
+                "occupancyPercent": 28.0
+              },
+              "resorts": [
+                { "name": "Matheran", "occupied": 315, "percent": 30.0 },
+                { "name": "Mahabaleshwar", "occupied": 1374, "percent": 50.89 },
+                { "name": "Karla", "occupied": 671, "percent": 30.64 },
+                { "name": "Malshej Ghat", "occupied": 65, "percent": 4.81 },
+                { "name": "Panshet", "occupied": 264, "percent": 25.88 },
+                { "name": "Bhimashankar", "occupied": 371, "percent": 15.27 },
+                { "name": "Koyana", "occupied": 36, "percent": 14.52 }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 3235,
+                "occupancyPercent": 52.0
+              },
+              "resorts": [
+                { "name": "Ganpatipule", "occupied": 1992, "percent": 60.0 },
+                { "name": "Harihareshwar", "occupied": 313, "percent": 54.91 },
+                { "name": "Tarkarli", "occupied": 508, "percent": 84.67 },
+                { "name": "Velneshwar", "occupied": 160, "percent": 35.56 },
+                { "name": "Kunkeshwar", "occupied": 259, "percent": 23.33 }
+              ]
+            }
+          ]
+        },
+
+        {
+          "month": "May",
+          "summary": {
+            "available": 24303,
+            "occupied": 14803,
+            "occupancyPercent": 60.91
+          },
+          "regions": [
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 371,
+                "occupancyPercent": 13.0
+              },
+              "resorts": [
+                { "name": "H.R. Aurangabad", "occupied": 246, "percent": 14.70 },
+                { "name": "Ajanta (Fardapur)", "occupied": 46, "percent": 9.27 },
+                { "name": "Ajanta T Junction", "occupied": 23, "percent": 14.84 },
+                { "name": "Lonar", "occupied": 56, "percent": 22.58 }
+              ]
+            },
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 5053,
+                "occupancyPercent": 45.0
+              },
+              "resorts": [
+                { "name": "Matheran", "occupied": 315, "percent": 29.03 },
+                { "name": "Mahabaleshwar", "occupied": 2432, "percent": 87.17 },
+                { "name": "Karla", "occupied": 1166, "percent": 51.52 },
+                { "name": "Malshej Ghat", "occupied": 102, "percent": 7.31 },
+                { "name": "Panshet", "occupied": 254, "percent": 24.10 },
+                { "name": "Bhimashankar", "occupied": 646, "percent": 25.73 },
+                { "name": "Koyana", "occupied": 49, "percent": 39.52 }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 5098,
+                "occupancyPercent": 75.0
+              },
+              "resorts": [
+                { "name": "Ganpatipule", "occupied": 3054, "percent": 89.56 },
+                { "name": "Harihareshwar", "occupied": 522, "percent": 88.62 },
+                { "name": "Tarkarli", "occupied": 623, "percent": 99.05 },
+                { "name": "Velneshwar", "occupied": 360, "percent": 77.42 },
+                { "name": "Kunkeshwar", "occupied": 539, "percent": 46.99 }
+              ]
+            }
+          ]
+        },
+
+        {
+          "month": "Jun",
+          "summary": {
+            "available": 26716,
+            "occupied": 11900,
+            "occupancyPercent": 44.54
+          },
+          "regions": [
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 360,
+                "occupancyPercent": 15.0
+              },
+              "resorts": [
+                { "name": "H.R. Aurangabad", "occupied": 190, "percent": 11.35 },
+                { "name": "Ajanta (Fardapur)", "occupied": 78, "percent": 16.25 },
+                { "name": "Ajanta T Junction", "occupied": 35, "percent": 23.33 },
+                { "name": "Lonar", "occupied": 57, "percent": 23.75 }
+              ]
+            },
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 4215,
+                "occupancyPercent": 33.0
+              },
+              "resorts": [
+                { "name": "Matheran", "occupied": 402, "percent": 38.29 },
+                { "name": "Mahabaleshwar", "occupied": 1795, "percent": 66.48 },
+                { "name": "Karla", "occupied": 833, "percent": 38.04 },
+                { "name": "Malshej Ghat", "occupied": 376, "percent": 27.85 },
+                { "name": "Panshet", "occupied": 217, "percent": 21.27 },
+                { "name": "Bhimashankar", "occupied": 557, "percent": 25.43 },
+                { "name": "Koyana", "occupied": 35, "percent": 29.17 }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 2835,
+                "occupancyPercent": 45.0
+              },
+              "resorts": [
+                { "name": "Ganpatipule", "occupied": 1963, "percent": 59.48 },
+                { "name": "Harihareshwar", "occupied": 333, "percent": 46.25 },
+                { "name": "Tarkarli", "occupied": 278, "percent": 46.33 },
+                { "name": "Tarkarli IISDA", "occupied": 95, "percent": 28.79 },
+                { "name": "Velneshwar", "occupied": 166, "percent": 36.89 }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

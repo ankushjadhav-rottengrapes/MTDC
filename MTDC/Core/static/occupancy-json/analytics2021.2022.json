@@ -1,0 +1,62 @@
+{
+  "years": [
+    {
+      "year": "2021-22",
+      "months": [
+        {
+          "month": "Apr",
+          "summary": {
+            "available": 28655,
+            "occupied": 1443,
+            "occupancyPercent": 5.04
+          },
+          "regions": [
+            {
+              "name": "R.O Pune",
+              "summary": {
+                "occupied": 376,
+                "occupancyPercent": 3.48
+              },
+              "resorts": [
+                { "name": "Matheran", "occupied": 19, "percent": 1.81 },
+                { "name": "Mahabaleshwar", "occupied": 146, "percent": 5.23 },
+                { "name": "Karla", "occupied": 80, "percent": 3.76 },
+                { "name": "Malshej Ghat", "occupied": 23, "percent": 1.70 },
+                { "name": "Panshet", "occupied": 20, "percent": 1.90 },
+                { "name": "Bhimashankar", "occupied": 54, "percent": 2.15 },
+                { "name": "Koyana", "occupied": 34, "percent": 27.42 }
+              ]
+            },
+            {
+              "name": "R.O Ratnagiri",
+              "summary": {
+                "occupied": 515,
+                "occupancyPercent": 12.0
+              },
+              "resorts": [
+                { "name": "Ganpatipule", "occupied": 262, "percent": 13.27 },
+                { "name": "Harihareshwar", "occupied": 61, "percent": 8.47 },
+                { "name": "Tarkarli", "occupied": 84, "percent": 15.56 },
+                { "name": "Velneshwar", "occupied": 65, "percent": 14.44 },
+                { "name": "Kunkeshwar", "occupied": 43, "percent": 3.87 }
+              ]
+            },
+            {
+              "name": "R.O Aurangabad",
+              "summary": {
+                "occupied": 71,
+                "occupancyPercent": 2.48
+              },
+              "resorts": [
+                { "name": "H.R. Aurangabad", "occupied": 60, "percent": 3.70 },
+                { "name": "Ajanta (Fardapur)", "occupied": 5, "percent": 0.60 },
+                { "name": "Ajanta T Junction", "occupied": 0, "percent": 0.00 },
+                { "name": "Lonar", "occupied": 6, "percent": 2.50 }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

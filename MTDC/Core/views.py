@@ -2,12 +2,12 @@ import binascii
 import re
 import struct
 from collections import Counter
-
+from django.http import JsonResponse
 from django.db import connection
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render ,get_object_or_404
 
-from .models import master_mtdc, PropertyCover, PropertyImage, PropertyDocument, PropertyVideo
+from .models import master_mtdc, PropertyCover, PropertyImage, PropertyDocument, PropertyVideo ,OccupancyJson
 
 OWNERSHIP_REGION_ORDER = [
     "Ratnagiri",
@@ -342,8 +342,26 @@ def dashboard(request, property_id=None):
     }
     return render(request, "dashboard.html", context)
 
-
 @login_required
 def analytics(request):
-    context = {}
+    year = request.GET.get("year", "2023-2024")
+    
+    # Fetch the specific year entry
+    occupancy_record = OccupancyJson.objects.filter(year=year).first()
+    
+    # Check if this is an AJAX/JSON request from your Highcharts template
+    is_ajax = request.headers.get('x-requested-with') == 'XMLHttpRequest' or request.GET.get('format') == 'json'
+    
+    if is_ajax:
+        if occupancy_record:
+            # Assuming your field is named 'data', 'json_data', or similar.
+            # Replace '.data' with whatever your model field name is.
+            return JsonResponse(occupancy_record.data, safe=False)
+        else:
+            return JsonResponse({"financial_year": year, "total_records": 0, "data": []})
+
+    # Standard browser page load
+    context = {
+        "occupancy_json": OccupancyJson.objects.filter(year=year),
+    }
     return render(request, "analytics.html", context)
