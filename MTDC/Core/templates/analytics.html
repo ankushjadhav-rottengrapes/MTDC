@@ -492,7 +492,7 @@
 
         .chart-container {
             width: 100%;
-            height: 380px;
+            height: 400px;
             margin-top: 8px;
         }
 
@@ -565,8 +565,8 @@
             margin-bottom: 8px;
         }
 
-        /* Pagination Layout CSS */
-        .table-pagination-bar {
+        /* Pagination Navigation CSS */
+        .table-pagination-controls {
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -577,42 +577,43 @@
             border-radius: 0 0 12px 12px;
             flex-wrap: wrap;
             gap: 12px;
+            box-shadow: 0 4px 12px rgba(18, 25, 36, 0.04);
         }
 
-        .pagination-info {
+        .pagination-status-text {
             font-size: 13px;
             color: var(--muted);
             font-weight: 600;
         }
 
-        .pagination-controls {
+        .pagination-action-buttons {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .pagination-btn {
+        .pagination-nav-btn {
             background: #ffffff;
             border: 1px solid var(--line);
-            padding: 6px 12px;
+            padding: 6px 14px;
             font-size: 13px;
             font-weight: 700;
             color: var(--navy);
             border-radius: 6px;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
-        .pagination-btn:hover:not(:disabled) {
+        .pagination-nav-btn:hover:not(:disabled) {
             background: var(--cream);
             border-color: var(--saffron);
         }
 
-        .pagination-btn:disabled {
+        .pagination-nav-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
         }
 
-        .page-size-selector select {
+        .page-limit-selector select {
             padding: 4px 8px;
             border-radius: 6px;
             border: 1px solid var(--line);
@@ -621,6 +622,7 @@
             background: #ffffff;
             color: var(--navy);
             outline: none;
+            cursor: pointer;
         }
 
         .dashboard-alert {
@@ -667,9 +669,13 @@
             animation: spin 0.8s linear infinite;
         }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+       @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
     <script src="{% static 'js/highcharts.js' %}"></script>
@@ -832,20 +838,21 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="table-pagination-bar">
-                        <div class="page-size-selector">
-                            <label for="page-size-select" style="font-size: 13px; font-weight: 600; color: var(--muted); margin-right: 4px;">Rows per page:</label>
-                            <select id="page-size-select">
+                    
+                    <div class="table-pagination-controls">
+                        <div class="page-limit-selector">
+                            <label for="rows-per-page" style="font-size: 13px; font-weight: 600; color: var(--muted); margin-right: 6px;">Rows per page:</label>
+                            <select id="rows-per-page">
                                 <option value="5">5</option>
                                 <option value="10" selected>10</option>
                                 <option value="25">25</option>
                                 <option value="50">50</option>
                             </select>
                         </div>
-                        <div class="pagination-info" id="pagination-info-text">Showing 0-0 of 0 resorts</div>
-                        <div class="pagination-controls">
-                            <button class="pagination-btn" id="btn-page-prev">Previous</button>
-                            <button class="pagination-btn" id="btn-page-next">Next</button>
+                        <div class="pagination-status-text" id="pagination-status">Showing 0-0 of 0 resorts</div>
+                        <div class="pagination-action-buttons">
+                            <button class="pagination-nav-btn" id="prev-page-btn">Previous</button>
+                            <button class="pagination-nav-btn" id="next-page-btn">Next</button>
                         </div>
                     </div>
                 </div>
@@ -862,36 +869,73 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // State variables
+            // Global State Management Engine
             let originalData = null;
             let filteredResorts = [];
+            let processedSearchResults = [];
             let currentSortColumn = 'occupancy';
             let currentSortDirection = 'desc';
             
-            // New Pagination State Variables
+            // Client Side Pagination State Machine
             let currentPage = 1;
             let pageSize = 10;
-            let finalSortedFilteredList = [];
 
-            // Highcharts configuration with clean responsive UX updates
+            // Highcharts Configuration Engine with Export Layout Fixes
+          // Highcharts Configuration Engine with Export Layout Fixes
             const hasHighcharts = typeof Highcharts !== 'undefined';
             if (hasHighcharts) {
                 Highcharts.setOptions({
                     colors: ['#0f5da8', '#f5821f', '#0f8b69', '#13233b', '#5d6675', '#e4d8c6'],
                     chart: {
                         style: {
-                            fontFamily: 'Inter, sans-serif'
+                            fontFamily: 'Inter, sans-serif',
+                            color: '#101820' // Forces fallback text color to a crisp dark slate
                         },
                         backgroundColor: '#ffffff',
-                        reflow: true // auto reflow sizes on system resize events
+                        spacingTop: 20,    
+                        spacingRight: 20,  
+                        spacingBottom: 15
                     },
-                    credits: { enabled: false },
-                    title: { text: null },
+                    // Global styling adjustments for all sub-charts
+                    xAxis: {
+                        labels: {
+                            style: { color: '#101820', fontWeight: '700', fontSize: '11px' }
+                        },
+                        title: {
+                            style: { color: '#101820', fontWeight: '800' }
+                        }
+                    },
+                    yAxis: {
+                        labels: {
+                            style: { color: '#101820', fontWeight: '700', fontSize: '11px' }
+                        },
+                        title: {
+                            style: { color: '#101820', fontWeight: '800' }
+                        }
+                    },
+                    legend: {
+                        itemStyle: { color: '#101820', fontWeight: '700', fontSize: '12px' },
+                        itemHoverStyle: { color: '#f5821f' }
+                    },
                     plotOptions: {
                         series: {
-                            animation: { duration: 600 }
+                            dataLabels: {
+                                style: { color: '#101820', textOutline: 'none', fontWeight: '700', fontSize: '11px' }
+                            }
                         }
-                    }
+                    },
+                    exporting: {
+                        buttons: {
+                            contextButton: {
+                                align: 'right',
+                                verticalAlign: 'top',
+                                x: 10,
+                                y: -20
+                            }
+                        }
+                    },
+                    credits: { enabled: false },
+                    title: { text: null }
                 });
             } else {
                 console.warn('Highcharts library is not loaded. Charts will be disabled.');
@@ -915,7 +959,7 @@
                 });
             }
 
-            // DOM Selectors
+            // DOM UI Elements Selectors
             const yearSelect = document.getElementById('year-select');
             const regionSelect = document.getElementById('region-select');
             const monthSelect = document.getElementById('month-select');
@@ -925,54 +969,56 @@
             const kpiGrid = document.getElementById('kpi-grid');
             const resortSearch = document.getElementById('resort-search');
             
-            // Pagination DOM selectors
-            const pageSizeSelect = document.getElementById('page-size-select');
-            const paginationInfoText = document.getElementById('pagination-info-text');
-            const btnPagePrev = document.getElementById('btn-page-prev');
-            const btnPageNext = document.getElementById('btn-page-next');
+            // Pagination Element Selectors
+            const rowsPerPageSelect = document.getElementById('rows-per-page');
+            const paginationStatus = document.getElementById('pagination-status');
+            const prevPageBtn = document.getElementById('prev-page-btn');
+            const nextPageBtn = document.getElementById('next-page-btn');
             
-            // KPI DOM elements
+            // KPI Nodes
             const kpiResortsCount = document.getElementById('kpi-resorts-count');
             const kpiAvailableNights = document.getElementById('kpi-available-nights');
             const kpiOccupancyRate = document.getElementById('kpi-occupancy-rate');
             const kpiOccupiedNights = document.getElementById('kpi-occupied-nights');
 
-            // Event Listeners for Filters
+            // Event Registry Architecture
             yearSelect.addEventListener('change', loadDataForYear);
             regionSelect.addEventListener('change', applyFilters);
             monthSelect.addEventListener('change', applyFilters);
             resortSearch.addEventListener('input', () => {
-                currentPage = 1; // reset page back to 1 on input search values
+                currentPage = 1; // Safely bounce client indices to page 1 during filtration lookup inputs
                 applySearch();
             });
 
-            // Pagination Interaction Listeners
-            pageSizeSelect.addEventListener('change', (e) => {
+            // Pagination Controls Listeners
+            rowsPerPageSelect.addEventListener('change', (e) => {
                 pageSize = parseInt(e.target.value, 10);
                 currentPage = 1;
-                paginateAndRenderTable();
+                paginateAndBuildTable();
             });
-            btnPagePrev.addEventListener('click', () => {
+
+            prevPageBtn.addEventListener('click', () => {
                 if (currentPage > 1) {
                     currentPage--;
-                    paginateAndRenderTable();
-                }
-            });
-            btnPageNext.addEventListener('click', () => {
-                const totalPages = Math.ceil(finalSortedFilteredList.length / pageSize);
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    paginateAndRenderTable();
+                    paginateAndBuildTable();
                 }
             });
 
-            // Table Sorting Listeners
+            nextPageBtn.addEventListener('click', () => {
+                const maxPages = Math.ceil(processedSearchResults.length / pageSize);
+                if (currentPage < maxPages) {
+                    currentPage++;
+                    paginateAndBuildTable();
+                }
+            });
+
+            // Table Sorting Event Hookups
             document.getElementById('th-name').addEventListener('click', () => sortTable('name'));
             document.getElementById('th-region').addEventListener('click', () => sortTable('region'));
             document.getElementById('th-occupied').addEventListener('click', () => sortTable('occupied'));
             document.getElementById('th-occupancy').addEventListener('click', () => sortTable('occupancy'));
 
-            // Initial load
+            // Core Execution Initialization Entry Hook
             loadDataForYear();
 
             async function loadDataForYear() {
@@ -981,16 +1027,14 @@
 
                 try {
                     const response = await fetch(`?year=${selectedYear}&format=json`, {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest'
-                        }
+                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
                     });
                     if (!response.ok) {
                         throw new Error(`Data file backend endpoint issue for selection: ${selectedYear}.`);
                     }
                     const rawJson = await response.json();
-                    
                     originalData = transformFlatData(rawJson, selectedYear);
+                    
                     populateFilters(originalData);
                     
                     regionSelect.value = 'all';
@@ -1060,20 +1104,12 @@
 
                     return {
                         month: m.month,
-                        summary: {
-                            available: m.totalAvailable,
-                            occupied: m.totalOccupied
-                        },
+                        summary: { available: m.totalAvailable, occupied: m.totalOccupied },
                         regions: regionsArray
                     };
                 });
 
-                return {
-                    years: [{
-                        year: financialYearName,
-                        months: nestedMonths
-                    }]
-                };
+                return { years: [{ year: financialYearName, months: nestedMonths }] };
             }
 
             function showLoading() {
@@ -1119,8 +1155,7 @@
                 regionSelect.innerHTML = '<option value="all">All Regions</option>';
                 Array.from(regions).sort().forEach(r => {
                     const opt = document.createElement('option');
-                    opt.value = r;
-                    opt.textContent = r;
+                    opt.value = r; opt.textContent = r;
                     regionSelect.appendChild(opt);
                 });
                 if (regions.has(currentRegionVal)) regionSelect.value = currentRegionVal;
@@ -1129,8 +1164,7 @@
                 monthSelect.innerHTML = '<option value="all">All Months</option>';
                 Array.from(months).forEach(m => {
                     const opt = document.createElement('option');
-                    opt.value = m;
-                    opt.textContent = m;
+                    opt.value = m; opt.textContent = m;
                     monthSelect.appendChild(opt);
                 });
                 if (months.has(currentMonthVal)) monthSelect.value = currentMonthVal;
@@ -1262,7 +1296,7 @@
                     renderMonthlyRegionComparisonChart(months, selectedRegion);
                 }
                 
-                currentPage = 1; 
+                currentPage = 1;
                 applySearch();
             }
 
@@ -1282,47 +1316,39 @@
                     let valB = b[currentSortColumn];
 
                     if (typeof valA === 'string') {
-                        return currentSortDirection === 'asc' 
-                            ? valA.localeCompare(valB) 
-                            : valB.localeCompare(valA);
+                        return currentSortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
                     } else {
-                        return currentSortDirection === 'asc' 
-                            ? valA - valB 
-                            : valB - valA;
+                        return currentSortDirection === 'asc' ? valA - valB : valB - valA;
                     }
                 });
 
-                // Assign the final computed array list to our structural pagination array state global variable
-                finalSortedFilteredList = results;
-                paginateAndRenderTable();
+                processedSearchResults = results;
+                paginateAndBuildTable();
             }
 
-            // Client-side execution function slicing rows per selected data limits
-            function paginateAndRenderTable() {
-                const totalItems = finalSortedFilteredList.length;
-                const totalPages = Math.ceil(totalItems / pageSize) || 1;
+            // Slice data limits per client settings
+            function paginateAndBuildTable() {
+                const totalRecordsCount = processedSearchResults.length;
+                const totalPagesCount = Math.ceil(totalRecordsCount / pageSize) || 1;
 
-                // Adjust page bounds to safety thresholds if inputs clip maximum indices
-                if (currentPage > totalPages) currentPage = totalPages;
+                if (currentPage > totalPagesCount) currentPage = totalPagesCount;
                 if (currentPage < 1) currentPage = 1;
 
-                const startIndex = (currentPage - 1) * pageSize;
-                const endIndex = Math.min(startIndex + pageSize, totalItems);
+                const globalStartIndex = (currentPage - 1) * pageSize;
+                const globalEndIndex = Math.min(globalStartIndex + pageSize, totalRecordsCount);
                 
-                const paginatedSubset = finalSortedFilteredList.slice(startIndex, startIndex + pageSize);
+                const visibleRecordsSubset = processedSearchResults.slice(globalStartIndex, globalEndIndex);
 
-                // Update UI Information panel strings
-                if (totalItems === 0) {
-                    paginationInfoText.textContent = "Showing 0-0 of 0 resorts";
+                if (totalRecordsCount === 0) {
+                    paginationStatus.textContent = "Showing 0-0 of 0 resorts";
                 } else {
-                    paginationInfoText.textContent = `Showing ${startIndex + 1}-${endIndex} of ${totalItems} resorts`;
+                    paginationStatus.textContent = `Showing ${globalStartIndex + 1}-${globalEndIndex} of ${totalRecordsCount} resorts`;
                 }
 
-                // Manage disabled styling flags on target control buttons
-                btnPagePrev.disabled = (currentPage === 1);
-                btnPageNext.disabled = (currentPage === totalPages);
+                prevPageBtn.disabled = (currentPage === 1);
+                nextPageBtn.disabled = (currentPage === totalPagesCount);
 
-                renderResortsTable(paginatedSubset);
+                renderResortsTable(visibleRecordsSubset);
             }
 
             function sortTable(column) {
@@ -1380,7 +1406,7 @@
                 `).join('');
             }
 
-            /* --- Enhanced User Friendly Highcharts Layout Setup Functions --- */
+            /* --- UX Optimized Highcharts Renderer Block --- */
 
             function renderOccupancyTrendsChart(data) {
                 const categories = data.map(d => d.month);
@@ -1390,23 +1416,27 @@
 
                 Highcharts.chart('occupancy-trends-chart', {
                     chart: { zoomType: 'xy' },
-                    xAxis: [{ categories: categories, crosshair: true }],
+                    xAxis: [{ 
+                        categories: categories, 
+                        crosshair: true,
+                        labels: { style: { fontSize: '11px', color: '#5d6675', fontWeight: '600' } }
+                    }],
                     yAxis: [{
-                        labels: { format: '{value}' },
-                        title: { text: 'Room Nights', style: { color: '#0f5da8', fontWeight: 'bold' } }
+                        labels: { style: { color: '#0f5da8', fontWeight: '600' } },
+                        title: { text: 'Room Nights', style: { color: '#0f5da8', fontWeight: '700' } }
                     }, {
-                        title: { text: 'Occupancy Rate (%)', style: { color: '#f5821f', fontWeight: 'bold' } },
-                        labels: { format: '{value}%' },
+                        title: { text: 'Occupancy Rate (%)', style: { color: '#f5821f', fontWeight: '700' } },
+                        labels: { format: '{value}%', style: { color: '#f5821f', fontWeight: '600' } },
                         opposite: true, min: 0, max: 100
                     }],
-                    // Clean unified tooltip structure for comparative tracking
                     tooltip: { 
                         shared: true,
                         useHTML: true,
-                        headerFormat: '<span style="font-size:12px; font-weight:bold; color:var(--navy);">{point.key}</span><br/>',
-                        pointFormat: '<span style="color:{series.color}">●</span> {series.name}: <b>{point.y}</b><br/>'
+                        headerFormat: '<span style="font-size:12px; font-weight:bold; color:#13233b;">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:2px 0;">{series.name}: </td><td style="padding:2px 0 2px 8px; text-align:right;"><b>{point.y}</b></td></tr>',
+                        footerFormat: '</table>'
                     },
-                    legend: { align: 'center', verticalAlign: 'bottom', layout: 'horizontal', backgroundColor: '#ffffff' },
+                    legend: { align: 'center', verticalAlign: 'bottom', backgroundColor: '#ffffff', itemStyle: { fontWeight: '700' } },
                     series: [{
                         name: 'Available Room-Nights', type: 'column', data: availableData, color: '#e4d8c6', tooltip: { valueSuffix: ' nights' }
                     }, {
@@ -1423,37 +1453,44 @@
                 const chartData = regions.map(reg => ({ name: reg.name, y: reg.occupied }));
                 Highcharts.chart('region-contribution-chart', {
                     chart: { type: 'pie' },
-                    tooltip: { pointFormat: 'Share: <b>{point.y} nights ({point.percentage:.1f}%)</b>' },
+                    tooltip: { pointFormat: '{series.name}: <b>{point.y} nights ({point.percentage:.1f}%)</b>' },
+                    accessibility: { point: { valueSuffix: '%' } },
                     plotOptions: {
                         pie: {
                             allowPointSelect: true, 
                             cursor: 'pointer',
                             dataLabels: {
                                 enabled: true, 
-                                format: '<b>{point.name}</b><br>{point.percentage:.1f}%',
+                                format: '<b>{point.name}</b><br>{point.percentage:.1f}%', 
                                 distance: 15,
-                                style: { fontSize: '11px', textOutline: 'none', color: '#101820' }
+                                style: { fontSize: '12px', textOutline: 'none', color: '#101820', fontWeight: '600' }
                             },
                             showInLegend: true, 
-                            innerSize: '60%' // turned into a clean donut chart for crisp insight readability
+                            innerSize: '60%' // Donut layout provides greater clarity for label reading
                         }
                     },
-                    legend: { verticalAlign: 'bottom', layout: 'horizontal' },
+                    legend: { itemStyle: { fontWeight: '700' } },
                     series: [{ name: 'Contribution', colorByPoint: true, data: chartData }]
                 });
             }
 
             function renderRegionOccupancyChart(regions) {
-                // User friendly change: sort regions by descending performance metrics explicitly
-                const sortedRegions = [...regions].sort((a, b) => b.occupancyPercent - a.occupancyPercent);
-                const categories = sortedRegions.map(reg => reg.name);
-                const dataPoints = sortedRegions.map(reg => reg.occupancyPercent);
+                const categories = regions.map(reg => reg.name);
+                const dataPoints = regions.map(reg => reg.occupancyPercent);
 
                 Highcharts.chart('region-occupancy-chart', {
                     chart: { type: 'column' },
-                    xAxis: { categories: categories, crosshair: true },
-                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)', style: { fontWeight: 'bold' } }, labels: { format: '{value}%' } },
-                    tooltip: { pointFormat: 'Occupancy Rate: <b>{point.y:.1f}%</b>' },
+                    xAxis: { 
+                        categories: categories, 
+                        crosshair: true,
+                        labels: { style: { fontSize: '11px', fontWeight: '600', color: '#101820' } }
+                    },
+                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)', style: { fontWeight: '700' } }, labels: { format: '{value}%' } },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:11px; font-weight:700;">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0 0 0 6px"><b>{point.y:.1f}%</b></td></tr>',
+                        footerFormat: '</table>', shared: true, useHTML: true
+                    },
                     plotOptions: { 
                         column: { 
                             pointPadding: 0.2, 
@@ -1462,7 +1499,7 @@
                             dataLabels: {
                                 enabled: true,
                                 format: '{point.y:.1f}%',
-                                style: { fontSize: '11px' }
+                                style: { fontSize: '11px', fontWeight: '700', textOutline: 'none' }
                             }
                         } 
                     },
@@ -1478,10 +1515,23 @@
 
                 Highcharts.chart('resorts-occupancy-chart', {
                     chart: { type: 'bar' },
-                    xAxis: { categories: categories, title: { text: null } },
-                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)', align: 'high', style: { fontWeight: 'bold' } }, labels: { format: '{value}%' } },
-                    tooltip: { pointFormat: 'Occupancy: <b>{point.y:.1f}%</b>' },
-                    plotOptions: { bar: { dataLabels: { enabled: true, format: '{point.y:.1f}%' }, color: '#f5821f' } },
+                    xAxis: { 
+                        categories: categories, 
+                        title: { text: null },
+                        labels: { style: { fontSize: '11px', fontWeight: '600', color: '#101820' } }
+                    },
+                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)', align: 'high', style: { fontWeight: '700' } }, labels: { format: '{value}%' } },
+                    tooltip: { valueSuffix: '%', shared: true },
+                    plotOptions: { 
+                        bar: { 
+                            dataLabels: { 
+                                enabled: true, 
+                                format: '{point.y:.1f}%',
+                                style: { fontSize: '11px', fontWeight: '700', textOutline: 'none' }
+                            }, 
+                            color: '#f5821f' 
+                        } 
+                    },
                     legend: { enabled: false },
                     series: [{ name: 'Occupancy', data: dataPoints }]
                 });
@@ -1508,11 +1558,19 @@
 
                 Highcharts.chart('monthly-region-chart', {
                     chart: { type: 'column' },
-                    xAxis: { categories: categories, crosshair: true },
-                    yAxis: { min: 0, title: { text: 'Occupied Nights', style: { fontWeight: 'bold' } } },
-                    tooltip: { shared: true, valueSuffix: ' nights' },
-                    plotOptions: { column: { pointPadding: 0.15, borderWidth: 0 } },
-                    legend: { verticalAlign: 'bottom', layout: 'horizontal' },
+                    xAxis: { 
+                        categories: categories, 
+                        crosshair: true,
+                        labels: { style: { fontSize: '11px', fontWeight: '600' } }
+                    },
+                    yAxis: { min: 0, title: { text: 'Occupied Nights', style: { fontWeight: '700' } } },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:12px; font-weight:700;">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:2px 0;">{series.name}: </td><td style="padding:2px 0 2px 6px;"><b>{point.y} nights</b></td></tr>',
+                        footerFormat: '</table>', shared: true, useHTML: true
+                    },
+                    plotOptions: { column: { pointPadding: 0.2, borderWidth: 0 } },
+                    legend: { itemStyle: { fontWeight: '700' } },
                     series: series
                 });
             }
