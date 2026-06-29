@@ -500,7 +500,7 @@
             overflow-x: auto;
             margin-top: 12px;
             border: 1px solid var(--line);
-            border-radius: 12px;
+            border-radius: 12px 12px 0 0;
             box-shadow: 0 4px 12px rgba(18, 25, 36, 0.04);
         }
 
@@ -563,6 +563,64 @@
             gap: 16px;
             margin-top: 12px;
             margin-bottom: 8px;
+        }
+
+        /* Pagination Layout CSS */
+        .table-pagination-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--cream-2);
+            padding: 12px 20px;
+            border: 1px solid var(--line);
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .pagination-info {
+            font-size: 13px;
+            color: var(--muted);
+            font-weight: 600;
+        }
+
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pagination-btn {
+            background: #ffffff;
+            border: 1px solid var(--line);
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--navy);
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--cream);
+            border-color: var(--saffron);
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .page-size-selector select {
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            font-size: 13px;
+            font-weight: 700;
+            background: #ffffff;
+            color: var(--navy);
+            outline: none;
         }
 
         .dashboard-alert {
@@ -673,7 +731,7 @@
                         <option value="2021-2022">2021-22</option>
                         <option value="2022-2023">2022-23</option>
                         <option value="2023-2024">2023-24</option>
-                        <option value="2025-2026"selected>2025-26</option>
+                        <option value="2025-2026" selected>2025-26</option>
                     </select>
                 </div>
                 <div class="filter-group">
@@ -774,6 +832,22 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="table-pagination-bar">
+                        <div class="page-size-selector">
+                            <label for="page-size-select" style="font-size: 13px; font-weight: 600; color: var(--muted); margin-right: 4px;">Rows per page:</label>
+                            <select id="page-size-select">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                            </select>
+                        </div>
+                        <div class="pagination-info" id="pagination-info-text">Showing 0-0 of 0 resorts</div>
+                        <div class="pagination-controls">
+                            <button class="pagination-btn" id="btn-page-prev">Previous</button>
+                            <button class="pagination-btn" id="btn-page-next">Next</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -793,8 +867,13 @@
             let filteredResorts = [];
             let currentSortColumn = 'occupancy';
             let currentSortDirection = 'desc';
+            
+            // New Pagination State Variables
+            let currentPage = 1;
+            let pageSize = 10;
+            let finalSortedFilteredList = [];
 
-            // Highcharts general options (Custom Premium Theme)
+            // Highcharts configuration with clean responsive UX updates
             const hasHighcharts = typeof Highcharts !== 'undefined';
             if (hasHighcharts) {
                 Highcharts.setOptions({
@@ -803,13 +882,15 @@
                         style: {
                             fontFamily: 'Inter, sans-serif'
                         },
-                        backgroundColor: '#ffffff'
+                        backgroundColor: '#ffffff',
+                        reflow: true // auto reflow sizes on system resize events
                     },
-                    credits: {
-                        enabled: false
-                    },
-                    title: {
-                        text: null
+                    credits: { enabled: false },
+                    title: { text: null },
+                    plotOptions: {
+                        series: {
+                            animation: { duration: 600 }
+                        }
                     }
                 });
             } else {
@@ -844,6 +925,12 @@
             const kpiGrid = document.getElementById('kpi-grid');
             const resortSearch = document.getElementById('resort-search');
             
+            // Pagination DOM selectors
+            const pageSizeSelect = document.getElementById('page-size-select');
+            const paginationInfoText = document.getElementById('pagination-info-text');
+            const btnPagePrev = document.getElementById('btn-page-prev');
+            const btnPageNext = document.getElementById('btn-page-next');
+            
             // KPI DOM elements
             const kpiResortsCount = document.getElementById('kpi-resorts-count');
             const kpiAvailableNights = document.getElementById('kpi-available-nights');
@@ -854,7 +941,30 @@
             yearSelect.addEventListener('change', loadDataForYear);
             regionSelect.addEventListener('change', applyFilters);
             monthSelect.addEventListener('change', applyFilters);
-            resortSearch.addEventListener('input', applySearch);
+            resortSearch.addEventListener('input', () => {
+                currentPage = 1; // reset page back to 1 on input search values
+                applySearch();
+            });
+
+            // Pagination Interaction Listeners
+            pageSizeSelect.addEventListener('change', (e) => {
+                pageSize = parseInt(e.target.value, 10);
+                currentPage = 1;
+                paginateAndRenderTable();
+            });
+            btnPagePrev.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    paginateAndRenderTable();
+                }
+            });
+            btnPageNext.addEventListener('click', () => {
+                const totalPages = Math.ceil(finalSortedFilteredList.length / pageSize);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    paginateAndRenderTable();
+                }
+            });
 
             // Table Sorting Listeners
             document.getElementById('th-name').addEventListener('click', () => sortTable('name'));
@@ -865,13 +975,11 @@
             // Initial load
             loadDataForYear();
 
-            // Function to load the dynamic JSON response directly via Django views
             async function loadDataForYear() {
                 const selectedYear = yearSelect.value;
                 showLoading();
 
                 try {
-                    // Send AJAX fetch request matching your Django URL patterns
                     const response = await fetch(`?year=${selectedYear}&format=json`, {
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest'
@@ -882,14 +990,13 @@
                     }
                     const rawJson = await response.json();
                     
-                    // Transform your flat model metrics to old dashboard structural schema definitions
                     originalData = transformFlatData(rawJson, selectedYear);
-                    
                     populateFilters(originalData);
                     
                     regionSelect.value = 'all';
                     monthSelect.value = 'all';
                     resortSearch.value = '';
+                    currentPage = 1;
 
                     hideStatus();
                     applyFilters();
@@ -898,7 +1005,6 @@
                 }
             }
 
-            // Data translation layer turning flat response arrays into expected component trees
             function transformFlatData(backendResponse, fallbackYear) {
                 const flatRecords = backendResponse.data || [];
                 const financialYearName = backendResponse.financial_year || fallbackYear;
@@ -919,7 +1025,6 @@
                     const occupied = Number(record.rooms_occupied) || 0;
                     const resName = record.resort;
 
-                    // Aggregate at Resort level across multiple rows (e.g. distinct room types)
                     if (!monthsMap[mName].regions[rName].resorts[resName]) {
                         monthsMap[mName].regions[rName].resorts[resName] = { name: resName, occupied: 0, available: 0 };
                     }
@@ -1157,6 +1262,7 @@
                     renderMonthlyRegionComparisonChart(months, selectedRegion);
                 }
                 
+                currentPage = 1; 
                 applySearch();
             }
 
@@ -1186,7 +1292,37 @@
                     }
                 });
 
-                renderResortsTable(results);
+                // Assign the final computed array list to our structural pagination array state global variable
+                finalSortedFilteredList = results;
+                paginateAndRenderTable();
+            }
+
+            // Client-side execution function slicing rows per selected data limits
+            function paginateAndRenderTable() {
+                const totalItems = finalSortedFilteredList.length;
+                const totalPages = Math.ceil(totalItems / pageSize) || 1;
+
+                // Adjust page bounds to safety thresholds if inputs clip maximum indices
+                if (currentPage > totalPages) currentPage = totalPages;
+                if (currentPage < 1) currentPage = 1;
+
+                const startIndex = (currentPage - 1) * pageSize;
+                const endIndex = Math.min(startIndex + pageSize, totalItems);
+                
+                const paginatedSubset = finalSortedFilteredList.slice(startIndex, startIndex + pageSize);
+
+                // Update UI Information panel strings
+                if (totalItems === 0) {
+                    paginationInfoText.textContent = "Showing 0-0 of 0 resorts";
+                } else {
+                    paginationInfoText.textContent = `Showing ${startIndex + 1}-${endIndex} of ${totalItems} resorts`;
+                }
+
+                // Manage disabled styling flags on target control buttons
+                btnPagePrev.disabled = (currentPage === 1);
+                btnPageNext.disabled = (currentPage === totalPages);
+
+                renderResortsTable(paginatedSubset);
             }
 
             function sortTable(column) {
@@ -1244,6 +1380,8 @@
                 `).join('');
             }
 
+            /* --- Enhanced User Friendly Highcharts Layout Setup Functions --- */
+
             function renderOccupancyTrendsChart(data) {
                 const categories = data.map(d => d.month);
                 const availableData = data.map(d => Math.round(d.available));
@@ -1255,14 +1393,20 @@
                     xAxis: [{ categories: categories, crosshair: true }],
                     yAxis: [{
                         labels: { format: '{value}' },
-                        title: { text: 'Room Nights', style: { color: '#0f5da8' } }
+                        title: { text: 'Room Nights', style: { color: '#0f5da8', fontWeight: 'bold' } }
                     }, {
-                        title: { text: 'Occupancy Rate (%)', style: { color: '#f5821f' } },
+                        title: { text: 'Occupancy Rate (%)', style: { color: '#f5821f', fontWeight: 'bold' } },
                         labels: { format: '{value}%' },
                         opposite: true, min: 0, max: 100
                     }],
-                    tooltip: { shared: true },
-                    legend: { align: 'center', verticalAlign: 'bottom', y: 0, backgroundColor: '#ffffff' },
+                    // Clean unified tooltip structure for comparative tracking
+                    tooltip: { 
+                        shared: true,
+                        useHTML: true,
+                        headerFormat: '<span style="font-size:12px; font-weight:bold; color:var(--navy);">{point.key}</span><br/>',
+                        pointFormat: '<span style="color:{series.color}">●</span> {series.name}: <b>{point.y}</b><br/>'
+                    },
+                    legend: { align: 'center', verticalAlign: 'bottom', layout: 'horizontal', backgroundColor: '#ffffff' },
                     series: [{
                         name: 'Available Room-Nights', type: 'column', data: availableData, color: '#e4d8c6', tooltip: { valueSuffix: ' nights' }
                     }, {
@@ -1279,37 +1423,49 @@
                 const chartData = regions.map(reg => ({ name: reg.name, y: reg.occupied }));
                 Highcharts.chart('region-contribution-chart', {
                     chart: { type: 'pie' },
-                    tooltip: { pointFormat: '{series.name}: <b>{point.y} nights ({point.percentage:.1f}%)</b>' },
-                    accessibility: { point: { valueSuffix: '%' } },
+                    tooltip: { pointFormat: 'Share: <b>{point.y} nights ({point.percentage:.1f}%)</b>' },
                     plotOptions: {
                         pie: {
-                            allowPointSelect: true, cursor: 'pointer',
+                            allowPointSelect: true, 
+                            cursor: 'pointer',
                             dataLabels: {
-                                enabled: true, format: '<b>{point.name}</b>: {point.percentage:.1f} %', distance: -30,
-                                filter: { property: 'percentage', operator: '>', value: 4 },
-                                style: { fontSize: '11px', textOutline: 'none' }
+                                enabled: true, 
+                                format: '<b>{point.name}</b><br>{point.percentage:.1f}%',
+                                distance: 15,
+                                style: { fontSize: '11px', textOutline: 'none', color: '#101820' }
                             },
-                            showInLegend: true, innerSize: '50%'
+                            showInLegend: true, 
+                            innerSize: '60%' // turned into a clean donut chart for crisp insight readability
                         }
                     },
+                    legend: { verticalAlign: 'bottom', layout: 'horizontal' },
                     series: [{ name: 'Contribution', colorByPoint: true, data: chartData }]
                 });
             }
 
             function renderRegionOccupancyChart(regions) {
-                const categories = regions.map(reg => reg.name);
-                const dataPoints = regions.map(reg => reg.occupancyPercent);
+                // User friendly change: sort regions by descending performance metrics explicitly
+                const sortedRegions = [...regions].sort((a, b) => b.occupancyPercent - a.occupancyPercent);
+                const categories = sortedRegions.map(reg => reg.name);
+                const dataPoints = sortedRegions.map(reg => reg.occupancyPercent);
 
                 Highcharts.chart('region-occupancy-chart', {
                     chart: { type: 'column' },
                     xAxis: { categories: categories, crosshair: true },
-                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)' }, labels: { format: '{value}%' } },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0"><b>{point.y:.1f}%</b></td></tr>',
-                        footerFormat: '</table>', shared: true, useHTML: true
+                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)', style: { fontWeight: 'bold' } }, labels: { format: '{value}%' } },
+                    tooltip: { pointFormat: 'Occupancy Rate: <b>{point.y:.1f}%</b>' },
+                    plotOptions: { 
+                        column: { 
+                            pointPadding: 0.2, 
+                            borderWidth: 0, 
+                            colorByPoint: true,
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.y:.1f}%',
+                                style: { fontSize: '11px' }
+                            }
+                        } 
                     },
-                    plotOptions: { column: { pointPadding: 0.2, borderWidth: 0, colorByPoint: true, colors: ['#0f8b69', '#0f5da8', '#f5821f', '#13233b'] } },
                     legend: { enabled: false },
                     series: [{ name: 'Occupancy Rate', data: dataPoints }]
                 });
@@ -1323,8 +1479,8 @@
                 Highcharts.chart('resorts-occupancy-chart', {
                     chart: { type: 'bar' },
                     xAxis: { categories: categories, title: { text: null } },
-                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)', align: 'high' }, labels: { overflow: 'justify', format: '{value}%' } },
-                    tooltip: { valueSuffix: '%' },
+                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)', align: 'high', style: { fontWeight: 'bold' } }, labels: { format: '{value}%' } },
+                    tooltip: { pointFormat: 'Occupancy: <b>{point.y:.1f}%</b>' },
                     plotOptions: { bar: { dataLabels: { enabled: true, format: '{point.y:.1f}%' }, color: '#f5821f' } },
                     legend: { enabled: false },
                     series: [{ name: 'Occupancy', data: dataPoints }]
@@ -1353,13 +1509,10 @@
                 Highcharts.chart('monthly-region-chart', {
                     chart: { type: 'column' },
                     xAxis: { categories: categories, crosshair: true },
-                    yAxis: { min: 0, title: { text: 'Occupied Nights' } },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0"><b>{point.y} nights</b></td></tr>',
-                        footerFormat: '</table>', shared: true, useHTML: true
-                    },
-                    plotOptions: { column: { pointPadding: 0.2, borderWidth: 0 } },
+                    yAxis: { min: 0, title: { text: 'Occupied Nights', style: { fontWeight: 'bold' } } },
+                    tooltip: { shared: true, valueSuffix: ' nights' },
+                    plotOptions: { column: { pointPadding: 0.15, borderWidth: 0 } },
+                    legend: { verticalAlign: 'bottom', layout: 'horizontal' },
                     series: series
                 });
             }
