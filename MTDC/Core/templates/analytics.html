@@ -57,6 +57,119 @@
             vertical-align: middle;
         }
 
+         .site-footer {
+            height: 56px;
+            padding: 8px 24px;
+            justify-content: center;
+            color: #263244;
+            background: #ffffff;
+            border-top: 1px solid var(--line);
+            box-shadow: 0 -10px 24px rgba(18, 25, 36, 0.08);
+            font-size: 13px;
+            font-weight: 800;
+            position: relative;
+            z-index: 4;
+        }
+        .footer-logo {
+            width: 50px;
+            height: 30px;
+            flex: 0 0 auto;
+            object-fit: contain;
+        }
+         @media (max-width: 900px) {
+            body {
+                overflow: auto;
+            }
+
+            .site-header,
+            .dashboard-bar,
+            .site-footer,
+            .content {
+                height: auto;
+                grid-template-columns: 1fr;
+            }
+
+            .site-header {
+                grid-template-columns: minmax(0, 1fr) auto;
+            }
+
+            .content {
+                min-height: 0;
+            }
+
+            .analytics-sidebar,
+            .sidebar {
+                max-height: none;
+            }
+
+            .map-panel {
+                height: 58vh;
+                border-right: 0;
+                border-left: 0;
+                border-bottom: 1px solid #cfc4b2;
+            }
+
+        }
+
+         @media (max-width: 620px) {
+            .site-header,
+            .dashboard-bar,
+            .site-footer {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .site-footer {
+                min-height: 62px;
+                font-size: 11px;
+            }
+
+            .footer-credit {
+                flex-wrap: wrap;
+                gap: 6px;
+                padding: 6px 10px;
+            }
+
+            .footer-logo {
+                width: 96px;
+                height: 26px;
+            }
+
+            .brand {
+                min-width: 0;
+            }
+
+            .brand-logo-wrap {
+                width: 50px;
+                height: 44px;
+            }
+
+            .brand-logo {
+                width: 44px;
+                height: 38px;
+            }
+
+            .brand-text strong {
+                font-size: 18px;
+            }
+
+            .profile-trigger {
+                min-width: 52px;
+                padding: 6px 8px;
+            }
+
+            .profile-summary,
+            .profile-chevron {
+                display: none;
+            }
+
+        }
+
+        .footer-credit span {
+            min-width: 0;
+            color: #3b4351;
+        }
+
         .brand,
         .site-footer,
         .footer-credit,
@@ -288,163 +401,6 @@
             font-weight: 600;
         }
 
-        .analytics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-
-        .analytics-card {
-            padding: 24px;
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            background: var(--surface);
-            box-shadow: var(--shadow);
-        }
-
-        .analytics-card h3 {
-            margin: 0 0 16px;
-            color: var(--navy);
-            font-size: 16px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .analytics-value {
-            font-family: "JetBrains Mono", monospace;
-            font-size: 48px;
-            font-weight: 800;
-            color: var(--saffron);
-            line-height: 1;
-        }
-
-        .analytics-label {
-            margin-top: 8px;
-            color: var(--muted);
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .chart-placeholder {
-            width: 100%;
-            height: 300px;
-            border: 2px dashed var(--line);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--muted);
-            font-size: 18px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #fff8f0 0%, #fffaf1 100%);
-        }
-
-        .site-footer {
-            height: 56px;
-            padding: 8px 24px;
-            justify-content: center;
-            color: #263244;
-            background: #ffffff;
-            border-top: 1px solid var(--line);
-            box-shadow: 0 -10px 24px rgba(18, 25, 36, 0.08);
-            font-size: 13px;
-            font-weight: 800;
-            position: relative;
-            z-index: 4;
-        }
-
-        .footer-credit {
-            min-width: 0;
-            min-height: 40px;
-            padding: 5px 14px;
-            gap: 12px;
-            justify-content: center;
-            border: 1px solid #f0dec2;
-            border-radius: 8px;
-            background: #fffaf1;
-            text-align: center;
-            display: flex;
-            align-items: center;
-        }
-
-        .footer-logo {
-            width: 112px;
-            height: 30px;
-            flex: 0 0 auto;
-            object-fit: contain;
-        }
-
-        .footer-credit span {
-            min-width: 0;
-            color: #3b4351;
-        }
-
-        .footer-credit strong {
-            color: var(--saffron);
-        }
-
-        @media (max-width: 1180px) {
-            .site-header {
-                grid-template-columns: minmax(0, 1fr) auto;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .brand {
-                min-width: 0;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .analytics-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .analytics-header h1 {
-                font-size: 24px;
-            }
-        }
-
-        @media (max-width: 620px) {
-            .site-header,
-            .site-footer {
-                padding-left: 16px;
-                padding-right: 16px;
-            }
-
-            .analytics-content {
-                padding: 20px 16px;
-            }
-
-            .brand {
-                min-width: 0;
-            }
-
-            .brand-logo-wrap {
-                width: 50px;
-                height: 44px;
-            }
-
-            .brand-logo {
-                width: 44px;
-                height: 38px;
-            }
-
-            .profile-trigger {
-                min-width: 52px;
-                padding: 6px 8px;
-            }
-
-            .profile-summary,
-            .profile-chevron {
-                display: none;
-            }
-        }
-
         .filters-bar {
             display: flex;
             flex-wrap: wrap;
@@ -488,6 +444,45 @@
         .filter-select:focus {
             border-color: var(--saffron);
             box-shadow: 0 0 0 3px rgba(245, 130, 31, 0.15);
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .analytics-card {
+            padding: 24px;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .analytics-card h3 {
+            margin: 0 0 16px;
+            color: var(--navy);
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .analytics-value {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--saffron);
+            line-height: 1;
+        }
+
+        .analytics-label {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
         }
 
         .chart-container {
@@ -535,8 +530,14 @@
             background-color: #fffbf5;
         }
 
-        .resort-table tr:last-child td {
-            border-bottom: none;
+        .resort-table-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 12px;
+            margin-bottom: 8px;
         }
 
         .resort-search-input {
@@ -555,17 +556,6 @@
             box-shadow: 0 0 0 3px rgba(245, 130, 31, 0.15);
         }
 
-        .resort-table-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
-            margin-top: 12px;
-            margin-bottom: 8px;
-        }
-
-        /* Pagination Navigation CSS */
         .table-pagination-controls {
             display: flex;
             justify-content: space-between;
@@ -625,25 +615,6 @@
             cursor: pointer;
         }
 
-        .dashboard-alert {
-            background: #fff0f0;
-            color: #d32f2f;
-            border: 1px solid #ffcdd2;
-            padding: 16px 20px;
-            border-radius: 12px;
-            margin-bottom: 28px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            box-shadow: var(--shadow);
-        }
-
-        .dashboard-alert .material-symbols-outlined {
-            font-size: 24px;
-            color: #d32f2f;
-        }
-
         .loading-overlay {
             display: flex;
             flex-direction: column;
@@ -670,11 +641,29 @@
         }
 
        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 1024px) {
+            .analytics-grid .analytics-card {
+                grid-column: span 1 !important;
             }
-            100% {
-                transform: rotate(360deg);
+            .site-header {
+                grid-template-columns: 1fr auto;
+                height: auto;
+                padding: 12px 16px;
+                gap: 12px;
+            }
+            .nav-links {
+                grid-row: 2;
+                grid-column: span 2;
+                justify-content: flex-start;
+                padding-top: 8px;
+                overflow-x: auto;
+            }
+            .brand {
+                min-width: auto;
             }
         }
     </style>
@@ -747,6 +736,18 @@
                     </select>
                 </div>
                 <div class="filter-group">
+                    <label class="filter-label" for="resort-select">Select Resort</label>
+                    <select id="resort-select" class="filter-select">
+                        <option value="all">All Resorts</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label" for="roomtype-select">Select Room Type</label>
+                    <select id="roomtype-select" class="filter-select">
+                        <option value="all">All Room Types</option>
+                    </select>
+                </div>
+                <div class="filter-group">
                     <label class="filter-label" for="month-select">Select Month</label>
                     <select id="month-select" class="filter-select">
                         <option value="all">All Months</option>
@@ -768,21 +769,21 @@
                 </div>
 
                 <div class="analytics-card">
-                    <h3>Available Room-Nights</h3>
-                    <div id="kpi-available-nights" class="analytics-value">-</div>
-                    <div class="analytics-label">Total capacity</div>
-                </div>
-
-                <div class="analytics-card">
                     <h3>Average Occupancy</h3>
                     <div id="kpi-occupancy-rate" class="analytics-value">-</div>
                     <div class="analytics-label">Weighted average rate</div>
                 </div>
 
                 <div class="analytics-card">
-                    <h3>Occupied Room-Nights</h3>
-                    <div id="kpi-occupied-nights" class="analytics-value">-</div>
-                    <div class="analytics-label">Total bookings</div>
+                    <h3>Indian Tourists</h3>
+                    <div id="kpi-indian-tourists" class="analytics-value" style="color: var(--blue);">-</div>
+                    <div class="analytics-label">Total Domestic Footfall</div>
+                </div>
+
+                <div class="analytics-card">
+                    <h3>Foreign Tourists</h3>
+                    <div id="kpi-foreign-tourists" class="analytics-value" style="color: var(--green);">-</div>
+                    <div class="analytics-label">Total International Footfall</div>
                 </div>
             </div>
 
@@ -796,6 +797,18 @@
                     <div class="analytics-card">
                         <h3>Region Occupancy Contribution</h3>
                         <div id="region-contribution-chart" class="chart-container"></div>
+                    </div>
+                </div>
+
+                <div class="analytics-grid" style="margin-top: 24px;">
+                    <div class="analytics-card">
+                        <h3>Room Type Preference</h3>
+                        <div id="room-type-chart" class="chart-container"></div>
+                    </div>
+
+                    <div class="analytics-card" style="grid-column: span 2;">
+                        <h3>Tourist Demographic Profile (Indian vs Foreigner)</h3>
+                        <div id="tourist-demographics-chart" class="chart-container"></div>
                     </div>
                 </div>
 
@@ -819,7 +832,7 @@
                 <div class="analytics-card" style="margin-top: 24px; grid-column: span 3;">
                     <div class="resort-table-header-row">
                         <h3 style="margin: 0;">Detailed Resort Breakdown</h3>
-                        <input type="text" id="resort-search" class="resort-search-input" placeholder="🔍 Search resorts by name or region...">
+                        <input type="text" id="resort-search" class="resort-search-input" placeholder="🔍 Search resorts by name, region, or room type...">
                     </div>
                     <div class="resort-table-container">
                         <table class="resort-table">
@@ -827,13 +840,16 @@
                                 <tr>
                                     <th id="th-name">Resort Name ⇅</th>
                                     <th id="th-region">Region ⇅</th>
-                                    <th id="th-occupied" style="text-align: right;">Occupied Room-Nights ⇅</th>
+                                    <th id="th-roomtype">Dominant Room Type ⇅</th>
+                                    <th id="th-occupied" style="text-align: right;">Occupied  ⇅</th>
                                     <th id="th-occupancy" style="text-align: right;">Occupancy % ⇅</th>
+                                    <th id="th-indian" style="text-align: right;">Indian ⇅</th>
+                                    <th id="th-foreign" style="text-align: right;">Foreigner ⇅</th>
                                 </tr>
                             </thead>
                             <tbody id="resorts-table-body">
                                 <tr>
-                                    <td colspan="4" style="text-align: center; color: var(--muted); padding: 30px;">Loading breakdown...</td>
+                                    <td colspan="7" style="text-align: center; color: var(--muted); padding: 30px;">Loading breakdown...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -869,34 +885,30 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Global State Management Engine
-            let originalData = null;
-            let filteredResorts = [];
-            let processedSearchResults = [];
+            let originalData = null; 
+            let flatDataRows = [];   
+            let filteredResorts = []; 
+            let processedSearchResults = []; 
+            
             let currentSortColumn = 'occupancy';
             let currentSortDirection = 'desc';
-            
-            // Client Side Pagination State Machine
             let currentPage = 1;
             let pageSize = 10;
 
-            // Highcharts Configuration Engine with Export Layout Fixes
-          // Highcharts Configuration Engine with Export Layout Fixes
             const hasHighcharts = typeof Highcharts !== 'undefined';
             if (hasHighcharts) {
-                Highcharts.setOptions({
+               Highcharts.setOptions({
                     colors: ['#0f5da8', '#f5821f', '#0f8b69', '#13233b', '#5d6675', '#e4d8c6'],
                     chart: {
                         style: {
                             fontFamily: 'Inter, sans-serif',
-                            color: '#101820' // Forces fallback text color to a crisp dark slate
+                            color: '#101820' 
                         },
                         backgroundColor: '#ffffff',
                         spacingTop: 20,    
                         spacingRight: 20,  
                         spacingBottom: 15
                     },
-                    // Global styling adjustments for all sub-charts
                     xAxis: {
                         labels: {
                             style: { color: '#101820', fontWeight: '700', fontSize: '11px' }
@@ -937,111 +949,88 @@
                     credits: { enabled: false },
                     title: { text: null }
                 });
-            } else {
-                console.warn('Highcharts library is not loaded. Charts will be disabled.');
-                const warningBanner = document.createElement('div');
-                warningBanner.className = 'dashboard-alert';
-                warningBanner.style.backgroundColor = '#fff9e6';
-                warningBanner.style.border = '1px solid #ffeeba';
-                warningBanner.style.color = '#856404';
-                warningBanner.innerHTML = `
-                    <span class="material-symbols-outlined" style="color: #856404; font-size: 24px; vertical-align: middle; margin-right: 8px;">warning</span>
-                    <div><strong>Offline Mode:</strong> Interactive charts could not be loaded because Highcharts library is unavailable. KPI cards and the detailed breakdown table remain active.</div>
-                `;
-                document.querySelector('.analytics-container').insertBefore(warningBanner, document.getElementById('loading-overlay'));
-                
-                document.querySelectorAll('.chart-container').forEach(container => {
-                    container.innerHTML = `
-                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: var(--muted); font-size: 14px; font-weight: 600; border: 1px dashed var(--line); border-radius: 8px; background: var(--cream-2);">
-                            📊 Chart unavailable (Highcharts not loaded)
-                        </div>
-                    `;
-                });
             }
 
-            // DOM UI Elements Selectors
             const yearSelect = document.getElementById('year-select');
             const regionSelect = document.getElementById('region-select');
+            const resortSelect = document.getElementById('resort-select');
+            const roomTypeSelect = document.getElementById('roomtype-select');
             const monthSelect = document.getElementById('month-select');
+            
             const loadingOverlay = document.getElementById('loading-overlay');
             const errorContainer = document.getElementById('error-container');
             const chartsDashboard = document.getElementById('charts-dashboard');
             const kpiGrid = document.getElementById('kpi-grid');
             const resortSearch = document.getElementById('resort-search');
             
-            // Pagination Element Selectors
             const rowsPerPageSelect = document.getElementById('rows-per-page');
             const paginationStatus = document.getElementById('pagination-status');
             const prevPageBtn = document.getElementById('prev-page-btn');
             const nextPageBtn = document.getElementById('next-page-btn');
             
-            // KPI Nodes
             const kpiResortsCount = document.getElementById('kpi-resorts-count');
-            const kpiAvailableNights = document.getElementById('kpi-available-nights');
             const kpiOccupancyRate = document.getElementById('kpi-occupancy-rate');
-            const kpiOccupiedNights = document.getElementById('kpi-occupied-nights');
+            const kpiIndianTourists = document.getElementById('kpi-indian-tourists');
+            const kpiForeignTourists = document.getElementById('kpi-foreign-tourists');
 
-            // Event Registry Architecture
             yearSelect.addEventListener('change', loadDataForYear);
-            regionSelect.addEventListener('change', applyFilters);
+            regionSelect.addEventListener('change', () => { updateResortDropdownOptions(); applyFilters(); });
+            resortSelect.addEventListener('change', applyFilters);
+            roomTypeSelect.addEventListener('change', applyFilters);
             monthSelect.addEventListener('change', applyFilters);
-            resortSearch.addEventListener('input', () => {
-                currentPage = 1; // Safely bounce client indices to page 1 during filtration lookup inputs
-                applySearch();
-            });
+            
+            resortSearch.addEventListener('input', () => { currentPage = 1; applySearch(); });
+            rowsPerPageSelect.addEventListener('change', (e) => { pageSize = parseInt(e.target.value, 10); currentPage = 1; paginateAndBuildTable(); });
+            
+            prevPageBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; paginateAndBuildTable(); } });
+            nextPageBtn.addEventListener('click', () => { if (currentPage < Math.ceil(processedSearchResults.length / pageSize)) { currentPage++; paginateAndBuildTable(); } });
 
-            // Pagination Controls Listeners
-            rowsPerPageSelect.addEventListener('change', (e) => {
-                pageSize = parseInt(e.target.value, 10);
-                currentPage = 1;
-                paginateAndBuildTable();
-            });
-
-            prevPageBtn.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    paginateAndBuildTable();
-                }
-            });
-
-            nextPageBtn.addEventListener('click', () => {
-                const maxPages = Math.ceil(processedSearchResults.length / pageSize);
-                if (currentPage < maxPages) {
-                    currentPage++;
-                    paginateAndBuildTable();
-                }
-            });
-
-            // Table Sorting Event Hookups
             document.getElementById('th-name').addEventListener('click', () => sortTable('name'));
             document.getElementById('th-region').addEventListener('click', () => sortTable('region'));
+            document.getElementById('th-roomtype').addEventListener('click', () => sortTable('roomtype'));
             document.getElementById('th-occupied').addEventListener('click', () => sortTable('occupied'));
             document.getElementById('th-occupancy').addEventListener('click', () => sortTable('occupancy'));
+            document.getElementById('th-indian').addEventListener('click', () => sortTable('touristindian'));
+            document.getElementById('th-foreign').addEventListener('click', () => sortTable('touristforeigners'));
 
-            // Core Execution Initialization Entry Hook
             loadDataForYear();
 
             async function loadDataForYear() {
                 const selectedYear = yearSelect.value;
                 showLoading();
-
                 try {
                     const response = await fetch(`?year=${selectedYear}&format=json`, {
                         headers: { 'X-Requested-With': 'XMLHttpRequest' }
                     });
-                    if (!response.ok) {
-                        throw new Error(`Data file backend endpoint issue for selection: ${selectedYear}.`);
-                    }
+                    if (!response.ok) throw new Error(`Failed loading backend context data for year ${selectedYear}.`);
+                    
                     const rawJson = await response.json();
-                    originalData = transformFlatData(rawJson, selectedYear);
+                    let items = rawJson.data || [];
                     
-                    populateFilters(originalData);
-                    
-                    regionSelect.value = 'all';
-                    monthSelect.value = 'all';
-                    resortSearch.value = '';
-                    currentPage = 1;
+                    const resortRegionMap = {};
+                    items.forEach(row => {
+                        if (row.resort && row.region && row.region.trim()) {
+                            resortRegionMap[row.resort] = row.region.trim().toUpperCase();
+                        }
+                    });
 
+                    flatDataRows = items.map(row => {
+                        if (row.region) {
+                            row.region = row.region.trim().toUpperCase();
+                        } else {
+                            row.region = "NOT SPECIFIED";
+                        }
+                        return row;
+                    }).filter(row => {
+                        if (!row.resort) return false;
+                        const resortStr = String(row.resort).trim();
+                        if (resortStr === "" || !isNaN(resortStr) || resortStr.includes('%')) {
+                            return false;
+                        }
+                        return true;
+                    });
+                    
+                    populateInitialDropdownFilters();
                     hideStatus();
                     applyFilters();
                 } catch (error) {
@@ -1049,253 +1038,169 @@
                 }
             }
 
-            function transformFlatData(backendResponse, fallbackYear) {
-                const flatRecords = backendResponse.data || [];
-                const financialYearName = backendResponse.financial_year || fallbackYear;
-                const monthsMap = {};
-
-                flatRecords.forEach(record => {
-                    const mName = record.month;
-                    const rName = record.region;
-
-                    if (!monthsMap[mName]) {
-                        monthsMap[mName] = { month: mName, regions: {}, totalOccupied: 0, totalAvailable: 0 };
-                    }
-                    if (!monthsMap[mName].regions[rName]) {
-                        monthsMap[mName].regions[rName] = { name: rName, resorts: {}, totalOccupied: 0, totalAvailable: 0 };
-                    }
-
-                    const available = Number(record.rooms_available) || 0;
-                    const occupied = Number(record.rooms_occupied) || 0;
-                    const resName = record.resort;
-
-                    if (!monthsMap[mName].regions[rName].resorts[resName]) {
-                        monthsMap[mName].regions[rName].resorts[resName] = { name: resName, occupied: 0, available: 0 };
-                    }
-                    
-                    monthsMap[mName].regions[rName].resorts[resName].occupied += occupied;
-                    monthsMap[mName].regions[rName].resorts[resName].available += available;
-
-                    monthsMap[mName].regions[rName].totalOccupied += occupied;
-                    monthsMap[mName].regions[rName].totalAvailable += available;
-                    monthsMap[mName].totalOccupied += occupied;
-                    monthsMap[mName].totalAvailable += available;
-                });
-
-                const nestedMonths = Object.values(monthsMap).map(m => {
-                    const regionsArray = Object.values(m.regions).map(r => {
-                        const resortsArray = Object.values(r.resorts).map(res => {
-                            return {
-                                name: res.name,
-                                occupied: res.occupied,
-                                percent: res.available > 0 ? (res.occupied / res.available) * 100 : 0
-                            };
-                        });
-
-                        return {
-                            name: r.name,
-                            summary: {
-                                occupied: r.totalOccupied,
-                                occupancyPercent: r.totalAvailable > 0 ? (r.totalOccupied / r.totalAvailable) * 100 : 0
-                            },
-                            resorts: resortsArray
-                        };
-                    });
-
-                    return {
-                        month: m.month,
-                        summary: { available: m.totalAvailable, occupied: m.totalOccupied },
-                        regions: regionsArray
-                    };
-                });
-
-                return { years: [{ year: financialYearName, months: nestedMonths }] };
-            }
-
-            function showLoading() {
-                loadingOverlay.style.display = 'flex';
-                errorContainer.style.display = 'none';
-                chartsDashboard.style.opacity = '0.3';
-                kpiGrid.style.opacity = '0.3';
-            }
-
-            function showError(message) {
-                loadingOverlay.style.display = 'none';
-                errorContainer.innerHTML = `
-                    <div class="dashboard-alert">
-                        <span class="material-symbols-outlined">warning</span>
-                        <div><strong>Data Loading Error:</strong> ${message}</div>
-                    </div>
-                `;
-                errorContainer.style.display = 'block';
-                chartsDashboard.style.opacity = '0.1';
-                kpiGrid.style.opacity = '0.1';
-            }
-
-            function hideStatus() {
-                loadingOverlay.style.display = 'none';
-                errorContainer.style.display = 'none';
-                chartsDashboard.style.opacity = '1';
-                kpiGrid.style.opacity = '1';
-            }
-
-            function populateFilters(data) {
-                const yearData = data.years[0];
-                if (!yearData || !yearData.months) return;
-
+            function populateInitialDropdownFilters() {
                 const regions = new Set();
+                const roomTypes = new Set();
                 const months = new Set();
 
-                yearData.months.forEach(m => {
-                    months.add(m.month);
-                    m.regions.forEach(r => regions.add(r.name));
+                flatDataRows.forEach(row => {
+                    if (row.region) regions.add(row.region);
+                    if (row.roomtype) roomTypes.add(row.roomtype);
+                    if (row.month) months.add(row.month);
                 });
 
-                const currentRegionVal = regionSelect.value;
                 regionSelect.innerHTML = '<option value="all">All Regions</option>';
                 Array.from(regions).sort().forEach(r => {
-                    const opt = document.createElement('option');
-                    opt.value = r; opt.textContent = r;
-                    regionSelect.appendChild(opt);
+                    regionSelect.innerHTML += `<option value="${r}">${r}</option>`;
                 });
-                if (regions.has(currentRegionVal)) regionSelect.value = currentRegionVal;
 
-                const currentMonthVal = monthSelect.value;
+                roomTypeSelect.innerHTML = '<option value="all">All Room Types</option>';
+                Array.from(roomTypes).sort().forEach(rt => {
+                    roomTypeSelect.innerHTML += `<option value="${rt}">${rt}</option>`;
+                });
+
                 monthSelect.innerHTML = '<option value="all">All Months</option>';
                 Array.from(months).forEach(m => {
-                    const opt = document.createElement('option');
-                    opt.value = m; opt.textContent = m;
-                    monthSelect.appendChild(opt);
+                    monthSelect.innerHTML += `<option value="${m}">${m}</option>`;
                 });
-                if (months.has(currentMonthVal)) monthSelect.value = currentMonthVal;
+
+                updateResortDropdownOptions();
+            }
+
+            function updateResortDropdownOptions() {
+                const selectedRegion = regionSelect.value;
+                const resorts = new Set();
+
+                flatDataRows.forEach(row => {
+                    if (selectedRegion === 'all' || row.region === selectedRegion) {
+                        if (row.resort) resorts.add(row.resort);
+                    }
+                });
+
+                const currentResortVal = resortSelect.value;
+                resortSelect.innerHTML = '<option value="all">All Resorts</option>';
+                Array.from(resorts).sort().forEach(res => {
+                    resortSelect.innerHTML += `<option value="${res}">${res}</option>`;
+                });
+
+                if (resorts.has(currentResortVal)) {
+                    resortSelect.value = currentResortVal;
+                } else {
+                    resortSelect.value = 'all';
+                }
             }
 
             function applyFilters() {
-                if (!originalData) return;
+                const selRegion = regionSelect.value;
+                const selResort = resortSelect.value;
+                const selRoomType = roomTypeSelect.value;
+                const selMonth = monthSelect.value;
 
-                const selectedRegion = regionSelect.value;
-                const selectedMonth = monthSelect.value;
-                const yearData = originalData.years[0];
-                if (!yearData || !yearData.months) return;
-
-                let months = yearData.months;
-                if (selectedMonth !== 'all') {
-                    months = months.filter(m => m.month === selectedMonth);
-                }
-
-                const resortAggregation = {};
-                let totalOccupied = 0;
-                let totalAvailable = 0;
-                const regionOccupiedMap = {};
-                const regionAvailableMap = {};
-                const monthlyTrends = [];
-
-                months.forEach(m => {
-                    let monthOccupied = 0;
-                    let monthAvailable = 0;
-
-                    m.regions.forEach(reg => {
-                        if (selectedRegion !== 'all' && reg.name !== selectedRegion) return;
-
-                        const regOccupied = reg.summary.occupied;
-                        const regPercent = reg.summary.occupancyPercent;
-                        const regAvailable = regPercent > 0 ? (regOccupied / regPercent) * 100 : 0;
-
-                        totalOccupied += regOccupied;
-                        monthOccupied += regOccupied;
-                        
-                        regionOccupiedMap[reg.name] = (regionOccupiedMap[reg.name] || 0) + regOccupied;
-
-                        reg.resorts.forEach(res => {
-                            const resOccupied = res.occupied;
-                            const resPercent = res.percent;
-                            const resAvailable = resPercent > 0 ? (resOccupied / resPercent) * 100 : 0;
-
-                            if (!resortAggregation[res.name]) {
-                                resortAggregation[res.name] = {
-                                    name: res.name,
-                                    region: reg.name,
-                                    occupied: 0,
-                                    available: 0
-                                };
-                            }
-                            resortAggregation[res.name].occupied += resOccupied;
-                            resortAggregation[res.name].available += resAvailable;
-                        });
-                    });
-
-                    if (selectedRegion === 'all') {
-                        totalAvailable += m.summary.available;
-                        monthAvailable = m.summary.available;
-                    } else {
-                        let calcRegionAvail = 0;
-                        m.regions.forEach(reg => {
-                            if (reg.name === selectedRegion) {
-                                const regPercent = reg.summary.occupancyPercent;
-                                calcRegionAvail = regPercent > 0 ? (reg.summary.occupied / regPercent) * 100 : 0;
-                            }
-                        });
-                        totalAvailable += calcRegionAvail;
-                        monthAvailable = calcRegionAvail;
-                    }
-
-                    monthlyTrends.push({
-                        month: m.month,
-                        occupied: monthOccupied,
-                        available: monthAvailable,
-                        occupancyPercent: monthAvailable > 0 ? (monthOccupied / monthAvailable) * 100 : 0
-                    });
+                const rowsFiltered = flatDataRows.filter(row => {
+                    if (selRegion !== 'all' && row.region !== selRegion) return false;
+                    if (selResort !== 'all' && row.resort !== selResort) return false;
+                    if (selRoomType !== 'all' && row.roomtype !== selRoomType) return false;
+                    if (selMonth !== 'all' && row.month !== selMonth) return false;
+                    return true;
                 });
 
-                if (selectedRegion === 'all') {
-                    months.forEach(m => {
-                        m.regions.forEach(reg => {
-                            const regOccupied = reg.summary.occupied;
-                            const regPercent = reg.summary.occupancyPercent;
-                            const regAvailable = regPercent > 0 ? (regOccupied / regPercent) * 100 : 0;
-                            regionAvailableMap[reg.name] = (regionAvailableMap[reg.name] || 0) + regAvailable;
-                        });
-                    });
-                } else {
-                    regionAvailableMap[selectedRegion] = totalAvailable;
-                }
+                let totalOccupied = 0;
+                let totalAvailable = 0;
+                let totalIndian = 0;
+                let totalForeign = 0;
 
-                filteredResorts = Object.values(resortAggregation).map(res => {
-                    return {
-                        name: res.name,
-                        region: res.region,
-                        occupied: Math.round(res.occupied),
-                        available: Math.round(res.available),
-                        occupancy: res.available > 0 ? Number(((res.occupied / res.available) * 100).toFixed(1)) : 0
-                    };
+                const resortAggMap = {};
+                const roomTypeAggMap = {};
+                const regionOccupiedMap = {};
+                const regionAvailableMap = {};
+                const monthlyTrendsMap = {};
+                const monthlyRegionMap = {}; 
+
+                rowsFiltered.forEach(row => {
+                    // Force parsing metric components into clean integers immediately to bypass floating anomalies in source context
+                    const occ = Math.round(Number(row.roomsoccupied) || 0);
+                    const avail = Math.round(Number(row.rooms_available) || 0);
+                    const ind = Math.round(Number(row.touristindian) || 0);
+                    const forgn = Math.round(Number(row.touristforeigners) || 0);
+
+                    totalOccupied += occ;
+                    totalAvailable += avail;
+                    totalIndian += ind;
+                    totalForeign += forgn;
+
+                    if (!resortAggMap[row.resort]) {
+                        resortAggMap[row.resort] = { name: row.resort, region: row.region, occupied: 0, available: 0, indian: 0, foreign: 0, roomTypes: {} };
+                    }
+                    resortAggMap[row.resort].occupied += occ;
+                    resortAggMap[row.resort].available += avail;
+                    resortAggMap[row.resort].indian += ind;
+                    resortAggMap[row.resort].foreign += forgn;
+                    resortAggMap[row.resort].roomTypes[row.roomtype] = (resortAggMap[row.resort].roomTypes[row.roomtype] || 0) + occ;
+
+                    if (!roomTypeAggMap[row.roomtype]) {
+                        roomTypeAggMap[row.roomtype] = { occupied: 0, indian: 0, foreign: 0 };
+                    }
+                    roomTypeAggMap[row.roomtype].occupied += occ;
+                    roomTypeAggMap[row.roomtype].indian += ind;
+                    roomTypeAggMap[row.roomtype].foreign += forgn;
+
+                    regionOccupiedMap[row.region] = (regionOccupiedMap[row.region] || 0) + occ;
+                    regionAvailableMap[row.region] = (regionAvailableMap[row.region] || 0) + avail;
+
+                    if (!monthlyTrendsMap[row.month]) {
+                        monthlyTrendsMap[row.month] = { month: row.month, occupied: 0, available: 0, indian: 0, foreign: 0 };
+                    }
+                    monthlyTrendsMap[row.month].occupied += occ;
+                    monthlyTrendsMap[row.month].available += avail;
+                    monthlyTrendsMap[row.month].indian += ind;
+                    monthlyTrendsMap[row.month].foreign += forgn;
+
+                    if (!monthlyRegionMap[row.month]) monthlyRegionMap[row.month] = {};
+                    monthlyRegionMap[row.month][row.region] = (monthlyRegionMap[row.month][row.region] || 0) + occ;
                 });
 
                 const averageOccupancy = totalAvailable > 0 ? (totalOccupied / totalAvailable) * 100 : 0;
-                
-                kpiResortsCount.textContent = filteredResorts.length;
-                kpiAvailableNights.textContent = Math.round(totalAvailable).toLocaleString();
-                kpiOccupiedNights.textContent = Math.round(totalOccupied).toLocaleString();
+                kpiResortsCount.textContent = Object.keys(resortAggMap).length;
                 kpiOccupancyRate.textContent = averageOccupancy.toFixed(1) + '%';
+                kpiIndianTourists.textContent = totalIndian.toLocaleString();
+                kpiForeignTourists.textContent = totalForeign.toLocaleString();
 
-                const regionsList = Object.keys(regionOccupiedMap).map(rName => {
-                    const occ = regionOccupiedMap[rName];
-                    const avail = regionAvailableMap[rName] || 0;
+                filteredResorts = Object.values(resortAggMap).map(res => {
+                    let dominantRoomType = "None";
+                    let maxOcc = -1;
+                    Object.keys(res.roomTypes).forEach(rt => {
+                        if (res.roomTypes[rt] > maxOcc) { maxOcc = res.roomTypes[rt]; dominantRoomType = rt; }
+                    });
                     return {
-                        name: rName,
-                        occupied: Math.round(occ),
-                        available: Math.round(avail),
-                        occupancyPercent: avail > 0 ? Number(((occ / avail) * 100).toFixed(1)) : 0
+                        name: res.name, region: res.region, roomtype: dominantRoomType,
+                        occupied: res.occupied, available: res.available,
+                        occupancy: res.available > 0 ? Number(((res.occupied / res.available) * 100).toFixed(1)) : 0,
+                        touristindian: res.indian, touristforeigners: res.foreign
                     };
                 });
 
+                const regionsList = Object.keys(regionOccupiedMap).map(rName => ({
+                    name: rName, occupied: regionOccupiedMap[rName], available: regionAvailableMap[rName],
+                    occupancyPercent: regionAvailableMap[rName] > 0 ? Number(((regionOccupiedMap[rName] / regionAvailableMap[rName]) * 100).toFixed(1)) : 0
+                }));
+
+                const uniqueMonthsOrdered = [...new Set(flatDataRows.map(r => r.month))];
+                const monthlyTrendsList = uniqueMonthsOrdered.filter(m => monthlyTrendsMap[m]).map(m => ({
+                    month: m, occupied: monthlyTrendsMap[m].occupied, available: monthlyTrendsMap[m].available,
+                    occupancyPercent: monthlyTrendsMap[m].available > 0 ? (monthlyTrendsMap[m].occupied / monthlyTrendsMap[m].available) * 100 : 0,
+                    indian: monthlyTrendsMap[m].indian, foreign: monthlyTrendsMap[m].foreign
+                }));
+
                 if (hasHighcharts) {
-                    renderOccupancyTrendsChart(monthlyTrends);
+                    renderOccupancyTrendsChart(monthlyTrendsList);
                     renderRegionContributionChart(regionsList);
                     renderRegionOccupancyChart(regionsList);
                     renderTopResortsChart(filteredResorts);
-                    renderMonthlyRegionComparisonChart(months, selectedRegion);
+                    renderRoomTypeChart(roomTypeAggMap);
+                    renderTouristDemographicsChart(monthlyTrendsList);
+                    renderMonthlyRegionComparisonChart(uniqueMonthsOrdered, monthlyRegionMap, selRegion);
                 }
-                
+
                 currentPage = 1;
                 applySearch();
             }
@@ -1307,14 +1212,13 @@
                 if (searchVal) {
                     results = filteredResorts.filter(res => 
                         res.name.toLowerCase().includes(searchVal) || 
-                        res.region.toLowerCase().includes(searchVal)
+                        res.region.toLowerCase().includes(searchVal) ||
+                        res.roomtype.toLowerCase().includes(searchVal)
                     );
                 }
 
                 results.sort((a, b) => {
-                    let valA = a[currentSortColumn];
-                    let valB = b[currentSortColumn];
-
+                    let valA = a[currentSortColumn]; let valB = b[currentSortColumn];
                     if (typeof valA === 'string') {
                         return currentSortDirection === 'asc' ? valA.localeCompare(valB) : valB.localeCompare(valA);
                     } else {
@@ -1326,29 +1230,22 @@
                 paginateAndBuildTable();
             }
 
-            // Slice data limits per client settings
             function paginateAndBuildTable() {
-                const totalRecordsCount = processedSearchResults.length;
-                const totalPagesCount = Math.ceil(totalRecordsCount / pageSize) || 1;
+                const totalRecords = processedSearchResults.length;
+                const totalPages = Math.ceil(totalRecords / pageSize) || 1;
 
-                if (currentPage > totalPagesCount) currentPage = totalPagesCount;
+                if (currentPage > totalPages) currentPage = totalPages;
                 if (currentPage < 1) currentPage = 1;
 
-                const globalStartIndex = (currentPage - 1) * pageSize;
-                const globalEndIndex = Math.min(globalStartIndex + pageSize, totalRecordsCount);
-                
-                const visibleRecordsSubset = processedSearchResults.slice(globalStartIndex, globalEndIndex);
+                const startIdx = (currentPage - 1) * pageSize;
+                const endIdx = Math.min(startIdx + pageSize, totalRecords);
+                const subset = processedSearchResults.slice(startIdx, endIdx);
 
-                if (totalRecordsCount === 0) {
-                    paginationStatus.textContent = "Showing 0-0 of 0 resorts";
-                } else {
-                    paginationStatus.textContent = `Showing ${globalStartIndex + 1}-${globalEndIndex} of ${totalRecordsCount} resorts`;
-                }
-
+                paginationStatus.textContent = totalRecords === 0 ? "Showing 0-0 of 0 resorts" : `Showing ${startIdx + 1}-${endIdx} of ${totalRecords} resorts`;
                 prevPageBtn.disabled = (currentPage === 1);
-                nextPageBtn.disabled = (currentPage === totalPagesCount);
+                nextPageBtn.disabled = (currentPage === totalPages);
 
-                renderResortsTable(visibleRecordsSubset);
+                renderResortsTable(subset);
             }
 
             function sortTable(column) {
@@ -1356,223 +1253,189 @@
                     currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
                 } else {
                     currentSortColumn = column;
-                    currentSortDirection = column === 'name' || column === 'region' ? 'asc' : 'desc';
+                    currentSortDirection = ['name', 'region', 'roomtype'].includes(column) ? 'asc' : 'desc';
                 }
 
-                const columns = ['name', 'region', 'occupied', 'occupancy'];
-                const colLabels = {
-                    name: 'Resort Name',
-                    region: 'Region',
-                    occupied: 'Occupied Room-Nights',
-                    occupancy: 'Occupancy %'
-                };
+                const columns = ['name', 'region', 'roomtype', 'occupied', 'occupancy', 'indian', 'foreign'];
+                const mapIds = { name: 'name', region: 'region', roomtype: 'roomtype', occupied: 'occupied', occupancy: 'occupancy', indian: 'touristindian', foreign: 'touristforeigners' };
+                const labels = { name: 'Resort Name', region: 'Region', roomtype: 'Dominant Room Type', occupied: 'Occupied ', occupancy: 'Occupancy %', indian: 'Indian', foreign: 'Foreigner' };
 
                 columns.forEach(col => {
                     const th = document.getElementById(`th-${col}`);
-                    if (col === currentSortColumn) {
-                        th.textContent = `${colLabels[col]} ${currentSortDirection === 'asc' ? '▲' : '▼'}`;
+                    if (mapIds[col] === currentSortColumn) {
+                        th.textContent = `${labels[col]} ${currentSortDirection === 'asc' ? '▲' : '▼'}`;
                         th.style.color = 'var(--saffron)';
                     } else {
-                        th.textContent = `${colLabels[col]} ⇅`;
-                        th.style.color = '';
+                        th.textContent = `${labels[col]} ⇅`; th.style.color = '';
                     }
                 });
-
                 applySearch();
             }
 
             function renderResortsTable(resorts) {
                 const tbody = document.getElementById('resorts-table-body');
                 if (resorts.length === 0) {
-                    tbody.innerHTML = `
-                        <tr>
-                            <td colspan="4" style="text-align: center; color: var(--muted); padding: 30px;">
-                                No resorts found matching the criteria.
-                            </td>
-                        </tr>
-                    `;
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--muted); padding: 30px;">No matching records found.</td></tr>`;
                     return;
                 }
-
                 tbody.innerHTML = resorts.map(res => `
                     <tr>
                         <td style="font-weight: 600; color: var(--navy);">${res.name}</td>
                         <td><span style="background-color: var(--cream); color: var(--navy); padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 700;">${res.region}</span></td>
+                        <td style="color: var(--muted); font-size: 13px; font-weight: 600;">${res.roomtype}</td>
                         <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 600;">${res.occupied.toLocaleString()}</td>
-                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 800; color: ${res.occupancy > 50 ? 'var(--green)' : res.occupancy > 25 ? 'var(--blue)' : 'var(--muted)'};">
-                            ${res.occupancy.toFixed(1)}%
-                        </td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace; font-weight: 800; color: ${res.occupancy > 50 ? 'var(--green)' : res.occupancy > 25 ? 'var(--blue)' : 'var(--muted)'};">${res.occupancy.toFixed(1)}%</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace; color: var(--blue); font-weight: 600;">${res.touristindian.toLocaleString()}</td>
+                        <td style="text-align: right; font-family: 'JetBrains Mono', monospace; color: var(--green); font-weight: 600;">${res.touristforeigners.toLocaleString()}</td>
                     </tr>
                 `).join('');
             }
 
-            /* --- UX Optimized Highcharts Renderer Block --- */
-
             function renderOccupancyTrendsChart(data) {
-                const categories = data.map(d => d.month);
-                const availableData = data.map(d => Math.round(d.available));
-                const occupiedData = data.map(d => Math.round(d.occupied));
-                const percentData = data.map(d => Number(d.occupancyPercent.toFixed(1)));
-
                 Highcharts.chart('occupancy-trends-chart', {
                     chart: { zoomType: 'xy' },
-                    xAxis: [{ 
-                        categories: categories, 
-                        crosshair: true,
-                        labels: { style: { fontSize: '11px', color: '#5d6675', fontWeight: '600' } }
-                    }],
-                    yAxis: [{
-                        labels: { style: { color: '#0f5da8', fontWeight: '600' } },
-                        title: { text: 'Room Nights', style: { color: '#0f5da8', fontWeight: '700' } }
-                    }, {
-                        title: { text: 'Occupancy Rate (%)', style: { color: '#f5821f', fontWeight: '700' } },
-                        labels: { format: '{value}%', style: { color: '#f5821f', fontWeight: '600' } },
-                        opposite: true, min: 0, max: 100
-                    }],
-                    tooltip: { 
-                        shared: true,
-                        useHTML: true,
-                        headerFormat: '<span style="font-size:12px; font-weight:bold; color:#13233b;">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:2px 0;">{series.name}: </td><td style="padding:2px 0 2px 8px; text-align:right;"><b>{point.y}</b></td></tr>',
-                        footerFormat: '</table>'
-                    },
-                    legend: { align: 'center', verticalAlign: 'bottom', backgroundColor: '#ffffff', itemStyle: { fontWeight: '700' } },
-                    series: [{
-                        name: 'Available Room-Nights', type: 'column', data: availableData, color: '#e4d8c6', tooltip: { valueSuffix: ' nights' }
-                    }, {
-                        name: 'Occupied Room-Nights', type: 'column', data: occupiedData, color: '#0f5da8', tooltip: { valueSuffix: ' nights' }
-                    }, {
-                        name: 'Occupancy Rate', type: 'line', yAxis: 1, data: percentData, color: '#f5821f', lineWidth: 3,
-                        marker: { lineWidth: 2, lineColor: '#f5821f', fillColor: '#ffffff', radius: 5 },
-                        tooltip: { valueSuffix: '%' }
-                    }]
+                    xAxis: [{ categories: data.map(d => d.month), crosshair: true }],
+                    yAxis: [{ title: { text: 'Room ', style: { color: '#0f5da8', fontWeight: '700' } } }, 
+                            { title: { text: 'Occupancy Rate (%)', style: { color: '#f5821f', fontWeight: '700' } }, labels: { format: '{value}%' }, opposite: true, min: 0, max: 100 }],
+                    tooltip: { shared: true },
+                    series: [
+                        { name: 'Available Room-', type: 'column', data: data.map(d => d.available), color: '#e4d8c6' }, 
+                        { name: 'Occupied Room-', type: 'column', data: data.map(d => d.occupied), color: '#0f5da8' }, 
+                        { name: 'Occupancy Rate', type: 'line', yAxis: 1, data: data.map(d => Number(d.occupancyPercent.toFixed(1))), color: '#f5821f', lineWidth: 3 }
+                    ]
                 });
             }
 
             function renderRegionContributionChart(regions) {
-                const chartData = regions.map(reg => ({ name: reg.name, y: reg.occupied }));
                 Highcharts.chart('region-contribution-chart', {
                     chart: { type: 'pie' },
-                    tooltip: { pointFormat: '{series.name}: <b>{point.y} nights ({point.percentage:.1f}%)</b>' },
-                    accessibility: { point: { valueSuffix: '%' } },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true, 
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true, 
-                                format: '<b>{point.name}</b><br>{point.percentage:.1f}%', 
-                                distance: 15,
-                                style: { fontSize: '12px', textOutline: 'none', color: '#101820', fontWeight: '600' }
-                            },
-                            showInLegend: true, 
-                            innerSize: '60%' // Donut layout provides greater clarity for label reading
-                        }
+                    tooltip: { pointFormat: '{series.name}: <b>{point.y}  ({point.percentage:.1f}%)</b>' },
+                    plotOptions: { pie: { innerSize: '60%', dataLabels: { format: '<b>{point.name}</b><br>{point.percentage:.1f}%' } } },
+                    series: [{ name: 'Contribution', colorByPoint: true, data: regions.map(reg => ({ name: reg.name, y: reg.occupied })) }]
+                });
+            }
+
+            function renderRoomTypeChart(roomTypeData) {
+                const chartData = Object.keys(roomTypeData).map(key => {
+                    const totalTourists = roomTypeData[key].indian + roomTypeData[key].foreign;
+                    const indPct = totalTourists > 0 ? (roomTypeData[key].indian / totalTourists) * 100 : 0;
+                    const fgnPct = totalTourists > 0 ? (roomTypeData[key].foreign / totalTourists) * 100 : 0;
+
+                    return {
+                        name: key,
+                        y: roomTypeData[key].occupied,
+                        indianCount: roomTypeData[key].indian,
+                        foreignCount: roomTypeData[key].foreign,
+                        indianPercentage: indPct.toFixed(1),
+                        foreignPercentage: fgnPct.toFixed(1)
+                    };
+                });
+
+                Highcharts.chart('room-type-chart', {
+                    chart: { type: 'pie' },
+                    tooltip: {
+                        useHTML: true,
+                        headerFormat: '<span style="font-size: 13px; font-weight: 800; color: var(--navy);">{point.key} Breakdown</span><br/>',
+                        pointFormat: `
+                            <div style="margin-top: 6px; font-size: 12px; line-height: 1.4;">
+                                📊 Share of Occupied Volume: <b>{point.y}  ({point.percentage:.1f}%)</b><br/>
+                                <hr style="border:0; border-top:1px dashed #ccc; margin:6px 0;">
+                                <span style="color:#0f5da8; font-weight:700;">🇮🇳 Indian Tourists:</span> <b>{point.indianCount} ({point.indianPercentage}%)</b><br/>
+                                <span style="color:#0f8b69; font-weight:700;">🌍 Foreign Tourists:</span> <b>{point.foreignCount} ({point.foreignPercentage}%)</b>
+                            </div>
+                        `
                     },
-                    legend: { itemStyle: { fontWeight: '700' } },
-                    series: [{ name: 'Contribution', colorByPoint: true, data: chartData }]
+                    plotOptions: { 
+                        pie: { 
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: { 
+                                enabled: true, 
+                                format: '<b>{point.name}</b><br>{point.percentage:.1f}%' 
+                            } 
+                        } 
+                    },
+                    series: [{ name: 'Room Type Share', colorByPoint: true, data: chartData }]
+                });
+            }
+
+            function renderTouristDemographicsChart(trendsData) {
+                let subtitleText = null;
+                const isMirrored = trendsData.length > 0 && trendsData.every(t => t.indian > 0 && t.indian === t.foreign);
+                if (isMirrored) {
+                    subtitleText = '<span style="color: #c2410c; font-weight: bold;">⚠️ Warning: Raw dataset context reports symmetrical values across subsets.</span>';
+                }
+
+                Highcharts.chart('tourist-demographics-chart', {
+                    chart: { type: 'column' },
+                    subtitle: { text: subtitleText, useHTML: true },
+                    xAxis: { categories: trendsData.map(t => t.month), crosshair: true },
+                    yAxis: { min: 0, title: { text: 'Total Registered Visitors', style: { fontWeight: '700' } } },
+                    tooltip: { shared: true },
+                    series: [
+                        { name: 'Indian Tourists', data: trendsData.map(t => t.indian), color: '#0f5da8' }, 
+                        { name: 'Foreign Tourists', data: trendsData.map(t => t.foreign), color: '#0f8b69' }
+                    ]
                 });
             }
 
             function renderRegionOccupancyChart(regions) {
-                const categories = regions.map(reg => reg.name);
-                const dataPoints = regions.map(reg => reg.occupancyPercent);
-
                 Highcharts.chart('region-occupancy-chart', {
                     chart: { type: 'column' },
-                    xAxis: { 
-                        categories: categories, 
-                        crosshair: true,
-                        labels: { style: { fontSize: '11px', fontWeight: '600', color: '#101820' } }
-                    },
-                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)', style: { fontWeight: '700' } }, labels: { format: '{value}%' } },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:11px; font-weight:700;">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td><td style="padding:0 0 0 6px"><b>{point.y:.1f}%</b></td></tr>',
-                        footerFormat: '</table>', shared: true, useHTML: true
-                    },
-                    plotOptions: { 
-                        column: { 
-                            pointPadding: 0.2, 
-                            borderWidth: 0, 
-                            colorByPoint: true,
-                            dataLabels: {
-                                enabled: true,
-                                format: '{point.y:.1f}%',
-                                style: { fontSize: '11px', fontWeight: '700', textOutline: 'none' }
-                            }
-                        } 
-                    },
+                    xAxis: { categories: regions.map(reg => reg.name), crosshair: true },
+                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)' }, labels: { format: '{value}%' } },
+                    plotOptions: { column: { colorByPoint: true, dataLabels: { enabled: true, format: '{point.y:.1f}%' } } },
                     legend: { enabled: false },
-                    series: [{ name: 'Occupancy Rate', data: dataPoints }]
+                    series: [{ name: 'Occupancy Rate', data: regions.map(reg => reg.occupancyPercent) }]
                 });
             }
 
             function renderTopResortsChart(resorts) {
                 const topResorts = [...resorts].sort((a, b) => b.occupancy - a.occupancy).slice(0, 10);
-                const categories = topResorts.map(res => res.name);
-                const dataPoints = topResorts.map(res => res.occupancy);
-
                 Highcharts.chart('resorts-occupancy-chart', {
                     chart: { type: 'bar' },
-                    xAxis: { 
-                        categories: categories, 
-                        title: { text: null },
-                        labels: { style: { fontSize: '11px', fontWeight: '600', color: '#101820' } }
-                    },
-                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)', align: 'high', style: { fontWeight: '700' } }, labels: { format: '{value}%' } },
-                    tooltip: { valueSuffix: '%', shared: true },
-                    plotOptions: { 
-                        bar: { 
-                            dataLabels: { 
-                                enabled: true, 
-                                format: '{point.y:.1f}%',
-                                style: { fontSize: '11px', fontWeight: '700', textOutline: 'none' }
-                            }, 
-                            color: '#f5821f' 
-                        } 
-                    },
+                    xAxis: { categories: topResorts.map(res => res.name) },
+                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)', align: 'high' } },
+                    plotOptions: { bar: { dataLabels: { enabled: true, format: '{point.y:.1f}%' }, color: '#f5821f' } },
                     legend: { enabled: false },
-                    series: [{ name: 'Occupancy', data: dataPoints }]
+                    series: [{ name: 'Occupancy', data: topResorts.map(res => res.occupancy) }]
                 });
             }
 
-            function renderMonthlyRegionComparisonChart(months, activeRegion) {
-                const categories = months.map(m => m.month);
-                const regionNames = new Set();
-                
-                months.forEach(m => {
-                    m.regions.forEach(r => {
-                        if (activeRegion !== 'all' && r.name !== activeRegion) return;
-                        regionNames.add(r.name);
-                    });
+            function renderMonthlyRegionComparisonChart(monthsOrder, matrixData, activeRegion) {
+                const targetRegions = new Set();
+                monthsOrder.forEach(m => {
+                    if (matrixData[m]) {
+                        Object.keys(matrixData[m]).forEach(r => {
+                            if (activeRegion === 'all' || r === activeRegion) targetRegions.add(r);
+                        });
+                    }
                 });
 
-                const series = Array.from(regionNames).map(rName => {
-                    const data = months.map(m => {
-                        const reg = m.regions.find(r => r.name === rName);
-                        return reg ? reg.summary.occupied : 0;
-                    });
-                    return { name: rName, data: data };
-                });
+                const series = Array.from(targetRegions).map(rName => ({
+                    name: rName,
+                    data: monthsOrder.map(m => (matrixData[m] && matrixData[m][rName]) ? matrixData[m][rName] : 0)
+                }));
 
                 Highcharts.chart('monthly-region-chart', {
                     chart: { type: 'column' },
-                    xAxis: { 
-                        categories: categories, 
-                        crosshair: true,
-                        labels: { style: { fontSize: '11px', fontWeight: '600' } }
-                    },
-                    yAxis: { min: 0, title: { text: 'Occupied Nights', style: { fontWeight: '700' } } },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:12px; font-weight:700;">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:2px 0;">{series.name}: </td><td style="padding:2px 0 2px 6px;"><b>{point.y} nights</b></td></tr>',
-                        footerFormat: '</table>', shared: true, useHTML: true
-                    },
-                    plotOptions: { column: { pointPadding: 0.2, borderWidth: 0 } },
-                    legend: { itemStyle: { fontWeight: '700' } },
+                    xAxis: { categories: monthsOrder, crosshair: true },
+                    yAxis: { min: 0, title: { text: 'Occupied ' } },
                     series: series
                 });
+            }
+
+            function showLoading() {
+                loadingOverlay.style.display = 'flex'; errorContainer.style.display = 'none';
+                chartsDashboard.style.opacity = '0.3'; kpiGrid.style.opacity = '0.3';
+            }
+            function showError(msg) {
+                loadingOverlay.style.display = 'none'; errorContainer.style.display = 'block';
+                errorContainer.innerHTML = `<div class="dashboard-alert"><span class="material-symbols-outlined">warning</span><div><strong>Error:</strong> ${msg}</div></div>`;
+            }
+            function hideStatus() {
+                loadingOverlay.style.display = 'none'; errorContainer.style.display = 'none';
+                chartsDashboard.style.opacity = '1'; kpiGrid.style.opacity = '1';
             }
         });
     </script>
