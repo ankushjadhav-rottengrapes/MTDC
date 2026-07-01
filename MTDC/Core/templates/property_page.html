@@ -478,7 +478,9 @@
         }
 
         .sidebar {
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
             background: #fffaf1;
         }
 
@@ -1238,9 +1240,12 @@
         }
 
         .property-tabs {
+            min-height: 0;
             padding: 0 14px 14px;
             display: grid;
+            grid-template-rows: auto minmax(0, 1fr);
             gap: 10px;
+            flex: 1 1 auto;
         }
 
         .property-tab-list {
@@ -1311,6 +1316,8 @@
 
         .property-tab-panel {
             display: none;
+            min-height: 0;
+            overflow-y: auto;
             padding: 12px 14px;
             border: 1px solid var(--line);
             border-radius: 8px;
