@@ -340,7 +340,8 @@ def dashboard(request, property_id=None):
         "ownership_breakdown_data": ownership_breakdown_data,
         "zone_breakdown_data": zone_breakdown_data,
     }
-    return render(request, "dashboard.html", context)
+    template_name = "property_page.html" if property_id is not None else "dashboard.html"
+    return render(request, template_name, context)
 
 @login_required
 def analytics(request):

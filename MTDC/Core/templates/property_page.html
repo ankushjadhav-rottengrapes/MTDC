@@ -1,0 +1,1949 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTDC GIS Dashboard</title>
+    <link rel="icon" type="image/png" href="{% static 'logo/mtdc-logo.png' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/ol@10.6.1/ol.css" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #0c1628;
+            --navy-2: #13233b;
+            --ink: #101820;
+            --muted: #5d6675;
+            --saffron: #f5821f;
+            --sun: #ffe79a;
+            --cream: #fff4df;
+            --cream-2: #fffaf1;
+            --line: #e4d8c6;
+            --blue: #0f5da8;
+            --green: #0f8b69;
+            --surface: #ffffff;
+            --shadow: 0 14px 34px rgba(45, 31, 7, 0.14);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-width: 320px;
+            overflow: hidden;
+            color: var(--ink);
+            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(90deg, #fff0b8, #ffe49a);
+        }
+
+        button,
+        input,
+        select {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        .material-symbols-outlined {
+            font-size: 22px;
+            line-height: 1;
+            vertical-align: middle;
+        }
+
+        .brand,
+        .site-footer,
+        .footer-credit,
+        .nav-links,
+        .profile-trigger,
+        .profile-summary,
+        .logout-button,
+        .search,
+        .asset-meta,
+        .card-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .site-header {
+            height: 62px;
+            padding: 6px 24px;
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            gap: 22px;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.94);
+            border-bottom: 1px solid var(--line);
+            box-shadow: 0 8px 24px rgba(18, 25, 36, 0.08);
+            backdrop-filter: blur(14px);
+            position: relative;
+            z-index: 5;
+        }
+
+        .brand {
+            gap: 14px;
+            min-width: 360px;
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .brand:hover .brand-text strong,
+        .brand:focus .brand-text strong {
+            color: var(--saffron);
+        }
+
+        .brand-logo-wrap {
+            width: 54px;
+            height: 46px;
+            display: grid;
+            place-items: center;
+            border-radius: 6px;
+            background: #ffffff;
+        }
+
+        .brand-logo {
+            width: 48px;
+            height: 40px;
+            display: block;
+            object-fit: contain;
+            flex: 0 0 auto;
+        }
+
+        .brand-text strong {
+            display: block;
+            color: var(--navy);
+            font-size: 17px;
+            line-height: 1.05;
+            font-weight: 800;
+        }
+
+        .brand-text span {
+            display: block;
+            margin-top: 3px;
+            color: var(--saffron);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+        }
+
+        .brand-text small {
+            display: block;
+            margin-top: 2px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            gap: clamp(12px, 2vw, 28px);
+            justify-content: center;
+            min-width: 0;
+        }
+
+        .nav-links a {
+            color: #1f2430;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .nav-links a.active {
+            color: var(--saffron);
+        }
+
+        .profile-menu {
+            position: relative;
+            justify-self: end;
+            z-index: 6;
+        }
+
+        .profile-menu summary {
+            list-style: none;
+        }
+
+        .profile-menu summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .profile-trigger {
+            min-width: 144px;
+            min-height: 48px;
+            gap: 10px;
+            padding: 6px 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--navy);
+            background: #ffffff;
+            box-shadow: 0 6px 18px rgba(18, 25, 36, 0.08);
+        }
+
+        .profile-avatar {
+            width: 34px;
+            height: 34px;
+            flex: 0 0 auto;
+            display: grid;
+            place-items: center;
+            border-radius: 50%;
+            color: #ffffff;
+            background: var(--saffron);
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+        .profile-summary {
+            min-width: 0;
+            flex: 1;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.1;
+        }
+
+        .profile-name {
+            max-width: 92px;
+            overflow: hidden;
+            color: var(--navy);
+            font-size: 13px;
+            font-weight: 800;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .profile-role {
+            margin-top: 3px;
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .profile-chevron {
+            color: var(--muted);
+            font-size: 20px;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 190px;
+            padding: 8px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 16px 34px rgba(15, 23, 42, 0.16);
+        }
+
+        .logout-form {
+            margin: 0;
+        }
+
+        .logout-button {
+            width: 100%;
+            min-height: 38px;
+            gap: 8px;
+            border: 0;
+            border-radius: 7px;
+            padding: 0 10px;
+            color: #c2410c;
+            background: transparent;
+            font-size: 14px;
+            font-weight: 800;
+            text-align: left;
+        }
+
+        .logout-button:hover,
+        .logout-button:focus {
+            background: #fff4df;
+        }
+
+        .dashboard-bar {
+            height: 58px;
+            padding: 8px 24px;
+            display: block;
+            align-items: center;
+            background: linear-gradient(90deg, #fff0b8, #ffe49a);
+            border-bottom: 1px solid rgba(145, 96, 16, 0.12);
+        }
+
+        .search {
+            min-height: 42px;
+            gap: 10px;
+            padding: 0 13px;
+            border: 1px solid rgba(52, 45, 30, 0.22);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 18px rgba(116, 74, 8, 0.09);
+        }
+
+        .search input {
+            width: 100%;
+            min-width: 0;
+            border: 0;
+            outline: 0;
+            background: transparent;
+            color: var(--ink);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .content {
+            height: calc(100vh - 128px);
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: 310px minmax(0, 4fr) minmax(300px, 1fr);
+            background: #f9eedb;
+        }
+
+        .site-footer {
+            height: 56px;
+            padding: 8px 24px;
+            justify-content: center;
+            color: #263244;
+            background: #ffffff;
+            border-top: 1px solid var(--line);
+            box-shadow: 0 -10px 24px rgba(18, 25, 36, 0.08);
+            font-size: 13px;
+            font-weight: 800;
+            position: relative;
+            z-index: 4;
+        }
+
+        .footer-credit {
+            min-width: 0;
+            min-height: 40px;
+            padding: 5px 14px;
+            gap: 12px;
+            justify-content: center;
+            border: 1px solid #f0dec2;
+            border-radius: 8px;
+            background: #fffaf1;
+            text-align: center;
+        }
+
+        .footer-logo {
+            width: 112px;
+            height: 30px;
+            flex: 0 0 auto;
+            object-fit: contain;
+        }
+
+        .footer-credit span {
+            min-width: 0;
+            color: #3b4351;
+        }
+
+        .footer-credit strong {
+            color: var(--saffron);
+        }
+
+        .content.is-property-detail {
+            grid-template-columns: 65% 35%;
+        }
+
+        .content.is-property-detail .analytics-sidebar {
+            display: none;
+        }
+
+        .content.is-property-detail .map-panel {
+            border-left: 0;
+        }
+
+        .map-panel {
+            position: relative;
+            min-width: 0;
+            background: #d8e4df;
+            border-left: 1px solid #cfc4b2;
+            border-right: 1px solid #cfc4b2;
+        }
+
+        #mtdc-map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .ol-control button {
+            background-color: var(--navy);
+            color: #ffffff;
+        }
+
+        .ol-control button:hover,
+        .ol-control button:focus {
+            background-color: var(--saffron);
+        }
+
+        .ol-zoom {
+            top: 16px;
+            left: 16px;
+        }
+
+        .ol-attribution {
+            font-size: 11px;
+        }
+
+        .layer-menu {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            z-index: 2;
+        }
+
+        .layer-toggle {
+            width: 42px;
+            height: 42px;
+            border: 0;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            color: #334155;
+            background: #ffffff;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+        }
+
+        .layer-toggle .material-symbols-outlined {
+            font-size: 24px;
+        }
+
+        .layer-options {
+            position: absolute;
+            top: 0;
+            right: calc(100% + 8px);
+            min-width: 116px;
+            padding: 6px;
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 16px 34px rgba(0, 0, 0, 0.24);
+            display: none;
+        }
+
+        .layer-menu:hover .layer-options,
+        .layer-menu:focus-within .layer-options {
+            display: grid;
+            gap: 4px;
+        }
+
+        .layer-options button {
+            width: 100%;
+            min-height: 34px;
+            padding: 0 10px;
+            border: 0;
+            border-radius: 7px;
+            color: #475569;
+            background: #ffffff;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .layer-options button:hover {
+            background: #f1f5f9;
+        }
+
+        .layer-options button.is-active {
+            color: #ffffff;
+            background: #0d6efd;
+        }
+
+        .map-hover-label {
+            min-width: max-content;
+            max-width: 220px;
+            padding: 8px 11px;
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            border-radius: 8px;
+            color: #172033;
+            background: #ffffff;
+            box-shadow: 0 10px 26px rgba(15, 23, 42, 0.22);
+            font-size: 13px;
+            font-weight: 800;
+            line-height: 1.25;
+            pointer-events: none;
+            white-space: normal;
+        }
+
+        .map-hover-label::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: -6px;
+            width: 10px;
+            height: 10px;
+            border-left: 1px solid rgba(15, 23, 42, 0.12);
+            border-bottom: 1px solid rgba(15, 23, 42, 0.12);
+            background: #ffffff;
+            transform: translateY(-50%) rotate(45deg);
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #fffaf1;
+        }
+
+        .analytics-sidebar {
+            overflow-y: auto;
+            padding: 10px;
+            background: #ffffff;
+        }
+
+        .analytics-panel {
+            display: grid;
+            gap: 10px;
+        }
+
+        .analytics-header {
+            position: relative;
+            overflow: hidden;
+            min-height: 106px;
+            padding: 10px 12px;
+            border: 1px solid #dfe7f0;
+            border-radius: 8px;
+            color: #ffffff;
+            background:
+                linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 44%),
+                linear-gradient(140deg, #0d3158 0%, #0f5da8 100%);
+            box-shadow: 0 10px 20px rgba(14, 35, 64, 0.14);
+        }
+
+        .analytics-header::after {
+            content: "";
+            position: absolute;
+            right: -34px;
+            bottom: -38px;
+            width: 92px;
+            height: 92px;
+            border: 14px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .analytics-kicker {
+            position: relative;
+            z-index: 1;
+            margin: 0 0 4px;
+            color: #ffd37d;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .analytics-header h2 {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            max-width: 120px;
+            font-size: 17px;
+            line-height: 1.02;
+            letter-spacing: 0;
+        }
+
+        .analytics-total {
+            position: relative;
+            z-index: 1;
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .analytics-total span {
+            max-width: 120px;
+            color: rgba(255, 255, 255, 0.86);
+            font-size: 10px;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        .analytics-total strong {
+            font-family: "JetBrains Mono", monospace;
+            font-size: 26px;
+            line-height: 0.9;
+            text-shadow: 0 3px 12px rgba(0, 0, 0, 0.18);
+        }
+
+        .analytics-card {
+            padding: 11px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.08);
+        }
+
+        .analytics-card h3 {
+            margin: 0 0 10px;
+            color: var(--navy);
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+        .analytics-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .region-analytics-list {
+            max-height: 162px;
+            overflow-y: auto;
+            padding-right: 6px;
+        }
+
+        .region-analytics-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .region-analytics-list::-webkit-scrollbar-thumb {
+            border-radius: 999px;
+            background: rgba(15, 93, 168, 0.35);
+        }
+
+        .region-analytics-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .analytics-row {
+            display: grid;
+            grid-template-columns: 28px minmax(0, 1fr) auto;
+            gap: 9px;
+            align-items: center;
+        }
+
+        .analytics-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            color: var(--blue);
+            background: #e7f1fb;
+        }
+
+        .analytics-icon .material-symbols-outlined {
+            font-size: 18px;
+        }
+
+        .analytics-label {
+            min-width: 0;
+        }
+
+        .analytics-label span {
+            display: block;
+            overflow: hidden;
+            color: #263244;
+            font-size: 13px;
+            font-weight: 800;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .analytics-meter {
+            height: 5px;
+            margin-top: 5px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #efe4d4;
+        }
+
+        .analytics-meter i {
+            width: var(--meter, 0%);
+            height: 100%;
+            display: block;
+            border-radius: inherit;
+            background: var(--saffron);
+            transition: width 0.25s ease;
+        }
+
+        .analytics-value {
+            min-width: 34px;
+            padding: 5px 8px;
+            border-radius: 999px;
+            color: var(--navy);
+            background: #fff1cf;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 12px;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .ownership-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 7px;
+        }
+
+        .ownership-tile {
+            min-height: 72px;
+            min-width: 0;
+            padding: 8px 8px;
+            border: 1px solid #eadfce;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: linear-gradient(180deg, #fffdf8, #fff7ea);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .ownership-tile span {
+            min-width: 0;
+            color: #3e4a5c;
+            font-size: 10px;
+            font-weight: 800;
+            line-height: 1.15;
+            overflow-wrap: normal;
+            word-break: normal;
+        }
+
+        .ownership-tile strong {
+            color: var(--navy);
+            font-family: "JetBrains Mono", monospace;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .ownership-toggle {
+            width: 100%;
+            text-align: left;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .ownership-toggle.is-active {
+            border-color: rgba(15, 93, 168, 0.45);
+            box-shadow: 0 0 0 2px rgba(15, 93, 168, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transform: translateY(-1px);
+        }
+
+        .zone-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .zone-tile {
+            min-height: 66px;
+            padding: 8px 10px;
+        }
+
+        .zone-tile span {
+            font-size: 11px;
+        }
+
+        .zone-tile strong {
+            font-size: 18px;
+        }
+
+        .ownership-breakdown {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e9edf3;
+        }
+
+        .ownership-breakdown-head {
+            display: grid;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
+
+        .ownership-breakdown-head h4 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .ownership-breakdown-subhead {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .ownership-breakdown-subhead span {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .ownership-breakdown-pill {
+            display: inline-flex;
+            align-items: center;
+            min-height: 26px;
+            padding: 4px 10px;
+            border: 1px solid #dce7f3;
+            border-radius: 999px;
+            color: #0f5da8;
+            background: #edf5ff;
+            font-size: 11px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 640px) {
+            .ownership-breakdown-subhead {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .ownership-breakdown-subhead span:last-child {
+                line-height: 1.2;
+            }
+        }
+
+        .ownership-breakdown-table {
+            display: grid;
+            gap: 0;
+            max-height: 232px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .ownership-breakdown-table::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .ownership-breakdown-table::-webkit-scrollbar-thumb {
+            border-radius: 999px;
+            background: rgba(15, 93, 168, 0.35);
+        }
+
+        .ownership-breakdown-table::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .ownership-breakdown-row,
+        .ownership-breakdown-head-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .ownership-breakdown-head-row {
+            padding-bottom: 8px;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .ownership-breakdown-row {
+            min-height: 36px;
+            padding: 8px 0;
+            border-top: 1px solid #e9edf3;
+            color: #1f2937;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .ownership-breakdown-row:first-of-type {
+            border-top: 0;
+        }
+
+        .ownership-breakdown-region {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .ownership-breakdown-value {
+            justify-self: end;
+            min-width: 32px;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .region-ownership-table {
+            display: grid;
+            gap: 0;
+        }
+
+        .region-ownership-head,
+        .region-ownership-row {
+            display: grid;
+            grid-template-columns: minmax(112px, 1.6fr) repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            align-items: center;
+        }
+
+        .region-ownership-head {
+            padding: 4px 0 10px;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .region-ownership-head span:first-child {
+            color: var(--navy);
+        }
+
+        .region-ownership-row {
+            min-height: 38px;
+            padding: 8px 0;
+            border-top: 1px solid #e9edf3;
+            color: #1f2937;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .region-ownership-row:first-of-type {
+            border-top: 0;
+        }
+
+        .region-ownership-region {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .region-ownership-value {
+            justify-self: center;
+            font-family: "JetBrains Mono", monospace;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .region-ownership-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .region-ownership-pill::before {
+            content: "";
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--pill-color, #0f5da8);
+            box-shadow: 0 0 0 4px rgba(15, 93, 168, 0.12);
+        }
+
+        .sidebar-head {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            padding: 16px 18px;
+            display: flex;
+            justify-content: space-between;
+            gap: 18px;
+            align-items: center;
+            background: rgba(255, 250, 241, 0.95);
+            border-bottom: 1px solid var(--line);
+            backdrop-filter: blur(10px);
+        }
+
+        .sidebar-head h2 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 20px;
+            line-height: 1.15;
+        }
+
+        .sidebar-head p {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .cards {
+            padding: 14px;
+            display: grid;
+            gap: 14px;
+        }
+
+        .asset-card {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .asset-img {
+            position: relative;
+            height: 118px;
+            overflow: hidden;
+        }
+
+        .asset-img img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            transition: transform 0.35s ease;
+        }
+
+        .asset-card:hover .asset-img img {
+            transform: scale(1.04);
+        }
+
+        .asset-id {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 6px 8px;
+            border-radius: 8px;
+            color: #ffffff;
+            background: rgba(12, 22, 40, 0.88);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .asset-body {
+            padding: 14px;
+        }
+
+        .asset-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .asset-title h3 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 18px;
+            line-height: 1.2;
+        }
+
+        .status {
+            flex: 0 0 auto;
+            padding: 5px 9px;
+            border-radius: 999px;
+            color: #074a75;
+            background: #dff0ff;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .status.survey {
+            color: #006d61;
+            background: #daf8ee;
+        }
+
+        .status.disputed {
+            color: #a33d00;
+            background: #ffe3c9;
+        }
+
+        .asset-meta {
+            gap: 18px;
+            margin-bottom: 14px;
+        }
+
+        .asset-summary {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 6px;
+            margin-bottom: 14px;
+        }
+
+        .asset-pill {
+            min-height: 48px;
+            padding: 7px 6px;
+            border: 1px solid #eadcc7;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            gap: 2px;
+            color: #384150;
+            background: #fff8ea;
+            text-align: center;
+        }
+
+        .asset-pill strong {
+            color: var(--navy);
+            font-family: "JetBrains Mono", monospace;
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        .asset-pill span {
+            font-size: 10px;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .asset-groups {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .asset-group {
+            padding: 10px;
+            border: 1px solid #eadfce;
+            border-radius: 8px;
+            background: #fffbf5;
+        }
+
+        .asset-group-title {
+            margin: 0 0 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            color: #273248;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .asset-count {
+            min-width: 24px;
+            padding: 3px 6px;
+            border-radius: 999px;
+            color: #ffffff;
+            background: var(--navy);
+            font-family: "JetBrains Mono", monospace;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .asset-list {
+            display: grid;
+            gap: 6px;
+        }
+
+        .asset-category-row {
+            min-height: 48px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto auto;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .asset-category-name {
+            color: #273248;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .asset-view-btn {
+            width: 34px;
+            height: 32px;
+            border: 0;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            color: #ffffff;
+            background: var(--saffron);
+        }
+
+        .asset-view-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+        }
+
+        .asset-row {
+            min-width: 0;
+            display: grid;
+            grid-template-columns: 24px minmax(0, 1fr);
+            gap: 8px;
+            align-items: center;
+            color: #4b5565;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .asset-row .material-symbols-outlined {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: grid;
+            place-items: center;
+            color: var(--saffron);
+            background: #fff0cf;
+            font-size: 18px;
+        }
+
+        .asset-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .asset-empty {
+            margin: 0;
+            color: #7b8492;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .meta-label {
+            display: block;
+            margin-bottom: 4px;
+            color: #586274;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+        }
+
+        .meta-value {
+            font-family: "JetBrains Mono", monospace;
+            color: #111827;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .card-actions {
+            gap: 8px;
+        }
+
+        .asset-title + .card-actions {
+            margin-top: 4px;
+        }
+
+        .details-btn,
+        .view-btn {
+            min-height: 38px;
+            border: 0;
+            border-radius: 8px;
+            font-weight: 800;
+            display: grid;
+            place-items: center;
+            text-decoration: none;
+        }
+
+        .details-btn {
+            flex: 1;
+            color: var(--navy);
+            background: #f0e6d6;
+        }
+
+        .view-btn {
+            width: 46px;
+            color: #ffffff;
+            background: var(--saffron);
+        }
+
+        .empty-sidebar {
+            margin: 14px;
+            padding: 22px;
+            border: 1px dashed #d9c7ab;
+            border-radius: 8px;
+            color: #596273;
+            background: #ffffff;
+            font-weight: 700;
+            line-height: 1.5;
+        }
+
+        .property-tabs {
+            min-height: 0;
+            padding: 0 14px 14px;
+            display: grid;
+            grid-template-rows: auto minmax(0, 1fr);
+            gap: 10px;
+            flex: 1 1 auto;
+        }
+
+        .property-tab-list {
+            min-height: 48px;
+            padding: 4px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 4px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff8f0;
+            box-shadow: 0 4px 12px rgba(45, 31, 7, 0.08);
+        }
+
+        .property-tab {
+            min-width: 0;
+            min-height: 40px;
+            padding: 6px 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            border: 0;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--navy);
+            font-size: 13px;
+            font-weight: 800;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+        }
+
+        .property-tab:hover {
+            background: #ffefd6;
+        }
+
+        .property-tab.is-active {
+            color: #ffffff;
+            background: var(--saffron);
+            box-shadow: 0 6px 14px rgba(255, 111, 0, 0.22);
+        }
+
+        .property-tab .material-symbols-outlined {
+            flex: 0 0 auto;
+            font-size: 18px;
+        }
+
+        .property-tab-label {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .property-tab-count {
+            min-width: 22px;
+            height: 22px;
+            padding: 0 6px;
+            display: grid;
+            place-items: center;
+            border-radius: 999px;
+            color: var(--navy);
+            background: #ffffff;
+            font-size: 11px;
+            font-weight: 900;
+        }
+
+        .property-tab-panel {
+            display: none;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 12px 14px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            color: var(--muted);
+            background: var(--surface);
+            box-shadow: 0 4px 12px rgba(45, 31, 7, 0.08);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .property-tab-panel.is-active {
+            display: block;
+        }
+        .asset-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 30;
+            display: grid;
+            grid-template-columns: minmax(220px, 20%) minmax(0, 80%);
+            color: #182133;
+            background: #ffffff;
+        }
+
+        .asset-modal[hidden] {
+            display: none;
+        }
+
+        .asset-modal-left {
+            min-width: 0;
+            padding: 18px;
+            border-right: 1px solid #ddd2c0;
+            background: #fffaf1;
+            overflow-y: auto;
+        }
+
+        .asset-modal-head h2 {
+            margin: 0;
+            color: var(--navy);
+            font-size: 21px;
+            line-height: 1.2;
+        }
+
+        .asset-modal-head p {
+            margin: 5px 0 14px;
+            color: #667085;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .asset-modal-search {
+            width: 100%;
+            min-height: 42px;
+            margin-bottom: 14px;
+            padding: 0 12px;
+            border: 1px solid #d9cbb8;
+            border-radius: 8px;
+            outline: 0;
+            background: #ffffff;
+            font-weight: 700;
+        }
+
+        .asset-modal-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .asset-modal-group {
+            margin: 10px 0 3px;
+            color: #6b7280;
+            font-size: 11px;
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .asset-modal-item {
+            min-height: 42px;
+            padding: 9px 10px;
+            border: 1px solid #eadcc7;
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: 24px minmax(0, 1fr);
+            gap: 9px;
+            align-items: center;
+            color: #263244;
+            background: #ffffff;
+            text-align: left;
+            font-weight: 800;
+        }
+
+        .asset-modal-item.is-active {
+            border-color: var(--saffron);
+            background: #fff1da;
+        }
+
+        .asset-modal-item .material-symbols-outlined {
+            color: var(--saffron);
+            font-size: 20px;
+        }
+
+        .asset-modal-item span:last-child {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .asset-modal-right {
+            min-width: 0;
+            display: grid;
+            grid-template-rows: auto minmax(0, 1fr);
+            background: #f7f1e8;
+        }
+
+        .asset-viewer-bar {
+            min-height: 58px;
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            background: #ffffff;
+            border-bottom: 1px solid #ddd2c0;
+        }
+
+        .asset-viewer-title {
+            min-width: 0;
+            color: var(--navy);
+            font-size: 16px;
+            font-weight: 900;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .asset-modal-close,
+        .asset-nav-btn {
+            width: 38px;
+            height: 36px;
+            border: 0;
+            border-radius: 8px;
+            display: grid;
+            place-items: center;
+            color: #ffffff;
+            background: var(--navy);
+        }
+
+        .asset-viewer-stage {
+            min-width: 0;
+            min-height: 0;
+            padding: 18px;
+            display: grid;
+            place-items: center;
+            overflow: auto;
+        }
+
+        .asset-viewer-stage.is-video {
+            padding: 0;
+            overflow: hidden;
+            background: #000000;
+        }
+
+        .asset-viewer-stage img,
+        .asset-viewer-stage video,
+        .asset-viewer-stage iframe,
+        .asset-viewer-stage model-viewer {
+            max-width: 100%;
+            max-height: 100%;
+            border: 0;
+            border-radius: 8px;
+            background: #ffffff;
+            box-shadow: 0 16px 34px rgba(15, 23, 42, 0.12);
+        }
+
+        .asset-viewer-stage video {
+            width: 100%;
+            height: 100%;
+            max-width: none;
+            max-height: none;
+            border-radius: 0;
+            object-fit: contain;
+            box-shadow: none;
+        }
+
+        .asset-viewer-stage iframe,
+        .asset-viewer-stage model-viewer {
+            width: 100%;
+            height: 100%;
+        }
+
+        .asset-viewer-empty {
+            max-width: 460px;
+            padding: 24px;
+            border: 1px dashed #d7c7af;
+            border-radius: 8px;
+            background: #ffffff;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .asset-viewer-empty a {
+            color: var(--saffron);
+        }
+
+        .asset-viewer-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        @media (max-width: 1180px) {
+            .site-header {
+                grid-template-columns: minmax(0, 1fr) auto;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .brand {
+                min-width: 0;
+            }
+
+            .content {
+                grid-template-columns: 280px minmax(0, 1fr) 320px;
+            }
+
+            .content.is-property-detail {
+                grid-template-columns: 65% 35%;
+            }
+        }
+
+        @media (max-width: 900px) {
+            body {
+                overflow: auto;
+            }
+
+            .site-header,
+            .dashboard-bar,
+            .site-footer,
+            .content {
+                height: auto;
+                grid-template-columns: 1fr;
+            }
+
+            .site-header {
+                grid-template-columns: minmax(0, 1fr) auto;
+            }
+
+            .content {
+                min-height: 0;
+            }
+
+            .analytics-sidebar,
+            .sidebar {
+                max-height: none;
+            }
+
+            .map-panel {
+                height: 58vh;
+                border-right: 0;
+                border-left: 0;
+                border-bottom: 1px solid #cfc4b2;
+            }
+
+        }
+
+        @media (max-width: 620px) {
+            .site-header,
+            .dashboard-bar,
+            .site-footer {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+
+            .site-footer {
+                min-height: 62px;
+                font-size: 11px;
+            }
+
+            .footer-credit {
+                flex-wrap: wrap;
+                gap: 6px;
+                padding: 6px 10px;
+            }
+
+            .footer-logo {
+                width: 96px;
+                height: 26px;
+            }
+
+            .brand {
+                min-width: 0;
+            }
+
+            .brand-logo-wrap {
+                width: 50px;
+                height: 44px;
+            }
+
+            .brand-logo {
+                width: 44px;
+                height: 38px;
+            }
+
+            .brand-text strong {
+                font-size: 18px;
+            }
+
+            .profile-trigger {
+                min-width: 52px;
+                padding: 6px 8px;
+            }
+
+            .profile-summary,
+            .profile-chevron {
+                display: none;
+            }
+
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{% url 'core:dashboard' %}" aria-label="Open main dashboard">
+            <div class="brand-logo-wrap">
+                <img class="brand-logo" src="{% static 'logo/mtdc-logo.png' %}" alt="Maharashtra Tourism logo">
+            </div>
+            <div class="brand-text">
+                <strong>Maharashtra Tourism Development Corporation</strong>
+                <small>Maharashtra Tourism</small>
+            </div>
+        </a>
+
+        <nav class="nav-links" aria-label="MTDC dashboard sections">
+            <a class="active" href="#">Properties</a>
+            <a href="{% url 'core:analytics' %}">Analytics</a>
+            <a href="#">Explore Maharashtra</a>
+            <a href="#">Reports</a>
+        </nav>
+
+        <details class="profile-menu">
+            <summary class="profile-trigger" aria-label="Open profile menu">
+                <span class="profile-avatar">{{ user.username|first|upper|default:"U" }}</span>
+                <span class="profile-summary">
+                    <span class="profile-name">{% if user.get_short_name %}{{ user.get_short_name }}{% else %}{{ user.username }}{% endif %}</span>
+                    <span class="profile-role">{% if user.is_staff %}Admin{% else %}User{% endif %}</span>
+                </span>
+                <span class="material-symbols-outlined profile-chevron" aria-hidden="true">expand_more</span>
+            </summary>
+            <div class="profile-dropdown">
+                <form class="logout-form" method="post" action="{% url 'core:logout' %}">
+                    {% csrf_token %}
+                    <button class="logout-button" type="submit">
+                        <span class="material-symbols-outlined" aria-hidden="true">logout</span>
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </details>
+    </header>
+
+
+    <main class="content{% if is_property_detail %} is-property-detail{% endif %}">
+        <aside class="analytics-sidebar" aria-label="Property analytics">
+            <div class="analytics-panel">
+                <section class="analytics-header" aria-label="Property summary">
+                    <p class="analytics-kicker">Analytics</p>
+                    <h2>Property Summary</h2>
+                    <div class="analytics-total">
+                        <span>Total Properties</span>
+                        <strong id="analytics-total-properties">{{ property_count }}</strong>
+                    </div>
+                </section>
+
+                <section class="analytics-card" aria-label="Region wise properties">
+                    <h3>Region Wise Properties</h3>
+                    <div class="analytics-list region-analytics-list">
+                        {% for region in region_property_counts %}
+                        <div class="analytics-row">
+                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">place</span></span>
+                            <span class="analytics-label"><span>{{ region.region }}</span><span class="analytics-meter"><i style="--meter: {% widthratio region.property_count max_region_property_count 100 %}%"></i></span></span>
+                            <span class="analytics-value">{{ region.property_count }}</span>
+                        </div>
+                        {% empty %}
+                        <div class="analytics-empty">No region data found.</div>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <section class="analytics-card" aria-label="Ownership details">
+                    <h3>Ownership Details</h3>
+                    <div class="ownership-grid">
+                        <button class="ownership-tile ownership-toggle is-active" type="button" data-ownership-metric="ppp">
+                            <span>PPP</span>
+                            <strong data-analytics-key="ppp">{{ ownership_breakdown_data.ppp.count }}</strong>
+                        </button>
+                        <button class="ownership-tile ownership-toggle" type="button" data-ownership-metric="lease">
+                            <span>Lease Renewal</span>
+                            <strong data-analytics-key="lease">{{ ownership_breakdown_data.lease.count }}</strong>
+                        </button>
+                        <button class="ownership-tile ownership-toggle" type="button" data-ownership-metric="small">
+                            <span>Small<br>Properties</span>
+                            <strong data-analytics-key="small">{{ ownership_breakdown_data.small.count }}</strong>
+                        </button>
+                    </div>
+
+                    <div class="ownership-breakdown">
+                        <div class="ownership-breakdown-head">
+                            <h4 id="ownership-breakdown-title">PPP Region Breakdown</h4>
+                        </div>
+                        <div class="ownership-breakdown-table" id="ownership-breakdown-table" role="table" aria-label="Region ownership breakdown"></div>
+                    </div>
+                    {{ ownership_breakdown_data|json_script:"ownership-breakdown-data" }}
+                </section>
+
+                <section class="analytics-card" aria-label="Zone wise properties">
+                    <h3>Zone Wise Properties</h3>
+                    <div class="zone-grid">
+                        <button class="ownership-tile zone-tile ownership-toggle is-active" type="button" data-zone-metric="rp">
+                            <span>RP Zone</span>
+                            <strong data-zone-count="rp">{{ zone_breakdown_data.rp.count }}</strong>
+                        </button>
+                        <button class="ownership-tile zone-tile ownership-toggle" type="button" data-zone-metric="dp">
+                            <span>DP Zone</span>
+                            <strong data-zone-count="dp">{{ zone_breakdown_data.dp.count }}</strong>
+                        </button>
+                    </div>
+
+                    <div class="ownership-breakdown">
+                        <div class="ownership-breakdown-head">
+                            <h4 id="zone-breakdown-title">RP Zone Breakdown</h4>
+                        </div>
+                        <div class="ownership-breakdown-table" id="zone-breakdown-table" role="table" aria-label="Zone property breakdown"></div>
+                    </div>
+                    {{ zone_breakdown_data|json_script:"zone-breakdown-data" }}
+                </section>
+            </div>
+        </aside>
+
+        <section class="map-panel" aria-label="Satellite basemap">
+            <div id="mtdc-map"></div>
+            <div id="mtdc-hover-label" class="map-hover-label" hidden></div>
+            <div class="layer-menu" aria-label="Basemap switcher">
+                <button class="layer-toggle" type="button" aria-label="Change basemap">
+                    <span class="material-symbols-outlined">layers</span>
+                </button>
+                <div class="layer-options">
+                    <button class="is-active" type="button" data-layer="satellite">Satellite</button>
+                    <button type="button" data-layer="osm">OSM</button>
+                    <button type="button" data-layer="terrain">Terrain</button>
+                </div>
+            </div>
+        </section>
+
+        <aside class="sidebar" aria-label="Property insights">
+            <div class="sidebar-head">
+                <div>
+                    <h2>{% if is_property_detail %}Selected Property{% else %}Property Insights{% endif %}</h2>
+                    <p id="property-sidebar-count">{{ property_count }} {% if property_count == 1 %}property{% else %}properties{% endif %} loaded from records</p>
+                </div>
+            </div>
+
+            <div class="cards">
+                {% for property in properties %}
+                <article class="asset-card" data-property-id="{{ property.property_id }}" data-property-name="{{ property.property_name }}" data-property-category="{{ property.category|default:"" }}" data-property-region="{{ property.region|default:"" }}" data-property-rp-zone="{{ property.rp_zone|default:"" }}" data-property-dp-zone="{{ property.dp_zone|default:"" }}">
+                    <div class="asset-img">
+                        {% if property.cover_url %}
+                            <img src="{{ property.cover_url }}" alt="{{ property.property_name }}">
+                        {% else %}
+                            <img src="{% static 'images/tarkarli-coast.svg' %}" alt="{{ property.property_name }}">
+                        {% endif %}
+                    </div>
+                    <div class="asset-body">
+                        <div class="asset-title">
+                            <h3>{{ property.property_name }}</h3>
+                            {% if property.display_category %}<span class="status">{{ property.display_category }}</span>{% endif %}
+                        </div>
+                    </div>
+                </article>
+                {% empty %}
+                    <div class="empty-sidebar">
+                        No properties found.
+                    </div>
+                {% endfor %}
+                <div id="property-search-empty" class="empty-sidebar" hidden>
+                    No matching properties found.
+                </div>
+            </div>
+
+            {% if is_property_detail %}
+            <div class="property-tabs" data-property-tabs>
+                <div class="property-tab-list" role="tablist" aria-label="Property assets">
+                    <button class="property-tab is-active" type="button" id="property-tab-documents" role="tab" aria-selected="true" aria-controls="property-panel-documents" data-property-tab="documents">
+                        <span class="material-symbols-outlined" aria-hidden="true">description</span>
+                        <span class="property-tab-label">Documents</span>
+                        <span class="property-tab-count">{{ property_documents|length }}</span>
+                    </button>
+                    <button class="property-tab" type="button" id="property-tab-images" role="tab" aria-selected="false" aria-controls="property-panel-images" data-property-tab="images">
+                        <span class="material-symbols-outlined" aria-hidden="true">image</span>
+                        <span class="property-tab-label">Images</span>
+                        <span class="property-tab-count">{{ property_images|length }}</span>
+                    </button>
+                    <button class="property-tab" type="button" id="property-tab-videos" role="tab" aria-selected="false" aria-controls="property-panel-videos" data-property-tab="videos">
+                        <span class="material-symbols-outlined" aria-hidden="true">movie</span>
+                        <span class="property-tab-label">Videos</span>
+                        <span class="property-tab-count">{{ property_videos|length }}</span>
+                    </button>
+                </div>
+
+                <div class="property-tab-panel is-active" id="property-panel-documents" role="tabpanel" aria-labelledby="property-tab-documents" data-property-panel="documents">
+                    {% if property_documents %}
+                        <div style="display:grid;gap:6px;">
+                        {% for doc in property_documents %}
+                            <a href="{{ doc.file.url }}" target="_blank" rel="noopener"
+                               style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
+                                <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">description</span>
+                                <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ doc.title }}</span>
+                                <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No documents uploaded yet.</p>
+                    {% endif %}
+                </div>
+
+                <div class="property-tab-panel" id="property-panel-images" role="tabpanel" aria-labelledby="property-tab-images" data-property-panel="images" hidden>
+                    {% if property_images %}
+                        <div style="display:grid;gap:6px;">
+                        {% for img in property_images %}
+                            <a href="{{ img.image.url }}" target="_blank" rel="noopener"
+                               style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
+                                <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">image</span>
+                                <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ img.caption|default:img.image.name }}</span>
+                                <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No images uploaded yet.</p>
+                    {% endif %}
+                </div>
+
+                <div class="property-tab-panel" id="property-panel-videos" role="tabpanel" aria-labelledby="property-tab-videos" data-property-panel="videos" hidden>
+                    {% if property_videos %}
+                        <div style="display:grid;gap:6px;">
+                        {% for video in property_videos %}
+                            <a href="{{ video.youtube_url }}" target="_blank" rel="noopener"
+                               style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
+                                <span class="material-symbols-outlined" style="color:#ff0000;font-size:18px;">smart_display</span>
+                                <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ video.title|default:video.youtube_url }}</span>
+                                <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No videos uploaded yet.</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </aside>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-credit">
+            <img class="footer-logo" src="{% static 'logo/monarch_logo.jpg' %}" alt="Monarch Surveyors and Engineering Consultants Limited logo">
+            <span>Designed and developed by <strong>Monarch Surveyors and Engineering Consultants Limited</strong></span>
+        </div>
+    </footer>
+
+    <section id="asset-viewer-modal" class="asset-modal" aria-modal="true" role="dialog" hidden>
+        <aside class="asset-modal-left">
+            <div class="asset-modal-head">
+                <h2 id="asset-modal-title">Assets</h2>
+                <p id="asset-modal-subtitle">0 items</p>
+            </div>
+            <input id="asset-modal-search" class="asset-modal-search" type="search" placeholder="Search...">
+            <div id="asset-modal-list" class="asset-modal-list"></div>
+        </aside>
+        <section class="asset-modal-right">
+            <div class="asset-viewer-bar">
+                <div id="asset-viewer-title" class="asset-viewer-title">Select an item</div>
+                <div class="asset-viewer-actions">
+                    <button id="asset-prev-btn" class="asset-nav-btn" type="button" aria-label="Previous image">
+                        <span class="material-symbols-outlined">chevron_left</span>
+                    </button>
+                    <button id="asset-next-btn" class="asset-nav-btn" type="button" aria-label="Next image">
+                        <span class="material-symbols-outlined">chevron_right</span>
+                    </button>
+                    <button id="asset-modal-close" class="asset-modal-close" type="button" aria-label="Close asset viewer">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+            </div>
+            <div id="asset-viewer-stage" class="asset-viewer-stage">
+                <div class="asset-viewer-empty">Select an item from the left panel.</div>
+            </div>
+        </section>
+    </section>
+
+    {{ state_boundary_extent_coords|json_script:"state-boundary-extent-data" }}
+    {{ selected_property_map_details|json_script:"selected-property-map-data" }}
+    <script src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js"></script>
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+    <script src="{% static 'js/property.js' %}"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
