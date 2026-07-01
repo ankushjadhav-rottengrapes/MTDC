@@ -1237,73 +1237,93 @@
             line-height: 1.5;
         }
 
-        .property-accordion {
+        .property-tabs {
             padding: 0 14px 14px;
             display: grid;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .accordion-item {
+        .property-tab-list {
+            min-height: 48px;
+            padding: 4px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 4px;
             border: 1px solid var(--line);
             border-radius: 8px;
-            background: var(--surface);
+            background: #fff8f0;
             box-shadow: 0 4px 12px rgba(45, 31, 7, 0.08);
-            overflow: hidden;
         }
 
-        .accordion-trigger {
-            width: 100%;
-            min-height: 48px;
-            padding: 0 14px;
+        .property-tab {
+            min-width: 0;
+            min-height: 40px;
+            padding: 6px 8px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
+            gap: 6px;
             border: 0;
-            background: #fff8f0;
+            border-radius: 6px;
+            background: transparent;
             color: var(--navy);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
-            text-align: left;
+            text-align: center;
             cursor: pointer;
-            transition: background 0.15s;
+            transition: background 0.15s, color 0.15s, box-shadow 0.15s;
         }
 
-        .accordion-trigger:hover {
+        .property-tab:hover {
             background: #ffefd6;
         }
 
-        .accordion-trigger .material-symbols-outlined:first-child {
-            color: var(--saffron);
-            font-size: 20px;
+        .property-tab.is-active {
+            color: #ffffff;
+            background: var(--saffron);
+            box-shadow: 0 6px 14px rgba(255, 111, 0, 0.22);
         }
 
-        .accordion-trigger-label {
-            flex: 1;
+        .property-tab .material-symbols-outlined {
+            flex: 0 0 auto;
+            font-size: 18px;
         }
 
-        .accordion-chevron {
-            color: var(--muted);
-            font-size: 20px;
-            transition: transform 0.2s;
+        .property-tab-label {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
-        .accordion-item.is-open .accordion-chevron {
-            transform: rotate(180deg);
+        .property-tab-count {
+            min-width: 22px;
+            height: 22px;
+            padding: 0 6px;
+            display: grid;
+            place-items: center;
+            border-radius: 999px;
+            color: var(--navy);
+            background: #ffffff;
+            font-size: 11px;
+            font-weight: 900;
         }
 
-        .accordion-body {
+        .property-tab-panel {
             display: none;
             padding: 12px 14px;
-            border-top: 1px solid var(--line);
+            border: 1px solid var(--line);
+            border-radius: 8px;
             color: var(--muted);
+            background: var(--surface);
+            box-shadow: 0 4px 12px rgba(45, 31, 7, 0.08);
             font-size: 13px;
             font-weight: 700;
         }
 
-        .accordion-item.is-open .accordion-body {
+        .property-tab-panel.is-active {
             display: block;
         }
-
         .asset-modal {
             position: fixed;
             inset: 0;
@@ -1782,78 +1802,74 @@
             </div>
 
             {% if is_property_detail %}
-            <div class="property-accordion">
-                <div class="accordion-item">
-                    <button class="accordion-trigger" type="button">
-                        <span class="material-symbols-outlined">description</span>
-                        <span class="accordion-trigger-label">Property Documents</span>
-                        <span class="accordion-trigger-label" style="font-size:11px;color:var(--muted);">{{ property_documents|length }}</span>
-                        <span class="material-symbols-outlined accordion-chevron">expand_more</span>
+            <div class="property-tabs" data-property-tabs>
+                <div class="property-tab-list" role="tablist" aria-label="Property assets">
+                    <button class="property-tab is-active" type="button" id="property-tab-documents" role="tab" aria-selected="true" aria-controls="property-panel-documents" data-property-tab="documents">
+                        <span class="material-symbols-outlined" aria-hidden="true">description</span>
+                        <span class="property-tab-label">Documents</span>
+                        <span class="property-tab-count">{{ property_documents|length }}</span>
                     </button>
-                    <div class="accordion-body">
-                        {% if property_documents %}
-                            <div style="display:grid;gap:6px;">
-                            {% for doc in property_documents %}
-                                <a href="{{ doc.file.url }}" target="_blank" rel="noopener"
-                                   style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
-                                    <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">description</span>
-                                    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ doc.title }}</span>
-                                    <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
-                                </a>
-                            {% endfor %}
-                            </div>
-                        {% else %}
-                            <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No documents uploaded yet.</p>
-                        {% endif %}
-                    </div>
+                    <button class="property-tab" type="button" id="property-tab-images" role="tab" aria-selected="false" aria-controls="property-panel-images" data-property-tab="images">
+                        <span class="material-symbols-outlined" aria-hidden="true">image</span>
+                        <span class="property-tab-label">Images</span>
+                        <span class="property-tab-count">{{ property_images|length }}</span>
+                    </button>
+                    <button class="property-tab" type="button" id="property-tab-videos" role="tab" aria-selected="false" aria-controls="property-panel-videos" data-property-tab="videos">
+                        <span class="material-symbols-outlined" aria-hidden="true">movie</span>
+                        <span class="property-tab-label">Videos</span>
+                        <span class="property-tab-count">{{ property_videos|length }}</span>
+                    </button>
                 </div>
-                <div class="accordion-item">
-                    <button class="accordion-trigger" type="button">
-                        <span class="material-symbols-outlined">image</span>
-                        <span class="accordion-trigger-label">Property Images</span>
-                        <span class="accordion-trigger-label" style="font-size:11px;color:var(--muted);">{{ property_images|length }}</span>
-                        <span class="material-symbols-outlined accordion-chevron">expand_more</span>
-                    </button>
-                    <div class="accordion-body">
-                        {% if property_images %}
-                            <div style="display:grid;gap:6px;">
-                            {% for img in property_images %}
-                                <a href="{{ img.image.url }}" target="_blank" rel="noopener"
-                                   style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
-                                    <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">image</span>
-                                    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ img.caption|default:img.image.name }}</span>
-                                    <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
-                                </a>
-                            {% endfor %}
-                            </div>
-                        {% else %}
-                            <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No images uploaded yet.</p>
-                        {% endif %}
-                    </div>
+
+                <div class="property-tab-panel is-active" id="property-panel-documents" role="tabpanel" aria-labelledby="property-tab-documents" data-property-panel="documents">
+                    {% if property_documents %}
+                        <div style="display:grid;gap:6px;">
+                        {% for doc in property_documents %}
+                            <a href="{{ doc.file.url }}" target="_blank" rel="noopener"
+                               style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
+                                <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">description</span>
+                                <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ doc.title }}</span>
+                                <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No documents uploaded yet.</p>
+                    {% endif %}
                 </div>
-                <div class="accordion-item">
-                    <button class="accordion-trigger" type="button">
-                        <span class="material-symbols-outlined">movie</span>
-                        <span class="accordion-trigger-label">Property Videos</span>
-                        <span class="accordion-trigger-label" style="font-size:11px;color:var(--muted);">{{ property_videos|length }}</span>
-                        <span class="material-symbols-outlined accordion-chevron">expand_more</span>
-                    </button>
-                    <div class="accordion-body">
-                        {% if property_videos %}
-                            <div style="display:grid;gap:6px;">
-                            {% for video in property_videos %}
-                                <a href="{{ video.youtube_url }}" target="_blank" rel="noopener"
-                                   style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
-                                    <span class="material-symbols-outlined" style="color:#ff0000;font-size:18px;">smart_display</span>
-                                    <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ video.title|default:video.youtube_url }}</span>
-                                    <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
-                                </a>
-                            {% endfor %}
-                            </div>
-                        {% else %}
-                            <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No videos uploaded yet.</p>
-                        {% endif %}
-                    </div>
+
+                <div class="property-tab-panel" id="property-panel-images" role="tabpanel" aria-labelledby="property-tab-images" data-property-panel="images" hidden>
+                    {% if property_images %}
+                        <div style="display:grid;gap:6px;">
+                        {% for img in property_images %}
+                            <a href="{{ img.image.url }}" target="_blank" rel="noopener"
+                               style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
+                                <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">image</span>
+                                <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ img.caption|default:img.image.name }}</span>
+                                <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No images uploaded yet.</p>
+                    {% endif %}
+                </div>
+
+                <div class="property-tab-panel" id="property-panel-videos" role="tabpanel" aria-labelledby="property-tab-videos" data-property-panel="videos" hidden>
+                    {% if property_videos %}
+                        <div style="display:grid;gap:6px;">
+                        {% for video in property_videos %}
+                            <a href="{{ video.youtube_url }}" target="_blank" rel="noopener"
+                               style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
+                                <span class="material-symbols-outlined" style="color:#ff0000;font-size:18px;">smart_display</span>
+                                <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ video.title|default:video.youtube_url }}</span>
+                                <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
+                            </a>
+                        {% endfor %}
+                        </div>
+                    {% else %}
+                        <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No videos uploaded yet.</p>
+                    {% endif %}
                 </div>
             </div>
             {% endif %}
