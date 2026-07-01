@@ -9,6 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <style>
         :root {
             --navy: #0c1628;
@@ -411,13 +416,16 @@
             border-radius: 12px;
             margin-bottom: 28px;
             box-shadow: var(--shadow);
-            align-items: center;
+            align-items: flex-end;
         }
 
         .filter-group {
-            display: flex;
-            flex-direction: column;
+            /* display: flex; */
+            /* flex-direction: column; */
             gap: 6px;
+            flex: 1 1 auto; /* Dynamically sizes dropdowns */
+            min-width: 120px; /* Prevents them from getting too squished */
+            max-width: 180px;
         }
 
         .filter-label {
@@ -428,22 +436,90 @@
             letter-spacing: 0.05em;
         }
 
-        .filter-select {
-            padding: 8px 16px;
-            border: 1px solid var(--line);
-            border-radius: 8px;
-            background-color: var(--cream-2);
-            color: var(--navy);
-            font-weight: 700;
-            min-width: 180px;
-            outline: none;
-            cursor: pointer;
+        /* Custom Select2 Dashboard Theme Styling Override */
+        .select2-container--default .select2-selection--single {
+            height: 40px !important;
+            padding: 5px 10px !important;
+            border: 1px solid var(--line) !important;
+            border-radius: 8px !important;
+            background-color: var(--cream-2) !important;
+            color: var(--navy) !important;
+            font-weight: 700 !important;
+            min-width: 180px !important;
+            outline: none !important;
+            display: flex !important;
+            align-items: center !important;
             transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .filter-select:focus {
-            border-color: var(--saffron);
-            box-shadow: 0 0 0 3px rgba(245, 130, 31, 0.15);
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: var(--navy) !important;
+            padding-left: 0 !important;
+            padding-right: 20px !important;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 38px !important;
+            right: -70px !important;
+        }
+
+        .select2-container--default.select2-container--open .select2-selection--single {
+            border-color: var(--saffron) !important;
+            box-shadow: 0 0 0 3px rgba(245, 130, 31, 0.15) !important;
+        }
+
+        .select2-dropdown {
+            border: 1px solid var(--line) !important;
+            border-radius: 8px !important;
+            box-shadow: var(--shadow) !important;
+            background-color: #ffffff !important;
+            overflow: hidden;
+            z-index: 9999;
+        }
+
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            border: 1px solid var(--line) !important;
+            border-radius: 6px !important;
+            outline: none !important;
+            padding: 6px 10px !important;
+        }
+
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: var(--saffron) !important;
+            color: #ffffff !important;
+        }
+
+        .select2-container--default .select2-results__option[aria-selected="true"] {
+            background-color: var(--cream) !important;
+            color: var(--navy) !important;
+            font-weight: 700;
+        }
+
+        .select2-results__option {
+            padding: 8px 12px !important;
+            font-size: 14px !important;
+            font-weight: 600 !important;
+            color: var(--ink) !important;
+        }
+
+        .reset-filter-btn {
+            padding: 9px 20px;
+            background-color: #fff4df;
+            border: 1px solid var(--saffron);
+            color: var(--saffron);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            height: 40px;
+        }
+
+        .reset-filter-btn:hover {
+            background-color: var(--saffron);
+            color: #ffffff;
         }
 
         .analytics-grid {
@@ -753,6 +829,9 @@
                         <option value="all">All Months</option>
                     </select>
                 </div>
+                <button type="button" id="reset-filters-btn" class="reset-filter-btn">
+                    <span class="material-symbols-outlined">restart_alt</span> Reset Filters
+                </button>
             </div>
 
             <div id="loading-overlay" class="loading-overlay" style="display: none;">
@@ -814,16 +893,11 @@
 
                 <div class="analytics-grid" style="margin-top: 24px;">
                     <div class="analytics-card">
-                        <h3>Region Occupancy Rates</h3>
-                        <div id="region-occupancy-chart" class="chart-container"></div>
-                    </div>
-
-                    <div class="analytics-card">
                         <h3>Top Performing Resorts</h3>
                         <div id="resorts-occupancy-chart" class="chart-container"></div>
                     </div>
 
-                    <div class="analytics-card">
+                    <div class="analytics-card" style="grid-column: span 2;">
                         <h3>Monthly Region Occupancy</h3>
                         <div id="monthly-region-chart" class="chart-container"></div>
                     </div>
@@ -895,6 +969,14 @@
             let currentPage = 1;
             let pageSize = 10;
 
+            // Initialize Select2 Elements
+            function initSelect2() {
+                $('.filter-select').select2({
+                    width: '100px',
+                    dropdownAutoWidth: true
+                });
+            }
+
             const hasHighcharts = typeof Highcharts !== 'undefined';
             if (hasHighcharts) {
                Highcharts.setOptions({
@@ -956,6 +1038,7 @@
             const resortSelect = document.getElementById('resort-select');
             const roomTypeSelect = document.getElementById('roomtype-select');
             const monthSelect = document.getElementById('month-select');
+            const resetFiltersBtn = document.getElementById('reset-filters-btn');
             
             const loadingOverlay = document.getElementById('loading-overlay');
             const errorContainer = document.getElementById('error-container');
@@ -973,11 +1056,21 @@
             const kpiIndianTourists = document.getElementById('kpi-indian-tourists');
             const kpiForeignTourists = document.getElementById('kpi-foreign-tourists');
 
-            yearSelect.addEventListener('change', loadDataForYear);
-            regionSelect.addEventListener('change', () => { updateResortDropdownOptions(); applyFilters(); });
-            resortSelect.addEventListener('change', applyFilters);
-            roomTypeSelect.addEventListener('change', applyFilters);
-            monthSelect.addEventListener('change', applyFilters);
+            // Wire up Select2 Event Listeners via jQuery
+            $('#year-select').on('change', loadDataForYear);
+            $('#region-select').on('change', () => { updateResortDropdownOptions(); applyFilters(); });
+            $('#resort-select').on('change', applyFilters);
+            $('#roomtype-select').on('change', applyFilters);
+            $('#month-select').on('change', applyFilters);
+            
+            resetFiltersBtn.addEventListener('click', () => {
+                $('#region-select').val('all').trigger('change.select2');
+                updateResortDropdownOptions();
+                $('#resort-select').val('all').trigger('change.select2');
+                $('#roomtype-select').val('all').trigger('change.select2');
+                $('#month-select').val('all').trigger('change.select2');
+                applyFilters();
+            });
             
             resortSearch.addEventListener('input', () => { currentPage = 1; applySearch(); });
             rowsPerPageSelect.addEventListener('change', (e) => { pageSize = parseInt(e.target.value, 10); currentPage = 1; paginateAndBuildTable(); });
@@ -993,6 +1086,8 @@
             document.getElementById('th-indian').addEventListener('click', () => sortTable('touristindian'));
             document.getElementById('th-foreign').addEventListener('click', () => sortTable('touristforeigners'));
 
+            // Initial startup runs
+            initSelect2();
             loadDataForYear();
 
             async function loadDataForYear() {
@@ -1065,6 +1160,11 @@
                 });
 
                 updateResortDropdownOptions();
+                
+                // Alert Select2 components that underlying options mutated
+                $('#region-select').trigger('change.select2');
+                $('#roomtype-select').trigger('change.select2');
+                $('#month-select').trigger('change.select2');
             }
 
             function updateResortDropdownOptions() {
@@ -1088,6 +1188,9 @@
                 } else {
                     resortSelect.value = 'all';
                 }
+                
+                // Sync options back to Select2 UI representation layer
+                $('#resort-select').trigger('change.select2');
             }
 
             function applyFilters() {
@@ -1110,14 +1213,10 @@
                 let totalForeign = 0;
 
                 const resortAggMap = {};
-                const roomTypeAggMap = {};
-                const regionOccupiedMap = {};
-                const regionAvailableMap = {};
                 const monthlyTrendsMap = {};
                 const monthlyRegionMap = {}; 
 
                 rowsFiltered.forEach(row => {
-                    // Force parsing metric components into clean integers immediately to bypass floating anomalies in source context
                     const occ = Math.round(Number(row.roomsoccupied) || 0);
                     const avail = Math.round(Number(row.rooms_available) || 0);
                     const ind = Math.round(Number(row.touristindian) || 0);
@@ -1127,25 +1226,24 @@
                     totalAvailable += avail;
                     totalIndian += ind;
                     totalForeign += forgn;
-
+                   
                     if (!resortAggMap[row.resort]) {
-                        resortAggMap[row.resort] = { name: row.resort, region: row.region, occupied: 0, available: 0, indian: 0, foreign: 0, roomTypes: {} };
+                        resortAggMap[row.resort] = { 
+                            name: row.resort, 
+                            region: row.region, 
+                            occupied: 0, 
+                            available: 0, 
+                            indian: 0, 
+                            foreign: 0, 
+                            roomTypes: {},
+                            rowCount: 0 
+                        };
                     }
                     resortAggMap[row.resort].occupied += occ;
                     resortAggMap[row.resort].available += avail;
                     resortAggMap[row.resort].indian += ind;
                     resortAggMap[row.resort].foreign += forgn;
                     resortAggMap[row.resort].roomTypes[row.roomtype] = (resortAggMap[row.resort].roomTypes[row.roomtype] || 0) + occ;
-
-                    if (!roomTypeAggMap[row.roomtype]) {
-                        roomTypeAggMap[row.roomtype] = { occupied: 0, indian: 0, foreign: 0 };
-                    }
-                    roomTypeAggMap[row.roomtype].occupied += occ;
-                    roomTypeAggMap[row.roomtype].indian += ind;
-                    roomTypeAggMap[row.roomtype].foreign += forgn;
-
-                    regionOccupiedMap[row.region] = (regionOccupiedMap[row.region] || 0) + occ;
-                    regionAvailableMap[row.region] = (regionAvailableMap[row.region] || 0) + avail;
 
                     if (!monthlyTrendsMap[row.month]) {
                         monthlyTrendsMap[row.month] = { month: row.month, occupied: 0, available: 0, indian: 0, foreign: 0 };
@@ -1157,6 +1255,24 @@
 
                     if (!monthlyRegionMap[row.month]) monthlyRegionMap[row.month] = {};
                     monthlyRegionMap[row.month][row.region] = (monthlyRegionMap[row.month][row.region] || 0) + occ;
+                });
+
+                const pieRegionOccupiedMap = {};
+                const pieRoomTypeAggMap = {};
+
+                flatDataRows.forEach(row => {
+                    const occ = Math.round(Number(row.roomsoccupied) || 0);
+                    const ind = Math.round(Number(row.touristindian) || 0);
+                    const forgn = Math.round(Number(row.touristforeigners) || 0);
+
+                    pieRegionOccupiedMap[row.region] = (pieRegionOccupiedMap[row.region] || 0) + occ;
+
+                    if (!pieRoomTypeAggMap[row.roomtype]) {
+                        pieRoomTypeAggMap[row.roomtype] = { occupied: 0, indian: 0, foreign: 0 };
+                    }
+                    pieRoomTypeAggMap[row.roomtype].occupied += occ;
+                    pieRoomTypeAggMap[row.roomtype].indian += ind;
+                    pieRoomTypeAggMap[row.roomtype].foreign += forgn;
                 });
 
                 const averageOccupancy = totalAvailable > 0 ? (totalOccupied / totalAvailable) * 100 : 0;
@@ -1179,9 +1295,8 @@
                     };
                 });
 
-                const regionsList = Object.keys(regionOccupiedMap).map(rName => ({
-                    name: rName, occupied: regionOccupiedMap[rName], available: regionAvailableMap[rName],
-                    occupancyPercent: regionAvailableMap[rName] > 0 ? Number(((regionOccupiedMap[rName] / regionAvailableMap[rName]) * 100).toFixed(1)) : 0
+                const regionsPieList = Object.keys(pieRegionOccupiedMap).map(rName => ({
+                    name: rName, occupied: pieRegionOccupiedMap[rName]
                 }));
 
                 const uniqueMonthsOrdered = [...new Set(flatDataRows.map(r => r.month))];
@@ -1193,10 +1308,9 @@
 
                 if (hasHighcharts) {
                     renderOccupancyTrendsChart(monthlyTrendsList);
-                    renderRegionContributionChart(regionsList);
-                    renderRegionOccupancyChart(regionsList);
+                    renderRegionContributionChart(regionsPieList);
                     renderTopResortsChart(filteredResorts);
-                    renderRoomTypeChart(roomTypeAggMap);
+                    renderRoomTypeChart(pieRoomTypeAggMap);
                     renderTouristDemographicsChart(monthlyTrendsList);
                     renderMonthlyRegionComparisonChart(uniqueMonthsOrdered, monthlyRegionMap, selRegion);
                 }
@@ -1298,9 +1412,14 @@
                     yAxis: [{ title: { text: 'Room ', style: { color: '#0f5da8', fontWeight: '700' } } }, 
                             { title: { text: 'Occupancy Rate (%)', style: { color: '#f5821f', fontWeight: '700' } }, labels: { format: '{value}%' }, opposite: true, min: 0, max: 100 }],
                     tooltip: { shared: true },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal'
+                        }
+                    },
                     series: [
-                        { name: 'Available Room-', type: 'column', data: data.map(d => d.available), color: '#e4d8c6' }, 
-                        { name: 'Occupied Room-', type: 'column', data: data.map(d => d.occupied), color: '#0f5da8' }, 
+                        { name: 'Available Rooms', type: 'column', data: data.map(d => d.available), color: '#e4d8c6' }, 
+                        { name: 'Occupied Rooms', type: 'column', data: data.map(d => d.occupied), color: '#0f5da8' }, 
                         { name: 'Occupancy Rate', type: 'line', yAxis: 1, data: data.map(d => Number(d.occupancyPercent.toFixed(1))), color: '#f5821f', lineWidth: 3 }
                     ]
                 });
@@ -1372,6 +1491,11 @@
                     xAxis: { categories: trendsData.map(t => t.month), crosshair: true },
                     yAxis: { min: 0, title: { text: 'Total Registered Visitors', style: { fontWeight: '700' } } },
                     tooltip: { shared: true },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal'
+                        }
+                    },
                     series: [
                         { name: 'Indian Tourists', data: trendsData.map(t => t.indian), color: '#0f5da8' }, 
                         { name: 'Foreign Tourists', data: trendsData.map(t => t.foreign), color: '#0f8b69' }
@@ -1379,24 +1503,13 @@
                 });
             }
 
-            function renderRegionOccupancyChart(regions) {
-                Highcharts.chart('region-occupancy-chart', {
-                    chart: { type: 'column' },
-                    xAxis: { categories: regions.map(reg => reg.name), crosshair: true },
-                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)' }, labels: { format: '{value}%' } },
-                    plotOptions: { column: { colorByPoint: true, dataLabels: { enabled: true, format: '{point.y:.1f}%' } } },
-                    legend: { enabled: false },
-                    series: [{ name: 'Occupancy Rate', data: regions.map(reg => reg.occupancyPercent) }]
-                });
-            }
-
             function renderTopResortsChart(resorts) {
                 const topResorts = [...resorts].sort((a, b) => b.occupancy - a.occupancy).slice(0, 10);
                 Highcharts.chart('resorts-occupancy-chart', {
-                    chart: { type: 'bar' },
-                    xAxis: { categories: topResorts.map(res => res.name) },
-                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)', align: 'high' } },
-                    plotOptions: { bar: { dataLabels: { enabled: true, format: '{point.y:.1f}%' }, color: '#f5821f' } },
+                    chart: { type: 'column' },
+                    xAxis: { categories: topResorts.map(res => res.name), crosshair: true },
+                    yAxis: { min: 0, max: 100, title: { text: 'Occupancy Rate (%)' }, labels: { format: '{value}%' } },
+                    plotOptions: { column: { dataLabels: { enabled: true, format: '{point.y:.1f}%' }, color: '#f5821f' } },
                     legend: { enabled: false },
                     series: [{ name: 'Occupancy', data: topResorts.map(res => res.occupancy) }]
                 });
@@ -1421,6 +1534,11 @@
                     chart: { type: 'column' },
                     xAxis: { categories: monthsOrder, crosshair: true },
                     yAxis: { min: 0, title: { text: 'Occupied ' } },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal'
+                        }
+                    },
                     series: series
                 });
             }
