@@ -366,6 +366,175 @@
             height: 100%;
         }
 
+      .asset-preview-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 100;
+            display: grid;
+            place-items: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+        }
+
+        .asset-preview-overlay[hidden] {
+            display: none;
+        }
+
+        .asset-preview-container {
+            width: min(1000px, 100%);
+            aspect-ratio: 4 / 3; /* 1000 × 750 */
+            max-height: 90vh;
+
+            display: grid;
+            grid-template-rows: minmax(0, 1fr) auto;
+            gap: 0;
+
+            border-radius: 16px;
+            background: #ffffff;
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.25);
+            overflow: hidden;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+        }
+
+        .asset-preview-body {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            padding: 0;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .asset-preview-footer {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 14px;
+            background: #f8fafc;
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.45;
+            flex-wrap: nowrap;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .asset-preview-filename {
+            flex: 0 0 auto;
+            min-width: 0;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 700;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .asset-preview-title {
+            display: none;
+        }
+
+        .asset-preview-close {
+            flex: 0 0 auto;
+            margin-left: auto;
+            min-height: 44px;
+            padding: 0 20px;
+            border: 0;
+            border-radius: 12px;
+            color: #ffffff;
+            background: var(--navy);
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .asset-preview-close:hover,
+        .asset-preview-close:focus {
+            background: var(--saffron);
+            color: #101820;
+        }
+
+        .asset-preview-body {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            padding: 0;
+            background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .asset-preview-body img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border: 0;
+            display: block;
+        }
+
+        .asset-preview-body video {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+            object-fit: contain;
+            background: #000000;
+        }
+
+        .asset-preview-body iframe,
+        .asset-preview-body .asset-preview-frame {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+            background: transparent;
+        }
+
+        .asset-preview-note {
+            flex: 1;
+            min-width: 0;
+            padding: 0;
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.45;
+            background: transparent;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .asset-preview-note a {
+            color: #0f74ff;
+            text-decoration: underline;
+            margin-left: 4px;
+        }
+
+        .asset-preview-empty {
+            width: 100%;
+            min-height: 200px;
+            padding: 20px;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            color: #334155;
+            font-weight: 700;
+        }
+
+        .asset-preview-body a {
+            color: var(--saffron);
+            font-weight: 700;
+        }
+
         .ol-control button {
             background-color: var(--navy);
             color: #ffffff;
@@ -1760,6 +1929,15 @@
 
         <section class="map-panel" aria-label="Satellite basemap">
             <div id="mtdc-map"></div>
+            <div id="asset-preview-overlay" class="asset-preview-overlay" hidden>
+                <div class="asset-preview-container">
+                    <div id="asset-preview-body" class="asset-preview-body"></div>
+                    <div class="asset-preview-footer">
+                        <div id="asset-preview-filename" class="asset-preview-filename"></div>
+                        <button id="asset-preview-close" class="asset-preview-close" type="button">Close</button>
+                    </div>
+                </div>
+            </div>
             <div id="mtdc-hover-label" class="map-hover-label" hidden></div>
             <div class="layer-menu" aria-label="Basemap switcher">
                 <button class="layer-toggle" type="button" aria-label="Change basemap">
@@ -1832,11 +2010,11 @@
                     {% if property_documents %}
                         <div style="display:grid;gap:6px;">
                         {% for doc in property_documents %}
-                            <a href="{{ doc.file.url }}" target="_blank" rel="noopener"
+                            <a href="{{ doc.file.url }}" class="asset-preview-link" data-kind="document" data-title="{{ doc.title|default:doc.file.name }}" data-url="{{ doc.file.url }}" rel="noopener"
                                style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
                                 <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">description</span>
-                                <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ doc.title }}</span>
-                                <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
+                                <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ doc.title|default:doc.file.name }}</span>
+                                <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">visibility</span>
                             </a>
                         {% endfor %}
                         </div>
@@ -1849,11 +2027,11 @@
                     {% if property_images %}
                         <div style="display:grid;gap:6px;">
                         {% for img in property_images %}
-                            <a href="{{ img.image.url }}" target="_blank" rel="noopener"
+                            <a href="{{ img.image.url }}" class="asset-preview-link" data-kind="image" data-title="{{ img.caption|default:img.image.name }}" data-url="{{ img.image.url }}" rel="noopener"
                                style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
                                 <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">image</span>
                                 <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ img.caption|default:img.image.name }}</span>
-                                <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
+                                <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">visibility</span>
                             </a>
                         {% endfor %}
                         </div>
@@ -1866,11 +2044,11 @@
                     {% if property_videos %}
                         <div style="display:grid;gap:6px;">
                         {% for video in property_videos %}
-                            <a href="{{ video.youtube_url }}" target="_blank" rel="noopener"
+                            <a href="{{ video.youtube_url }}" class="asset-preview-link" data-kind="video" data-title="{{ video.title|default:video.youtube_url }}" data-url="{{ video.youtube_url }}" rel="noopener"
                                style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
                                 <span class="material-symbols-outlined" style="color:#ff0000;font-size:18px;">smart_display</span>
                                 <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ video.title|default:video.youtube_url }}</span>
-                                <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">open_in_new</span>
+                                <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">visibility</span>
                             </a>
                         {% endfor %}
                         </div>
@@ -1890,35 +2068,6 @@
         </div>
     </footer>
 
-    <section id="asset-viewer-modal" class="asset-modal" aria-modal="true" role="dialog" hidden>
-        <aside class="asset-modal-left">
-            <div class="asset-modal-head">
-                <h2 id="asset-modal-title">Assets</h2>
-                <p id="asset-modal-subtitle">0 items</p>
-            </div>
-            <input id="asset-modal-search" class="asset-modal-search" type="search" placeholder="Search...">
-            <div id="asset-modal-list" class="asset-modal-list"></div>
-        </aside>
-        <section class="asset-modal-right">
-            <div class="asset-viewer-bar">
-                <div id="asset-viewer-title" class="asset-viewer-title">Select an item</div>
-                <div class="asset-viewer-actions">
-                    <button id="asset-prev-btn" class="asset-nav-btn" type="button" aria-label="Previous image">
-                        <span class="material-symbols-outlined">chevron_left</span>
-                    </button>
-                    <button id="asset-next-btn" class="asset-nav-btn" type="button" aria-label="Next image">
-                        <span class="material-symbols-outlined">chevron_right</span>
-                    </button>
-                    <button id="asset-modal-close" class="asset-modal-close" type="button" aria-label="Close asset viewer">
-                        <span class="material-symbols-outlined">close</span>
-                    </button>
-                </div>
-            </div>
-            <div id="asset-viewer-stage" class="asset-viewer-stage">
-                <div class="asset-viewer-empty">Select an item from the left panel.</div>
-            </div>
-        </section>
-    </section>
 
     {{ state_boundary_extent_coords|json_script:"state-boundary-extent-data" }}
     {{ selected_property_map_details|json_script:"selected-property-map-data" }}

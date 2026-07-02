@@ -736,248 +736,221 @@ if (propertySearchInput) {
 
 updateAnalytics();
 
-const assetModal = document.getElementById('asset-viewer-modal');
-const assetModalTitle = document.getElementById('asset-modal-title');
-const assetModalSubtitle = document.getElementById('asset-modal-subtitle');
-const assetModalSearch = document.getElementById('asset-modal-search');
-const assetModalList = document.getElementById('asset-modal-list');
-const assetViewerTitle = document.getElementById('asset-viewer-title');
-const assetViewerStage = document.getElementById('asset-viewer-stage');
-const assetModalClose = document.getElementById('asset-modal-close');
-const assetPrevBtn = document.getElementById('asset-prev-btn');
-const assetNextBtn = document.getElementById('asset-next-btn');
-const assetCategoryLabels = {
-    documents: 'Documents',
-    images: 'Images',
-    videos: 'Videos',
-    models3d: '3D Models'
-};
-const assetCategoryIcons = {
-    documents: 'description',
-    images: 'image',
-    videos: 'movie',
-    models3d: 'deployed_code'
-};
-let activeAssetItems = [];
-let activeAssetIndex = -1;
-let activeAssetCategory = '';
-
-const getAssetItems = (propertyId, category) => {
-    const propertyData = document.querySelector(`.property-asset-data[data-property-id="${Number(propertyId)}"]`);
-    if (!propertyData) {
-        return [];
-    }
-
-    return Array.from(propertyData.querySelectorAll(`.asset-data-item[data-category="${category}"]`)).map((item) => ({
-        category,
-        group: item.dataset.group || assetCategoryLabels[category],
-        kind: item.dataset.kind || category,
-        title: item.dataset.title || 'Untitled asset',
-        url: item.dataset.url || ''
-    }));
-};
+const assetPreviewOverlay = document.getElementById('asset-preview-overlay');
+const assetPreviewBody = document.getElementById('asset-preview-body');
+const assetPreviewFilename = document.getElementById('asset-preview-filename');
+const assetPreviewClose = document.getElementById('asset-preview-close');
 
 const getFileExtension = (url) => {
-    const cleanUrl = String(url || '').split('?')[0].split('#')[0];
-    const extension = cleanUrl.includes('.') ? cleanUrl.split('.').pop() : '';
-    return extension.toLowerCase();
+    if (!url) {
+        return '';
+    }
+    const match = url.split('?')[0].match(/\.([^.\/]+)$/);
+    return match ? match[1].toLowerCase() : '';
 };
 
-const renderAssetEmptyState = (message) => {
-    assetViewerStage.replaceChildren();
-    assetViewerStage.className = 'asset-viewer-stage';
-    const empty = document.createElement('div');
-    empty.className = 'asset-viewer-empty';
-    empty.textContent = message;
-    assetViewerStage.appendChild(empty);
+const getFileNameFromUrl = (url) => {
+    if (!url) {
+        return 'Preview';
+    }
+
+    try {
+        const parsed = new URL(url, window.location.origin);
+        const pathname = parsed.pathname;
+        return pathname.substring(pathname.lastIndexOf('/') + 1) || 'Preview';
+    } catch (error) {
+        const parts = url.split('/');
+        return parts.pop() || 'Preview';
+    }
 };
 
-const updateAssetNav = () => {
-    const canNavigate = ['images', 'models3d'].includes(activeAssetCategory) && activeAssetItems.length > 1;
-    assetPrevBtn.hidden = !canNavigate;
-    assetNextBtn.hidden = !canNavigate;
+const getYouTubeEmbedUrl = (url) => {
+    if (!url) {
+        return '';
+    }
+
+    let videoId = '';
+    
+    // Handle youtu.be URLs
+    const shortMatch = String(url).match(/youtu\.be\/([a-zA-Z0-9_-]+)/i);
+    if (shortMatch) {
+        videoId = shortMatch[1];
+    }
+    
+    // Handle youtube.com/watch?v= URLs
+    const watchMatch = String(url).match(/youtube\.com\/watch\?.*v=([a-zA-Z0-9_-]+)/i);
+    if (watchMatch) {
+        videoId = watchMatch[1];
+    }
+    
+    // Handle youtube.com/embed/ URLs
+    const embedMatch = String(url).match(/youtube\.com\/embed\/([a-zA-Z0-9_-]+)/i);
+    if (embedMatch) {
+        videoId = embedMatch[1];
+    }
+    
+    // Handle youtube.com/shorts/ URLs
+    const shortsMatch = String(url).match(/youtube\.com\/shorts\/([a-zA-Z0-9_-]+)/i);
+    if (shortsMatch) {
+        videoId = shortsMatch[1];
+    }
+
+    return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
 };
 
-const renderAssetViewer = (index) => {
-    activeAssetIndex = index;
-    const item = activeAssetItems[index];
+const getVimeoEmbedUrl = (url) => {
+    if (!url) {
+        return '';
+    }
+    const match = url.match(/(?:vimeo\.com\/(\d+)|player\.vimeo\.com\/video\/(\d+))/);
+    const id = match ? (match[1] || match[2]) : '';
+    return id ? `https://player.vimeo.com/video/${id}` : '';
+};
 
-    assetModalList.querySelectorAll('.asset-modal-item').forEach((button, buttonIndex) => {
-        button.classList.toggle('is-active', buttonIndex === index);
-    });
+const appendPreviewHint = (url, message) => {
+    const footer = document.querySelector('.asset-preview-footer');
+    if (!footer) return;
+    
+    // Remove any existing hint
+    const existingHint = footer.querySelector('.asset-preview-note');
+    if (existingHint) {
+        existingHint.remove();
+    }
+    
+    const hint = document.createElement('div');
+    hint.className = 'asset-preview-note';
+    hint.innerHTML = `${message} <a href="${url}" target="_blank" rel="noopener">open in a new tab</a>`;
+    
+    const closeButton = footer.querySelector('.asset-preview-close');
+    if (closeButton) {
+        footer.insertBefore(hint, closeButton);
+    } else {
+        footer.appendChild(hint);
+    }
+};
 
-    if (!item) {
-        assetViewerTitle.textContent = 'Select an item';
-        renderAssetEmptyState('Select an item from the left panel.');
-        updateAssetNav();
+const renderAssetPreview = (title, url, kind) => {
+    if (!assetPreviewOverlay || !assetPreviewBody) {
         return;
     }
 
-    assetViewerTitle.textContent = item.title;
-    assetViewerStage.replaceChildren();
-    assetViewerStage.className = `asset-viewer-stage is-${item.kind}`;
+    // Set filename - use 'video' text for videos, actual filename for others
+    if (assetPreviewFilename) {
+       assetPreviewFilename.textContent = `File Name : ${title?.trim() || getFileNameFromUrl(url) || ''}`;
+    }
 
-    if (item.kind === 'image') {
-        const image = document.createElement('img');
-        image.src = item.url;
-        image.alt = item.title;
-        assetViewerStage.appendChild(image);
-    } else if (item.kind === 'video') {
+    assetPreviewBody.replaceChildren();
+    assetPreviewOverlay.hidden = false;
+    document.body.style.overflow = 'hidden';
+
+    const extension = getFileExtension(url);
+    const isImage = kind === 'image' || ['png', 'jpg', 'jpeg', 'gif', 'webp', 'svg'].includes(extension);
+    const isPdf = extension === 'pdf' || (kind === 'document' && url.toLowerCase().includes('.pdf'));
+    const youTubeEmbedUrl = kind === 'video' ? getYouTubeEmbedUrl(url) : '';
+    const vimeoEmbedUrl = kind === 'video' ? getVimeoEmbedUrl(url) : '';
+
+    if (isImage) {
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = title;
+        assetPreviewBody.appendChild(img);
+        return;
+    }
+
+    if (kind === 'video') {
+        if (youTubeEmbedUrl) {
+            const iframe = document.createElement('iframe');
+            iframe.className = 'asset-preview-frame';
+            iframe.src = youTubeEmbedUrl;
+            iframe.title = title;
+            iframe.frameBorder = '0';
+            iframe.allowFullscreen = true;
+            // FIX: Explicitly tell the browser to send the origin/domain to YouTube
+            iframe.setAttribute('referrerpolicy', 'no-referrer-when-downgrade');
+            iframe.setAttribute('allow', 'fullscreen; autoplay; encrypted-media; picture-in-picture');
+            assetPreviewBody.appendChild(iframe);
+            return;
+        }
+
+        if (vimeoEmbedUrl) {
+            const iframe = document.createElement('iframe');
+            iframe.className = 'asset-preview-frame';
+            iframe.src = vimeoEmbedUrl;
+            iframe.title = title;
+            iframe.frameBorder = '0';
+            iframe.allowFullscreen = true;
+            iframe.setAttribute('allow', 'fullscreen');
+            assetPreviewBody.appendChild(iframe);
+            return;
+        }
+
         const video = document.createElement('video');
-        video.src = item.url;
+        video.className = 'asset-preview-frame';
+        video.src = url;
         video.controls = true;
         video.playsInline = true;
-        assetViewerStage.appendChild(video);
-    } else if (item.kind === 'model') {
-        const extension = getFileExtension(item.url);
-        if (['glb', 'gltf'].includes(extension)) {
-            const modelViewer = document.createElement('model-viewer');
-            modelViewer.src = item.url;
-            modelViewer.alt = item.title;
-            modelViewer.setAttribute('camera-controls', '');
-            modelViewer.setAttribute('auto-rotate', '');
-            modelViewer.setAttribute('shadow-intensity', '0.6');
-            assetViewerStage.appendChild(modelViewer);
-        } else {
-            const fallback = document.createElement('div');
-            fallback.className = 'asset-viewer-empty';
-            fallback.append(
-                document.createTextNode('Preview is not available for this 3D file.'),
-                document.createElement('br'),
-                document.createElement('br')
-            );
-            const link = document.createElement('a');
-            link.href = item.url;
-            link.target = '_blank';
-            link.rel = 'noopener';
-            link.textContent = 'Open or download 3D file';
-            fallback.appendChild(link);
-            assetViewerStage.appendChild(fallback);
-        }
-    } else {
-        const extension = getFileExtension(item.url);
-        if (extension === 'pdf') {
-            const frame = document.createElement('iframe');
-            frame.src = item.url;
-            frame.title = item.title;
-            assetViewerStage.appendChild(frame);
-        } else {
-            const fallback = document.createElement('div');
-            fallback.className = 'asset-viewer-empty';
-            fallback.append(
-                document.createTextNode('Preview is not available for this file.'),
-                document.createElement('br'),
-                document.createElement('br')
-            );
-            const link = document.createElement('a');
-            link.href = item.url;
-            link.target = '_blank';
-            link.rel = 'noopener';
-            link.textContent = 'Open or download file';
-            fallback.appendChild(link);
-            assetViewerStage.appendChild(fallback);
-        }
-    }
-
-    updateAssetNav();
-};
-
-const renderAssetList = () => {
-    const query = normalizeText(assetModalSearch.value).toLowerCase();
-    const filteredItems = activeAssetItems.filter((item) => (
-        !query ||
-        item.title.toLowerCase().includes(query) ||
-        item.group.toLowerCase().includes(query)
-    ));
-    let currentGroup = '';
-
-    assetModalList.replaceChildren();
-
-    if (filteredItems.length === 0) {
-        const empty = document.createElement('div');
-        empty.className = 'asset-viewer-empty';
-        empty.textContent = 'No matching assets found.';
-        assetModalList.appendChild(empty);
-        renderAssetEmptyState('No matching assets found.');
+        assetPreviewBody.appendChild(video);
         return;
     }
 
-    filteredItems.forEach((item) => {
-        const originalIndex = activeAssetItems.indexOf(item);
-        if (item.group !== currentGroup) {
-            currentGroup = item.group;
-            const group = document.createElement('div');
-            group.className = 'asset-modal-group';
-            group.textContent = currentGroup;
-            assetModalList.appendChild(group);
-        }
+    if (isPdf) {
+        const iframe = document.createElement('iframe');
+        iframe.className = 'asset-preview-frame';
+        iframe.src = url;
+        iframe.title = title;
+        iframe.frameBorder = '0';
+        assetPreviewBody.appendChild(iframe);
+        return;
+    }
 
-        const button = document.createElement('button');
-        button.className = 'asset-modal-item';
-        button.type = 'button';
-        const icon = document.createElement('span');
-        icon.className = 'material-symbols-outlined';
-        icon.textContent = assetCategoryIcons[item.category];
-        const title = document.createElement('span');
-        title.textContent = item.title;
-        button.append(icon, title);
-        button.addEventListener('click', () => renderAssetViewer(originalIndex));
-        assetModalList.appendChild(button);
-    });
-
-    const selectedIndex = filteredItems.includes(activeAssetItems[activeAssetIndex])
-        ? activeAssetIndex
-        : activeAssetItems.indexOf(filteredItems[0]);
-    renderAssetViewer(selectedIndex);
+    const fallback = document.createElement('div');
+    fallback.className = 'asset-preview-empty';
+    fallback.append(
+        document.createTextNode('Preview is not available for this file.'),
+        document.createElement('br'),
+        document.createElement('br')
+    );
+    const link = document.createElement('a');
+    link.href = url;
+    link.target = '_blank';
+    link.rel = 'noopener';
+    link.textContent = 'Open or download file';
+    fallback.appendChild(link);
+    assetPreviewBody.appendChild(fallback);
 };
 
-const openAssetModal = (propertyId, category) => {
-    const propertyData = document.querySelector(`.property-asset-data[data-property-id="${Number(propertyId)}"]`);
-    const propertyName = propertyData?.dataset.propertyName || 'Selected property';
-    activeAssetCategory = category;
-    activeAssetItems = getAssetItems(propertyId, category);
-    activeAssetIndex = -1;
+const closeAssetPreview = () => {
+    if (!assetPreviewOverlay) {
+        return;
+    }
 
-    assetModalTitle.textContent = assetCategoryLabels[category] || 'Assets';
-    assetModalSubtitle.textContent = `${propertyName} - ${activeAssetItems.length} ${activeAssetItems.length === 1 ? 'item' : 'items'}`;
-    assetModalSearch.value = '';
-    assetModal.hidden = false;
-    document.body.style.overflow = 'hidden';
-    renderAssetList();
-    assetModalSearch.focus();
-};
-
-const closeAssetModal = () => {
-    assetModal.hidden = true;
+    assetPreviewOverlay.hidden = true;
     document.body.style.overflow = '';
-    assetViewerStage.replaceChildren();
-    assetModalList.replaceChildren();
-    activeAssetItems = [];
-    activeAssetIndex = -1;
-    activeAssetCategory = '';
+    assetPreviewBody.replaceChildren();
 };
 
-document.querySelectorAll('.asset-view-btn').forEach((button) => {
-    button.addEventListener('click', () => {
-        openAssetModal(button.dataset.propertyId, button.dataset.category);
+document.querySelectorAll('.asset-preview-link').forEach((link) => {
+    link.addEventListener('click', (event) => {
+        event.preventDefault();
+        renderAssetPreview(link.dataset.title, link.dataset.url, link.dataset.kind);
     });
 });
 
-assetModalSearch.addEventListener('input', renderAssetList);
-assetModalClose.addEventListener('click', closeAssetModal);
-assetPrevBtn.addEventListener('click', () => {
-    if (activeAssetItems.length === 0) return;
-    const nextIndex = (activeAssetIndex - 1 + activeAssetItems.length) % activeAssetItems.length;
-    renderAssetViewer(nextIndex);
-});
-assetNextBtn.addEventListener('click', () => {
-    if (activeAssetItems.length === 0) return;
-    const nextIndex = (activeAssetIndex + 1) % activeAssetItems.length;
-    renderAssetViewer(nextIndex);
-});
+if (assetPreviewClose) {
+    assetPreviewClose.addEventListener('click', closeAssetPreview);
+}
+
+if (assetPreviewOverlay) {
+    assetPreviewOverlay.addEventListener('click', (event) => {
+        if (event.target === assetPreviewOverlay) {
+            closeAssetPreview();
+        }
+    });
+}
+
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && !assetModal.hidden) {
-        closeAssetModal();
+    if (event.key === 'Escape' && assetPreviewOverlay && !assetPreviewOverlay.hidden) {
+        closeAssetPreview();
     }
 });
 document.querySelectorAll('[data-property-tabs]').forEach((tabGroup) => {
