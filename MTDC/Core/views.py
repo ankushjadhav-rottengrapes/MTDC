@@ -279,6 +279,7 @@ def dashboard(request, property_id=None):
     properties = all_properties
     if selected_region:
         properties = properties.filter(region__iexact=selected_region)
+    selected_property_obj = None
     if selected_property_id and selected_property_id.isdigit():
         selected_property_id_int = int(selected_property_id)
         properties = properties.filter(property_id=selected_property_id_int)
@@ -320,6 +321,7 @@ def dashboard(request, property_id=None):
         "all_regions": list(all_regions),
         "region_filtered_ids": region_filtered_ids,
         "is_property_detail": bool(selected_property_id and selected_property_id.isdigit()),
+        "selected_property": selected_property_obj if (selected_property_id and selected_property_id.isdigit()) else None,
         "state_boundary_extent_coords": None,
         "selected_property_map_details": selected_property_map_details,
         "property_images": property_images,

@@ -1995,7 +1995,80 @@
                 </div>
             </div>
 
+            {% if is_property_detail and selected_property %}
+            <div style="margin:0 14px 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 4px 12px rgba(45,31,7,0.08);">
+                <button type="button"
+                    onclick="const b=document.getElementById('prop-details-body');const c=document.getElementById('prop-details-chevron');const o=b.style.display==='none';b.style.display=o?'block':'none';c.style.transform=o?'rotate(180deg)':'';" 
+                    style="width:100%;min-height:46px;padding:0 14px;display:flex;align-items:center;gap:10px;border:0;border-bottom:1px solid transparent;background:linear-gradient(90deg,#fff8f0,#fff4e6);color:var(--navy);font-size:13px;font-weight:800;text-align:left;cursor:pointer;">
+                    <span class="material-symbols-outlined" style="color:var(--saffron);font-size:20px;">info</span>
+                    <span style="flex:1;font-size:14px;">Property Details</span>
+                    <span class="material-symbols-outlined" style="font-size:20px;color:var(--muted);transition:transform 0.2s;" id="prop-details-chevron">expand_more</span>
+                </button>
+                <div id="prop-details-body" style="display:none;padding:14px;border-top:1px solid var(--line);background:#fffaf5;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                        {% if selected_property.village %}
+                        <div style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;">
+                            <div style="font-size:10px;font-weight:800;color:var(--muted);margin-bottom:2px;">VILLAGE</div>
+                            <div style="font-size:13px;font-weight:700;color:var(--navy);">{{ selected_property.village }}</div>
+                        </div>
+                        {% endif %}
+                        {% if selected_property.taluka %}
+                        <div style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;">
+                            <div style="font-size:10px;font-weight:800;color:var(--muted);margin-bottom:2px;">TALUKA</div>
+                            <div style="font-size:13px;font-weight:700;color:var(--navy);">{{ selected_property.taluka }}</div>
+                        </div>
+                        {% endif %}
+                        {% if selected_property.district %}
+                        <div style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;">
+                            <div style="font-size:10px;font-weight:800;color:var(--muted);margin-bottom:2px;">DISTRICT</div>
+                            <div style="font-size:13px;font-weight:700;color:var(--navy);">{{ selected_property.district }}</div>
+                        </div>
+                        {% endif %}
+                        {% if selected_property.area_acres %}
+                        <div style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;">
+                            <div style="font-size:10px;font-weight:800;color:var(--muted);margin-bottom:2px;">AREA (ACRES)</div>
+                            <div style="font-size:13px;font-weight:700;color:var(--navy);">{{ selected_property.area_acres }}</div>
+                        </div>
+                        {% endif %}
+                        {% if selected_property.area_hectare %}
+                        <div style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;">
+                            <div style="font-size:10px;font-weight:800;color:var(--muted);margin-bottom:2px;">AREA (HECTARE)</div>
+                            <div style="font-size:13px;font-weight:700;color:var(--navy);">{{ selected_property.area_hectare }}</div>
+                        </div>
+                        {% endif %}
+                        {% if selected_property.survey_no %}
+                        <div style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;">
+                            <div style="font-size:10px;font-weight:800;color:var(--muted);margin-bottom:2px;">SURVEY NO.</div>
+                            <div style="font-size:13px;font-weight:700;color:var(--navy);">{{ selected_property.survey_no }}</div>
+                        </div>
+                        {% endif %}
+                        {% if selected_property.property_type %}
+                        <div style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;grid-column:1/-1;">
+                            <div style="font-size:10px;font-weight:800;color:var(--muted);margin-bottom:2px;">PROPERTY TYPE</div>
+                            <div style="font-size:13px;font-weight:700;color:var(--navy);">{{ selected_property.property_type }}</div>
+                        </div>
+                        {% endif %}
+                        {% if selected_property.description %}
+                        <div style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;grid-column:1/-1;">
+                            <div style="font-size:10px;font-weight:800;color:var(--muted);margin-bottom:2px;">DESCRIPTION</div>
+                            <div style="font-size:13px;font-weight:700;color:var(--navy);line-height:1.5;">{{ selected_property.description }}</div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
             {% if is_property_detail %}
+            <div style="margin:0 14px 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 4px 12px rgba(45,31,7,0.08);">
+                <button type="button"
+                    onclick="const b=document.getElementById('prop-assets-body');const c=document.getElementById('prop-assets-chevron');const o=b.style.display==='none';b.style.display=o?'block':'none';c.style.transform=o?'rotate(180deg)':'';this.style.borderBottomColor=o?'var(--line)':'transparent';"
+                    style="width:100%;min-height:46px;padding:0 14px;display:flex;align-items:center;gap:10px;border:0;border-bottom:1px solid transparent;background:linear-gradient(90deg,#fff8f0,#fff4e6);color:var(--navy);font-size:14px;font-weight:800;text-align:left;cursor:pointer;">
+                    <span class="material-symbols-outlined" style="color:var(--saffron);font-size:20px;">folder_open</span>
+                    <span style="flex:1;">Property Documents</span>
+                    <span class="material-symbols-outlined" style="font-size:20px;color:var(--muted);transition:transform 0.2s;" id="prop-assets-chevron">expand_more</span>
+                </button>
+                <div id="prop-assets-body" style="display:none;padding:12px;">
             <div class="property-tabs" data-property-tabs>
                 <div class="property-tab-list" role="tablist" aria-label="Property assets">
                     <button class="property-tab is-active" type="button" id="property-tab-documents" role="tab" aria-selected="true" aria-controls="property-panel-documents" data-property-tab="documents">
@@ -2110,6 +2183,8 @@
                     {% else %}
                         <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No demarcation maps uploaded yet.</p>
                     {% endif %}
+                </div>
+            </div>
                 </div>
             </div>
             {% endif %}
