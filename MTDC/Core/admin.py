@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib import admin
 
-from .models import master_mtdc, OccupancyJson, PropertyCover, PropertyDocument, PropertyImage, PropertyVideo
+from .models import master_mtdc, OccupancyJson, PropertyCover, PropertyDocument, PropertyImage, PropertyMap, PropertyVideo
 
 
 class PropertyIdForm(forms.ModelForm):
@@ -33,6 +33,12 @@ class PropertyDocumentForm(PropertyIdForm):
         fields = "__all__"
 
 
+class PropertyMapForm(PropertyIdForm):
+    class Meta:
+        model = PropertyMap
+        fields = "__all__"
+
+
 class MasterMtdcAdmin(admin.ModelAdmin):
     list_display = ("property_id", "property_name", "category", "region", "rp_zone", "dp_zone")
     search_fields = ("property_name", "category", "region", "rp_zone", "dp_zone")
@@ -55,6 +61,13 @@ class PropertyDocumentAdmin(admin.ModelAdmin):
     list_filter = ("uploaded_at",)
 
 
+class PropertyMapAdmin(admin.ModelAdmin):
+    form = PropertyMapForm
+    list_display = ("property_id", "map_type", "title", "uploaded_at")
+    list_filter = ("map_type", "uploaded_at")
+    search_fields = ("title",)
+
+
 class PropertyVideoAdmin(admin.ModelAdmin):
     list_display = ("property", "title", "youtube_url", "uploaded_at")
     search_fields = ("property__property_name", "title")
@@ -72,5 +85,6 @@ admin.site.register(PropertyCover, PropertyCoverAdmin)
 admin.site.register(PropertyImage, PropertyImageAdmin)
 admin.site.register(PropertyDocument, PropertyDocumentAdmin)
 admin.site.register(PropertyVideo, PropertyVideoAdmin)
+admin.site.register(PropertyMap, PropertyMapAdmin)
 admin.site.register(OccupancyJson, OccupancyJsonAdmin)
 

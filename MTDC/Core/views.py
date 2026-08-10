@@ -7,7 +7,7 @@ from django.db import connection
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render ,get_object_or_404
 
-from .models import master_mtdc, PropertyCover, PropertyImage, PropertyDocument, PropertyVideo ,OccupancyJson
+from .models import master_mtdc, PropertyCover, PropertyImage, PropertyDocument, PropertyVideo, OccupancyJson, PropertyMap
 
 OWNERSHIP_REGION_ORDER = [
     "Ratnagiri",
@@ -319,12 +319,17 @@ def dashboard(request, property_id=None):
     property_images = []
     property_documents = []
     property_videos = []
+    demarcation_maps = []
+    survey_maps = []
 
     if selected_property_id and selected_property_id.isdigit():
         pid = int(selected_property_id)
         property_images = list(PropertyImage.objects.filter(property_id=pid))
         property_documents = list(PropertyDocument.objects.filter(property_id=pid))
         property_videos = list(PropertyVideo.objects.filter(property_id=pid))
+        all_maps = list(PropertyMap.objects.filter(property_id=pid))
+        demarcation_maps = [m for m in all_maps if m.map_type == 'demarcation']
+        survey_maps = [m for m in all_maps if m.map_type == 'survey']
 
     context = {
         "properties": property_cards,
@@ -335,6 +340,8 @@ def dashboard(request, property_id=None):
         "property_images": property_images,
         "property_documents": property_documents,
         "property_videos": property_videos,
+        "demarcation_maps": demarcation_maps,
+        "survey_maps": survey_maps,
         "region_property_counts": region_property_counts,
         "max_region_property_count": max_region_property_count,
         "ownership_breakdown_data": ownership_breakdown_data,

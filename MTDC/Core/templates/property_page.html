@@ -1421,7 +1421,7 @@
             min-height: 48px;
             padding: 4px;
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 4px;
             border: 1px solid var(--line);
             border-radius: 8px;
@@ -2004,6 +2004,11 @@
                         <span class="property-tab-label">Videos</span>
                         <span class="property-tab-count">{{ property_videos|length }}</span>
                     </button>
+                    <button class="property-tab" type="button" id="property-tab-maps" role="tab" aria-selected="false" aria-controls="property-panel-maps" data-property-tab="maps">
+                        <span class="material-symbols-outlined" aria-hidden="true">map</span>
+                        <span class="property-tab-label">Property Maps</span>
+                        <span class="property-tab-count">{{ demarcation_maps|length|add:survey_maps|length }}</span>
+                    </button>
                 </div>
 
                 <div class="property-tab-panel is-active" id="property-panel-documents" role="tabpanel" aria-labelledby="property-tab-documents" data-property-panel="documents">
@@ -2055,6 +2060,56 @@
                     {% else %}
                         <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No videos uploaded yet.</p>
                     {% endif %}
+                </div>
+
+                <div class="property-tab-panel" id="property-panel-maps" role="tabpanel" aria-labelledby="property-tab-maps" data-property-panel="maps" hidden>
+                    <div style="display:grid;gap:14px;">
+
+                        <div>
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--line);">
+                                <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">map</span>
+                                <span style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Government Demarcation Maps</span>
+                                <span style="margin-left:auto;min-width:22px;height:22px;padding:0 6px;display:grid;place-items:center;border-radius:999px;color:#fff;background:var(--navy);font-size:11px;font-weight:900;">{{ demarcation_maps|length }}</span>
+                            </div>
+                            {% if demarcation_maps %}
+                                <div style="display:grid;gap:6px;">
+                                {% for m in demarcation_maps %}
+                                    <a href="{{ m.file.url }}" class="asset-preview-link" data-kind="document" data-title="{{ m.title }}" data-url="{{ m.file.url }}" rel="noopener"
+                                       style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
+                                        <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">map</span>
+                                        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ m.title }}</span>
+                                        <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">visibility</span>
+                                    </a>
+                                {% endfor %}
+                                </div>
+                            {% else %}
+                                <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No demarcation maps uploaded yet.</p>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--line);">
+                                <span class="material-symbols-outlined" style="color:var(--blue);font-size:18px;">my_location</span>
+                                <span style="font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em;">Survey Maps</span>
+                                <span style="margin-left:auto;min-width:22px;height:22px;padding:0 6px;display:grid;place-items:center;border-radius:999px;color:#fff;background:var(--navy);font-size:11px;font-weight:900;">{{ survey_maps|length }}</span>
+                            </div>
+                            {% if survey_maps %}
+                                <div style="display:grid;gap:6px;">
+                                {% for m in survey_maps %}
+                                    <a href="{{ m.file.url }}" class="asset-preview-link" data-kind="document" data-title="{{ m.title }}" data-url="{{ m.file.url }}" rel="noopener"
+                                       style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--navy);text-decoration:none;font-weight:700;font-size:13px;">
+                                        <span class="material-symbols-outlined" style="color:var(--blue);font-size:18px;">my_location</span>
+                                        <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{{ m.title }}</span>
+                                        <span class="material-symbols-outlined" style="font-size:16px;color:var(--muted);">visibility</span>
+                                    </a>
+                                {% endfor %}
+                                </div>
+                            {% else %}
+                                <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;">No survey maps uploaded yet.</p>
+                            {% endif %}
+                        </div>
+
+                    </div>
                 </div>
             </div>
             {% endif %}
