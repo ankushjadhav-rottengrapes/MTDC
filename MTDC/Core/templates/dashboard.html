@@ -1657,13 +1657,17 @@
             <span class="material-symbols-outlined">search</span>
             <input id="property-search" type="search" placeholder="Search Property ID, Survey No, Resort, District...">
         </label>
+        <div style="display:flex;gap:8px;flex-shrink:0;width:270px;">
         <select id="region-filter" onchange="applyRegionFilter(this.value)"
-            style="min-height:42px;padding:0 12px;border:1px solid rgba(52,45,30,0.22);border-radius:8px;background:rgba(255,255,255,0.9);font-size:14px;font-weight:700;color:var(--ink);box-shadow:0 8px 18px rgba(116,74,8,0.09);outline:0;flex-shrink:0;">
+            style="min-height:42px;padding:0 12px;border:1px solid rgba(52,45,30,0.22);border-radius:8px;background:rgba(255,255,255,0.9);font-size:14px;font-weight:700;color:var(--ink);box-shadow:0 8px 18px rgba(116,74,8,0.09);outline:0;flex-shrink:0;width:220px;">
             <option value="">All Regions</option>
             {% for r in all_regions %}
             <option value="{{ r.region }}" {% if r.region == selected_region %}selected{% endif %}>{{ r.region }} ({{ r.count }})</option>
             {% endfor %}
         </select>
+        <button id="region-reset-btn" type="button" onclick="applyRegionFilter('');document.getElementById('region-filter').value='';" disabled
+            style="min-height:42px;width:42px;border:0;border-radius:8px;background:#f0e6d6;color:var(--navy);font-weight:800;font-size:18px;flex-shrink:0;opacity:0.45;cursor:not-allowed;">✕</button>
+        </div>
     </section>
 
     <main class="content{% if is_property_detail %} is-property-detail{% endif %}">
@@ -2671,6 +2675,12 @@
             const visibleCount = visibleIds.length;
             if (propertySidebarCount) {
                 propertySidebarCount.textContent = `${visibleCount} ${visibleCount === 1 ? 'property' : 'properties'} loaded from records`;
+            }
+            const resetBtn = document.getElementById('region-reset-btn');
+            if (resetBtn) {
+                resetBtn.disabled = !region;
+                resetBtn.style.opacity = region ? '1' : '0.45';
+                resetBtn.style.cursor = region ? 'pointer' : 'not-allowed';
             }
             history.replaceState({}, '', region ? `?region=${encodeURIComponent(region)}` : window.location.pathname);
             updateAnalytics();
