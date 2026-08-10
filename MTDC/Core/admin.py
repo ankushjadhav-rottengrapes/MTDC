@@ -40,8 +40,20 @@ class PropertyMapForm(PropertyIdForm):
 
 
 class MasterMtdcAdmin(admin.ModelAdmin):
-    list_display = ("property_id", "property_name", "category", "region", "rp_zone", "dp_zone")
-    search_fields = ("property_name", "category", "region", "rp_zone", "dp_zone")
+    list_display = ("property_id", "property_name", "category", "region", "district", "taluka", "village", "area_acres", "property_type")
+    search_fields = ("property_name", "category", "region", "district", "taluka", "village", "property_type")
+    list_filter = ("category", "region", "district", "property_type")
+    fieldsets = (
+        (None, {
+            "fields": ("property_id", "property_name", "category", "region")
+        }),
+        ("Location", {
+            "fields": ("village", "taluka", "district")
+        }),
+        ("Details", {
+            "fields": ("area_acres", "survey_no", "property_type", "description", "rp_zone", "dp_zone")
+        }),
+    )
 
 
 class PropertyCoverAdmin(admin.ModelAdmin):

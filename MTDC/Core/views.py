@@ -3,7 +3,7 @@ import re
 import struct
 from collections import Counter
 from django.http import JsonResponse
-from django.db import connection
+from django.db import models as django_models
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render ,get_object_or_404
 
@@ -269,6 +269,13 @@ def dashboard(request, property_id=None):
     zone_breakdown_data = _build_zone_breakdown_data(analytics_properties)
     selected_property_map_details = None
     selected_region = request.GET.get("region", "").strip()
+    all_regions = (
+        master_mtdc.objects.exclude(region__isnull=True)
+        .exclude(region="")
+        .values("region")
+        .annotate(count=django_models.Count("property_id"))
+        .order_by("region")
+    )
     properties = all_properties
     if selected_region:
         properties = properties.filter(region__iexact=selected_region)
@@ -310,6 +317,7 @@ def dashboard(request, property_id=None):
         "properties": property_cards,
         "property_count": len(property_cards),
         "selected_region": selected_region,
+        "all_regions": list(all_regions),
         "region_filtered_ids": region_filtered_ids,
         "is_property_detail": bool(selected_property_id and selected_property_id.isdigit()),
         "state_boundary_extent_coords": None,

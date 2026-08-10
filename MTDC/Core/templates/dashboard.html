@@ -1661,8 +1661,8 @@
             <select name="region" id="region-filter"
                 style="min-height:42px;padding:0 12px;border:1px solid rgba(52,45,30,0.22);border-radius:8px;background:rgba(255,255,255,0.9);font-size:14px;font-weight:700;color:var(--ink);box-shadow:0 8px 18px rgba(116,74,8,0.09);outline:0;">
                 <option value="">All Regions</option>
-                {% for r in region_property_counts %}
-                <option value="{{ r.region }}" {% if r.region == selected_region %}selected{% endif %}>{{ r.region }} ({{ r.property_count }})</option>
+                {% for r in all_regions %}
+                <option value="{{ r.region }}" {% if r.region == selected_region %}selected{% endif %}>{{ r.region }} ({{ r.count }})</option>
                 {% endfor %}
             </select>
             <button type="submit" style="min-height:42px;padding:0 16px;border:0;border-radius:8px;background:var(--saffron);color:#fff;font-weight:800;font-size:14px;">Filter</button>
