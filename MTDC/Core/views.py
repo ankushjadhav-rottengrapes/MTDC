@@ -134,34 +134,6 @@ def _build_zone_breakdown_data(properties):
     return breakdown
 
 
-def _fetch_region_property_counts():
-    query = """
-        SELECT
-            BTRIM(region) AS region,
-            COUNT(DISTINCT property_id) AS property_count
-        FROM public.mtdc_pdf_data
-        WHERE NULLIF(BTRIM(region), '') IS NOT NULL
-        GROUP BY BTRIM(region)
-        ORDER BY BTRIM(region);
-    """
-
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        rows = cursor.fetchall()
-
-    region_property_counts = [
-        {
-            "region": row[0],
-            "property_count": int(row[1]),
-        }
-        for row in rows
-    ]
-
-    max_region_property_count = max((item["property_count"] for item in region_property_counts), default=0)
-
-    return region_property_counts, max(max_region_property_count, 1)
-
-
 def _read_wkb_uint32(raw, offset, endian):
     return struct.unpack(endian + 'I', raw[offset:offset + 4])[0]
 
@@ -296,9 +268,10 @@ def dashboard(request, property_id=None):
     ownership_breakdown_data = _build_ownership_data(analytics_properties)
     zone_breakdown_data = _build_zone_breakdown_data(analytics_properties)
     selected_property_map_details = None
-    region_property_counts, max_region_property_count = _fetch_region_property_counts()
-
+    selected_region = request.GET.get("region", "").strip()
     properties = all_properties
+    if selected_region:
+        properties = properties.filter(region__iexact=selected_region)
     if selected_property_id and selected_property_id.isdigit():
         selected_property_id_int = int(selected_property_id)
         properties = properties.filter(property_id=selected_property_id_int)
@@ -331,9 +304,13 @@ def dashboard(request, property_id=None):
         demarcation_maps = [m for m in all_maps if m.map_type == 'demarcation']
         survey_maps = [m for m in all_maps if m.map_type == 'survey']
 
+    region_filtered_ids = [p.property_id for p in property_cards] if selected_region and not (selected_property_id and selected_property_id.isdigit()) else None
+
     context = {
         "properties": property_cards,
         "property_count": len(property_cards),
+        "selected_region": selected_region,
+        "region_filtered_ids": region_filtered_ids,
         "is_property_detail": bool(selected_property_id and selected_property_id.isdigit()),
         "state_boundary_extent_coords": None,
         "selected_property_map_details": selected_property_map_details,
@@ -342,8 +319,6 @@ def dashboard(request, property_id=None):
         "property_videos": property_videos,
         "demarcation_maps": demarcation_maps,
         "survey_maps": survey_maps,
-        "region_property_counts": region_property_counts,
-        "max_region_property_count": max_region_property_count,
         "ownership_breakdown_data": ownership_breakdown_data,
         "zone_breakdown_data": zone_breakdown_data,
     }
