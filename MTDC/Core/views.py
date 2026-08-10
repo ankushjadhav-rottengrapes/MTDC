@@ -3,11 +3,11 @@ import re
 import struct
 from collections import Counter
 from django.http import JsonResponse
-from django.db import connection
+from django.db import models as django_models
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render ,get_object_or_404
 
-from .models import master_mtdc, PropertyCover, PropertyImage, PropertyDocument, PropertyVideo ,OccupancyJson
+from .models import master_mtdc, PropertyCover, PropertyImage, PropertyDocument, PropertyVideo, OccupancyJson, PropertyMap
 
 OWNERSHIP_REGION_ORDER = [
     "Ratnagiri",
@@ -132,34 +132,6 @@ def _build_zone_breakdown_data(properties):
         }
 
     return breakdown
-
-
-def _fetch_region_property_counts():
-    query = """
-        SELECT
-            BTRIM(region) AS region,
-            COUNT(DISTINCT property_id) AS property_count
-        FROM public.mtdc_pdf_data
-        WHERE NULLIF(BTRIM(region), '') IS NOT NULL
-        GROUP BY BTRIM(region)
-        ORDER BY BTRIM(region);
-    """
-
-    with connection.cursor() as cursor:
-        cursor.execute(query)
-        rows = cursor.fetchall()
-
-    region_property_counts = [
-        {
-            "region": row[0],
-            "property_count": int(row[1]),
-        }
-        for row in rows
-    ]
-
-    max_region_property_count = max((item["property_count"] for item in region_property_counts), default=0)
-
-    return region_property_counts, max(max_region_property_count, 1)
 
 
 def _read_wkb_uint32(raw, offset, endian):
@@ -296,9 +268,16 @@ def dashboard(request, property_id=None):
     ownership_breakdown_data = _build_ownership_data(analytics_properties)
     zone_breakdown_data = _build_zone_breakdown_data(analytics_properties)
     selected_property_map_details = None
-    region_property_counts, max_region_property_count = _fetch_region_property_counts()
-
+    selected_region = request.GET.get("region", "").strip()
+    all_regions = (
+        master_mtdc.objects.exclude(region__isnull=True)
+        .exclude(region="")
+        .values("region")
+        .annotate(count=django_models.Count("property_id"))
+        .order_by("region")
+    )
     properties = all_properties
+    selected_property_obj = None
     if selected_property_id and selected_property_id.isdigit():
         selected_property_id_int = int(selected_property_id)
         properties = properties.filter(property_id=selected_property_id_int)
@@ -319,24 +298,35 @@ def dashboard(request, property_id=None):
     property_images = []
     property_documents = []
     property_videos = []
+    demarcation_maps = []
+    survey_maps = []
 
     if selected_property_id and selected_property_id.isdigit():
         pid = int(selected_property_id)
         property_images = list(PropertyImage.objects.filter(property_id=pid))
         property_documents = list(PropertyDocument.objects.filter(property_id=pid))
         property_videos = list(PropertyVideo.objects.filter(property_id=pid))
+        all_maps = list(PropertyMap.objects.filter(property_id=pid))
+        demarcation_maps = [m for m in all_maps if m.map_type == 'demarcation']
+        survey_maps = [m for m in all_maps if m.map_type == 'survey']
+
+    region_filtered_ids = None
 
     context = {
         "properties": property_cards,
         "property_count": len(property_cards),
+        "selected_region": selected_region,
+        "all_regions": list(all_regions),
+        "region_filtered_ids": region_filtered_ids,
         "is_property_detail": bool(selected_property_id and selected_property_id.isdigit()),
+        "selected_property": selected_property_obj if (selected_property_id and selected_property_id.isdigit()) else None,
         "state_boundary_extent_coords": None,
         "selected_property_map_details": selected_property_map_details,
         "property_images": property_images,
         "property_documents": property_documents,
         "property_videos": property_videos,
-        "region_property_counts": region_property_counts,
-        "max_region_property_count": max_region_property_count,
+        "demarcation_maps": demarcation_maps,
+        "survey_maps": survey_maps,
         "ownership_breakdown_data": ownership_breakdown_data,
         "zone_breakdown_data": zone_breakdown_data,
     }

@@ -1652,11 +1652,22 @@
         </details>
     </header>
 
-    <section class="dashboard-bar" aria-label="Dashboard search filters">
-        <label class="search">
+    <section class="dashboard-bar" aria-label="Dashboard search filters" style="display:flex;align-items:center;gap:12px;">
+        <label class="search" style="flex:1;">
             <span class="material-symbols-outlined">search</span>
             <input id="property-search" type="search" placeholder="Search Property ID, Survey No, Resort, District...">
         </label>
+        <div style="display:flex;gap:8px;flex-shrink:0;width:270px;">
+        <select id="region-filter" onchange="applyRegionFilter(this.value)"
+            style="min-height:42px;padding:0 12px;border:1px solid rgba(52,45,30,0.22);border-radius:8px;background:rgba(255,255,255,0.9);font-size:14px;font-weight:700;color:var(--ink);box-shadow:0 8px 18px rgba(116,74,8,0.09);outline:0;flex-shrink:0;width:220px;">
+            <option value="">All Regions</option>
+            {% for r in all_regions %}
+            <option value="{{ r.region }}" {% if r.region == selected_region %}selected{% endif %}>{{ r.region }} ({{ r.count }})</option>
+            {% endfor %}
+        </select>
+        <button id="region-reset-btn" type="button" onclick="applyRegionFilter('');document.getElementById('region-filter').value='';" disabled
+            style="min-height:42px;width:42px;border:0;border-radius:8px;background:#f0e6d6;color:var(--navy);font-weight:800;font-size:18px;flex-shrink:0;opacity:0.45;cursor:not-allowed;">✕</button>
+        </div>
     </section>
 
     <main class="content{% if is_property_detail %} is-property-detail{% endif %}">
@@ -1668,21 +1679,6 @@
                     <div class="analytics-total">
                         <span>Total Properties</span>
                         <strong id="analytics-total-properties">{{ property_count }}</strong>
-                    </div>
-                </section>
-
-                <section class="analytics-card" aria-label="Region wise properties">
-                    <h3>Region Wise Properties</h3>
-                    <div class="analytics-list region-analytics-list">
-                        {% for region in region_property_counts %}
-                        <div class="analytics-row">
-                            <span class="analytics-icon"><span class="material-symbols-outlined" aria-hidden="true">place</span></span>
-                            <span class="analytics-label"><span>{{ region.region }}</span><span class="analytics-meter"><i style="--meter: {% widthratio region.property_count max_region_property_count 100 %}%"></i></span></span>
-                            <span class="analytics-value">{{ region.property_count }}</span>
-                        </div>
-                        {% empty %}
-                        <div class="analytics-empty">No region data found.</div>
-                        {% endfor %}
                     </div>
                 </section>
 
@@ -1904,6 +1900,7 @@
 
     {{ state_boundary_extent_coords|json_script:"state-boundary-extent-data" }}
     {{ selected_property_map_details|json_script:"selected-property-map-data" }}
+    {{ region_filtered_ids|json_script:"region-filtered-ids-data" }}
     <script src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js"></script>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <script>
@@ -2013,7 +2010,12 @@
             buildLayerTokenFilter(selectedPropertyName)
         );
 
-        const selectedAreaFilter = hasSelectedProperty ? buildAreaFilter() : '';
+        const regionFilteredIds = JSON.parse(document.getElementById('region-filtered-ids-data').textContent);
+        const regionCqlFilter = regionFilteredIds && regionFilteredIds.length > 0
+            ? `property_id IN (${regionFilteredIds.join(',')})`
+            : regionFilteredIds !== null ? 'property_id IS NULL' : '';
+
+        const selectedAreaFilter = hasSelectedProperty ? buildAreaFilter() : regionCqlFilter;
 
         const masterMtdcSource = new ol.source.TileWMS({
             url: `${GEOSERVER_URL}/${GEOSERVER_WORKSPACE}/wms`,
@@ -2611,6 +2613,21 @@
 
             const activeZoneMetric = zoneTiles.find((tile) => tile.classList.contains('is-active'))?.dataset.zoneMetric || 'rp';
             renderZoneBreakdown(activeZoneMetric);
+
+            const ownershipRegionCounts = { ppp: {}, lease: {}, small: {} };
+            visibleCards.forEach((card) => {
+                const m = normalizeOwnershipMetric(card.dataset.propertyCategory || '');
+                if (!ownershipRegionCounts[m]) return;
+                const region = (card.dataset.propertyRegion || '').trim() || 'Unspecified';
+                ownershipRegionCounts[m][region] = (ownershipRegionCounts[m][region] || 0) + 1;
+            });
+            ['ppp', 'lease', 'small'].forEach((m) => {
+                ownershipBreakdownData[m].rows = Object.entries(ownershipRegionCounts[m])
+                    .filter(([, v]) => v > 0)
+                    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+            });
+            const activeOwnershipMetric = ownershipTiles.find((tile) => tile.classList.contains('is-active'))?.dataset.ownershipMetric || 'ppp';
+            renderOwnershipBreakdown(activeOwnershipMetric);
         };
 
         const filterPropertyCards = () => {
@@ -2644,6 +2661,36 @@
         }
 
         updateAnalytics();
+
+        const applyRegionFilter = (region) => {
+            propertyCards.forEach((card) => {
+                const cardRegion = (card.dataset.propertyRegion || '').trim();
+                card.hidden = region ? cardRegion.toLowerCase() !== region.toLowerCase() : false;
+            });
+            const visibleIds = propertyCards.filter((c) => !c.hidden).map((c) => Number(c.dataset.propertyId));
+            const cql = region
+                ? (visibleIds.length ? `property_id IN (${visibleIds.join(',')})` : 'property_id IS NULL')
+                : '';
+            masterMtdcSource.updateParams({ CQL_FILTER: cql || undefined });
+            const visibleCount = visibleIds.length;
+            if (propertySidebarCount) {
+                propertySidebarCount.textContent = `${visibleCount} ${visibleCount === 1 ? 'property' : 'properties'} loaded from records`;
+            }
+            const resetBtn = document.getElementById('region-reset-btn');
+            if (resetBtn) {
+                resetBtn.disabled = !region;
+                resetBtn.style.opacity = region ? '1' : '0.45';
+                resetBtn.style.cursor = region ? 'pointer' : 'not-allowed';
+            }
+            history.replaceState({}, '', region ? `?region=${encodeURIComponent(region)}` : window.location.pathname);
+            updateAnalytics();
+        };
+
+        const initialRegion = new URLSearchParams(window.location.search).get('region') || '';
+        if (initialRegion) {
+            document.getElementById('region-filter').value = initialRegion;
+            applyRegionFilter(initialRegion);
+        }
 
         const assetModal = document.getElementById('asset-viewer-modal');
         const assetModalTitle = document.getElementById('asset-modal-title');

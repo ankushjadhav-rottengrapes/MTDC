@@ -8,6 +8,14 @@ class master_mtdc(models.Model):
     region = models.CharField(max_length=100, blank=True)
     rp_zone = models.CharField(max_length=255, blank=True)
     dp_zone = models.CharField(max_length=255, blank=True)
+    village = models.CharField(max_length=255, blank=True, default='')
+    taluka = models.CharField(max_length=255, blank=True, default='')
+    district = models.CharField(max_length=255, blank=True, default='')
+    area_acres = models.CharField(max_length=100, blank=True, default='')
+    area_hectare = models.CharField(max_length=100, blank=True, default='')
+    survey_no = models.CharField(max_length=500, blank=True, default='')
+    property_type = models.CharField(max_length=255, blank=True, default='')
+    description = models.TextField(blank=True, default='')
     pt_geom = models.TextField(null=True, blank=True)
     pl_geom = models.TextField(null=True, blank=True)
     poly_geom = models.TextField(null=True, blank=True)
@@ -111,6 +119,41 @@ class PropertyVideo(models.Model):
 
     def __str__(self):
         return f"Video for property {self.property_id} - {self.title or self.youtube_url}"
+
+
+def validate_pdf(value):
+    from pathlib import Path
+    from django.core.exceptions import ValidationError
+    if Path(value.name).suffix.lower() != '.pdf':
+        raise ValidationError('Only PDF files are allowed for property maps.')
+
+
+def property_map_upload_path(instance, filename):
+    from pathlib import Path
+    from uuid import uuid4
+    ext = Path(filename).suffix.lower()
+    return f"properties/{instance.property_id}/maps/{uuid4().hex}{ext}"
+
+
+class PropertyMap(models.Model):
+    MAP_TYPE_CHOICES = [
+        ('demarcation', 'Government Demarcation Map'),
+        ('survey', 'Survey Map'),
+    ]
+    property_id = models.IntegerField()
+    map_type = models.CharField(max_length=20, choices=MAP_TYPE_CHOICES)
+    title = models.CharField(max_length=255)
+    file = models.FileField(upload_to=property_map_upload_path, validators=[validate_pdf])
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "core_propertymap"
+        ordering = ["map_type", "-uploaded_at"]
+        verbose_name = "Property Map"
+        verbose_name_plural = "Property Maps"
+
+    def __str__(self):
+        return f"{self.get_map_type_display()} for property {self.property_id} - {self.title}"
 
 
 class OccupancyJson(models.Model):
