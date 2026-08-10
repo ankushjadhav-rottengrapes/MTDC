@@ -1657,17 +1657,13 @@
             <span class="material-symbols-outlined">search</span>
             <input id="property-search" type="search" placeholder="Search Property ID, Survey No, Resort, District...">
         </label>
-        <form method="get" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-            <select name="region" id="region-filter"
-                style="min-height:42px;padding:0 12px;border:1px solid rgba(52,45,30,0.22);border-radius:8px;background:rgba(255,255,255,0.9);font-size:14px;font-weight:700;color:var(--ink);box-shadow:0 8px 18px rgba(116,74,8,0.09);outline:0;">
-                <option value="">All Regions</option>
-                {% for r in all_regions %}
-                <option value="{{ r.region }}" {% if r.region == selected_region %}selected{% endif %}>{{ r.region }} ({{ r.count }})</option>
-                {% endfor %}
-            </select>
-            <button type="submit" style="min-height:42px;padding:0 16px;border:0;border-radius:8px;background:var(--saffron);color:#fff;font-weight:800;font-size:14px;">Filter</button>
-            {% if selected_region %}<a href="/" style="min-height:42px;padding:0 12px;border-radius:8px;background:#f0e6d6;color:var(--navy);font-weight:800;font-size:14px;display:grid;place-items:center;text-decoration:none;">Clear</a>{% endif %}
-        </form>
+        <select id="region-filter" onchange="window.location.href='?region='+this.value"
+            style="min-height:42px;padding:0 12px;border:1px solid rgba(52,45,30,0.22);border-radius:8px;background:rgba(255,255,255,0.9);font-size:14px;font-weight:700;color:var(--ink);box-shadow:0 8px 18px rgba(116,74,8,0.09);outline:0;flex-shrink:0;">
+            <option value="">All Regions</option>
+            {% for r in all_regions %}
+            <option value="{{ r.region }}" {% if r.region == selected_region %}selected{% endif %}>{{ r.region }} ({{ r.count }})</option>
+            {% endfor %}
+        </select>
     </section>
 
     <main class="content{% if is_property_detail %} is-property-detail{% endif %}">
