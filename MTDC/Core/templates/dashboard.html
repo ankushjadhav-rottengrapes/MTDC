@@ -1657,7 +1657,7 @@
             <span class="material-symbols-outlined">search</span>
             <input id="property-search" type="search" placeholder="Search Property ID, Survey No, Resort, District...">
         </label>
-        <select id="region-filter" onchange="window.location.href='?region='+this.value"
+        <select id="region-filter" onchange="applyRegionFilter(this.value)"
             style="min-height:42px;padding:0 12px;border:1px solid rgba(52,45,30,0.22);border-radius:8px;background:rgba(255,255,255,0.9);font-size:14px;font-weight:700;color:var(--ink);box-shadow:0 8px 18px rgba(116,74,8,0.09);outline:0;flex-shrink:0;">
             <option value="">All Regions</option>
             {% for r in all_regions %}
@@ -2642,6 +2642,30 @@
         }
 
         updateAnalytics();
+
+        const applyRegionFilter = (region) => {
+            propertyCards.forEach((card) => {
+                const cardRegion = (card.dataset.propertyRegion || '').trim();
+                card.hidden = region ? cardRegion.toLowerCase() !== region.toLowerCase() : false;
+            });
+            const visibleIds = propertyCards.filter((c) => !c.hidden).map((c) => Number(c.dataset.propertyId));
+            const cql = region
+                ? (visibleIds.length ? `property_id IN (${visibleIds.join(',')})` : 'property_id IS NULL')
+                : '';
+            masterMtdcSource.updateParams({ CQL_FILTER: cql || undefined });
+            const visibleCount = visibleIds.length;
+            if (propertySidebarCount) {
+                propertySidebarCount.textContent = `${visibleCount} ${visibleCount === 1 ? 'property' : 'properties'} loaded from records`;
+            }
+            history.replaceState({}, '', region ? `?region=${encodeURIComponent(region)}` : window.location.pathname);
+            updateAnalytics();
+        };
+
+        const initialRegion = new URLSearchParams(window.location.search).get('region') || '';
+        if (initialRegion) {
+            document.getElementById('region-filter').value = initialRegion;
+            applyRegionFilter(initialRegion);
+        }
 
         const assetModal = document.getElementById('asset-viewer-modal');
         const assetModalTitle = document.getElementById('asset-modal-title');

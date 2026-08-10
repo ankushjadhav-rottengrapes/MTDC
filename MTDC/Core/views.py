@@ -277,8 +277,6 @@ def dashboard(request, property_id=None):
         .order_by("region")
     )
     properties = all_properties
-    if selected_region:
-        properties = properties.filter(region__iexact=selected_region)
     selected_property_obj = None
     if selected_property_id and selected_property_id.isdigit():
         selected_property_id_int = int(selected_property_id)
@@ -312,7 +310,7 @@ def dashboard(request, property_id=None):
         demarcation_maps = [m for m in all_maps if m.map_type == 'demarcation']
         survey_maps = [m for m in all_maps if m.map_type == 'survey']
 
-    region_filtered_ids = [p.property_id for p in property_cards] if selected_region and not (selected_property_id and selected_property_id.isdigit()) else None
+    region_filtered_ids = None
 
     context = {
         "properties": property_cards,
