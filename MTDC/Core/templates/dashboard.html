@@ -2609,6 +2609,21 @@
 
             const activeZoneMetric = zoneTiles.find((tile) => tile.classList.contains('is-active'))?.dataset.zoneMetric || 'rp';
             renderZoneBreakdown(activeZoneMetric);
+
+            const ownershipRegionCounts = { ppp: {}, lease: {}, small: {} };
+            visibleCards.forEach((card) => {
+                const m = normalizeOwnershipMetric(card.dataset.propertyCategory || '');
+                if (!ownershipRegionCounts[m]) return;
+                const region = (card.dataset.propertyRegion || '').trim() || 'Unspecified';
+                ownershipRegionCounts[m][region] = (ownershipRegionCounts[m][region] || 0) + 1;
+            });
+            ['ppp', 'lease', 'small'].forEach((m) => {
+                ownershipBreakdownData[m].rows = Object.entries(ownershipRegionCounts[m])
+                    .filter(([, v]) => v > 0)
+                    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+            });
+            const activeOwnershipMetric = ownershipTiles.find((tile) => tile.classList.contains('is-active'))?.dataset.ownershipMetric || 'ppp';
+            renderOwnershipBreakdown(activeOwnershipMetric);
         };
 
         const filterPropertyCards = () => {
