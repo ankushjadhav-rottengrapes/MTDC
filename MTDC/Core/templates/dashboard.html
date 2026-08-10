@@ -1900,6 +1900,7 @@
 
     {{ state_boundary_extent_coords|json_script:"state-boundary-extent-data" }}
     {{ selected_property_map_details|json_script:"selected-property-map-data" }}
+    {{ region_filtered_ids|json_script:"region-filtered-ids-data" }}
     <script src="https://cdn.jsdelivr.net/npm/ol@10.6.1/dist/ol.js"></script>
     <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
     <script>
@@ -2009,7 +2010,7 @@
             buildLayerTokenFilter(selectedPropertyName)
         );
 
-        const regionFilteredIds = {{ region_filtered_ids|default:"null"|safe }};
+        const regionFilteredIds = JSON.parse(document.getElementById('region-filtered-ids-data').textContent);
         const regionCqlFilter = regionFilteredIds && regionFilteredIds.length > 0
             ? `property_id IN (${regionFilteredIds.join(',')})`
             : regionFilteredIds !== null ? 'property_id IS NULL' : '';
