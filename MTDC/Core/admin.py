@@ -51,7 +51,7 @@ class MasterMtdcAdmin(admin.ModelAdmin):
             "fields": ("village", "taluka", "district")
         }),
         ("Details", {
-            "fields": ("area_acres", "survey_no", "property_type", "description", "rp_zone", "dp_zone")
+            "fields": ("area_acres", "area_hectare", "survey_no", "property_type", "description", "rp_zone", "dp_zone")
         }),
     )
 

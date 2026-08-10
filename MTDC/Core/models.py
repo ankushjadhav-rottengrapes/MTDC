@@ -12,6 +12,7 @@ class master_mtdc(models.Model):
     taluka = models.CharField(max_length=255, blank=True, default='')
     district = models.CharField(max_length=255, blank=True, default='')
     area_acres = models.CharField(max_length=100, blank=True, default='')
+    area_hectare = models.CharField(max_length=100, blank=True, default='')
     survey_no = models.CharField(max_length=500, blank=True, default='')
     property_type = models.CharField(max_length=255, blank=True, default='')
     description = models.TextField(blank=True, default='')
