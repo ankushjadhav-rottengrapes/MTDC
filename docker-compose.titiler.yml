@@ -1,0 +1,23 @@
+# TiTiler - Local Raster Tile Server for DSM/COG/VRT testing
+# Usage: docker compose -f docker-compose.titiler.yml up -d
+# Docs:  http://localhost:8008/docs
+
+services:
+  titiler:
+    image: ghcr.io/developmentseed/titiler:latest
+    container_name: mtdc-titiler
+    ports:
+      - "8008:80"
+    environment:
+      # Allow forwarded headers
+      - FORWARDED_ALLOW_IPS=*
+      # GDAL optimizations for remote COG/VRT access
+      - GDAL_HTTP_MERGE_CONSECUTIVE_RANGES=YES
+      - GDAL_DISABLE_READDIR_ON_OPEN=EMPTY_DIR
+      - CPL_VSIL_CURL_ALLOWED_EXTENSIONS=.tif,.tiff,.vrt
+      - GDAL_CACHEMAX=200
+      - VSI_CACHE=TRUE
+      - VSI_CACHE_SIZE=5000000
+      - GDAL_HTTP_MAX_RETRY=3
+      - GDAL_HTTP_RETRY_DELAY=1
+    restart: unless-stopped
