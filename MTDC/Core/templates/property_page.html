@@ -649,8 +649,21 @@
         .sidebar {
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow-y: auto;
             background: #fffaf1;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            border-radius: 999px;
+            background: rgba(15, 93, 168, 0.3);
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
         }
 
         .analytics-sidebar {
@@ -1097,10 +1110,10 @@
             position: sticky;
             top: 0;
             z-index: 2;
-            padding: 16px 18px;
+            padding: 12px 14px;
             display: flex;
             justify-content: space-between;
-            gap: 18px;
+            gap: 12px;
             align-items: center;
             background: rgba(255, 250, 241, 0.95);
             border-bottom: 1px solid var(--line);
@@ -1110,21 +1123,21 @@
         .sidebar-head h2 {
             margin: 0;
             color: var(--navy);
-            font-size: 20px;
+            font-size: 16px;
             line-height: 1.15;
         }
 
         .sidebar-head p {
-            margin: 4px 0 0;
+            margin: 3px 0 0;
             color: var(--muted);
-            font-size: 13px;
+            font-size: 11px;
             font-weight: 700;
         }
 
         .cards {
-            padding: 14px;
+            padding: 10px 14px;
             display: grid;
-            gap: 14px;
+            gap: 10px;
         }
 
         .asset-card {
@@ -1137,7 +1150,7 @@
 
         .asset-img {
             position: relative;
-            height: 118px;
+            height: 100px;
             overflow: hidden;
         }
 
@@ -1166,32 +1179,37 @@
         }
 
         .asset-body {
-            padding: 14px;
+            padding: 10px 12px;
         }
 
         .asset-title {
             display: flex;
             justify-content: space-between;
-            align-items: flex-start;
-            gap: 10px;
-            margin-bottom: 12px;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0;
         }
 
         .asset-title h3 {
             margin: 0;
             color: var(--navy);
-            font-size: 18px;
-            line-height: 1.2;
+            font-size: 15px;
+            line-height: 1.25;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .status {
             flex: 0 0 auto;
-            padding: 5px 9px;
+            padding: 4px 8px;
             border-radius: 999px;
             color: #074a75;
             background: #dff0ff;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
+            white-space: nowrap;
         }
 
         .status.survey {
@@ -1410,19 +1428,19 @@
 
         .property-tabs {
             min-height: 0;
-            padding: 0 14px 14px;
+            padding: 0;
             display: grid;
             grid-template-rows: auto minmax(0, 1fr);
-            gap: 10px;
+            gap: 8px;
             flex: 1 1 auto;
         }
 
         .property-tab-list {
-            padding: 4px;
+            padding: 3px;
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
             grid-template-rows: auto auto;
-            gap: 4px;
+            gap: 3px;
             border: 1px solid var(--line);
             border-radius: 8px;
             background: #fff8f0;
@@ -1431,17 +1449,17 @@
 
         .property-tab {
             min-width: 0;
-            min-height: 36px;
-            padding: 5px 8px;
+            min-height: 30px;
+            padding: 4px 6px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 4px;
+            gap: 3px;
             border: 0;
             border-radius: 6px;
             background: transparent;
             color: var(--navy);
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
             text-align: center;
             cursor: pointer;
@@ -1457,7 +1475,7 @@
             grid-column: 1 / -1;
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 4px;
+            gap: 3px;
         }
 
         .property-tab:hover {
@@ -1472,7 +1490,7 @@
 
         .property-tab .material-symbols-outlined {
             flex: 0 0 auto;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .property-tab-label {
@@ -1480,23 +1498,24 @@
         }
 
         .property-tab-count {
-            min-width: 22px;
-            height: 22px;
-            padding: 0 6px;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 4px;
             display: grid;
             place-items: center;
             border-radius: 999px;
             color: var(--navy);
             background: #ffffff;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 900;
         }
 
         .property-tab-panel {
             display: none;
             min-height: 0;
+            max-height: 220px;
             overflow-y: auto;
-            padding: 12px 14px;
+            padding: 8px 10px;
             border: 1px solid var(--line);
             border-radius: 8px;
             color: var(--muted);
@@ -1506,8 +1525,36 @@
             font-weight: 700;
         }
 
+        .property-tab-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .property-tab-panel::-webkit-scrollbar-thumb {
+            border-radius: 999px;
+            background: rgba(15, 93, 168, 0.3);
+        }
+
+        .property-tab-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
         .property-tab-panel.is-active {
             display: block;
+        }
+
+        .property-tab-panel .asset-preview-link {
+            padding: 6px 8px !important;
+            gap: 6px !important;
+            font-size: 12px !important;
+            border-radius: 6px !important;
+        }
+
+        .property-tab-panel .asset-preview-link .material-symbols-outlined {
+            font-size: 16px !important;
+        }
+
+        .property-tab-panel > div {
+            gap: 4px !important;
         }
         .asset-modal {
             position: fixed;
@@ -1996,16 +2043,17 @@
             </div>
 
             {% if is_property_detail and selected_property %}
-            <div style="margin:0 14px 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 4px 12px rgba(45,31,7,0.08);">
+            <div style="margin:0 14px 10px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 4px 12px rgba(45,31,7,0.08);">
                 <button type="button"
                     onclick="const b=document.getElementById('prop-details-body');const c=document.getElementById('prop-details-chevron');const o=b.style.display==='none';b.style.display=o?'block':'none';c.style.transform=o?'rotate(180deg)':'';" 
-                    style="width:100%;min-height:46px;padding:0 14px;display:flex;align-items:center;gap:10px;border:0;border-bottom:1px solid transparent;background:linear-gradient(90deg,#fff8f0,#fff4e6);color:var(--navy);font-size:13px;font-weight:800;text-align:left;cursor:pointer;">
-                    <span class="material-symbols-outlined" style="color:var(--saffron);font-size:20px;">info</span>
-                    <span style="flex:1;font-size:14px;">Property Details</span>
-                    <span class="material-symbols-outlined" style="font-size:20px;color:var(--muted);transition:transform 0.2s;" id="prop-details-chevron">expand_more</span>
+                    style="width:100%;min-height:40px;padding:0 12px;display:flex;align-items:center;gap:8px;border:0;border-bottom:1px solid transparent;background:linear-gradient(90deg,#fff8f0,#fff4e6);color:var(--navy);font-size:13px;font-weight:800;text-align:left;cursor:pointer;">
+                    <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">info</span>
+                    <span style="flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Property Details</span>
+                    <span class="material-symbols-outlined" style="font-size:18px;color:var(--muted);transition:transform 0.2s;" id="prop-details-chevron">expand_more</span>
                 </button>
-                <div id="prop-details-body" style="display:none;padding:14px;border-top:1px solid var(--line);background:#fffaf5;">
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+                <div id="prop-details-body" style="display:none;padding:10px 12px;border-top:1px solid var(--line);background:#fffaf5;">
+                    {% if selected_property.village or selected_property.taluka or selected_property.district or selected_property.area_acres or selected_property.area_hectare or selected_property.survey_no or selected_property.property_type or selected_property.description %}
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
                         {% if selected_property.village %}
                         <div style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:#fff;">
                             <div style="font-size:10px;font-weight:800;color:var(--muted);margin-bottom:2px;">VILLAGE</div>
@@ -2055,20 +2103,23 @@
                         </div>
                         {% endif %}
                     </div>
+                    {% else %}
+                    <p style="margin:0;color:var(--muted);font-size:12px;font-weight:700;text-align:center;padding:10px 0;">No property details found.</p>
+                    {% endif %}
                 </div>
             </div>
             {% endif %}
 
             {% if is_property_detail %}
-            <div style="margin:0 14px 14px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 4px 12px rgba(45,31,7,0.08);">
+            <div style="margin:0 14px 10px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff;box-shadow:0 4px 12px rgba(45,31,7,0.08);">
                 <button type="button"
                     onclick="const b=document.getElementById('prop-assets-body');const c=document.getElementById('prop-assets-chevron');const o=b.style.display==='none';b.style.display=o?'block':'none';c.style.transform=o?'rotate(180deg)':'';this.style.borderBottomColor=o?'var(--line)':'transparent';"
-                    style="width:100%;min-height:46px;padding:0 14px;display:flex;align-items:center;gap:10px;border:0;border-bottom:1px solid transparent;background:linear-gradient(90deg,#fff8f0,#fff4e6);color:var(--navy);font-size:14px;font-weight:800;text-align:left;cursor:pointer;">
-                    <span class="material-symbols-outlined" style="color:var(--saffron);font-size:20px;">folder_open</span>
-                    <span style="flex:1;">Property Documents</span>
-                    <span class="material-symbols-outlined" style="font-size:20px;color:var(--muted);transition:transform 0.2s;" id="prop-assets-chevron">expand_more</span>
+                    style="width:100%;min-height:40px;padding:0 12px;display:flex;align-items:center;gap:8px;border:0;border-bottom:1px solid transparent;background:linear-gradient(90deg,#fff8f0,#fff4e6);color:var(--navy);font-size:13px;font-weight:800;text-align:left;cursor:pointer;">
+                    <span class="material-symbols-outlined" style="color:var(--saffron);font-size:18px;">folder_open</span>
+                    <span style="flex:1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Property Documents</span>
+                    <span class="material-symbols-outlined" style="font-size:18px;color:var(--muted);transition:transform 0.2s;" id="prop-assets-chevron">expand_more</span>
                 </button>
-                <div id="prop-assets-body" style="display:none;padding:12px;">
+                <div id="prop-assets-body" style="display:none;padding:8px 10px;">
             <div class="property-tabs" data-property-tabs>
                 <div class="property-tab-list" role="tablist" aria-label="Property assets">
                     <button class="property-tab is-active" type="button" id="property-tab-documents" role="tab" aria-selected="true" aria-controls="property-panel-documents" data-property-tab="documents">
