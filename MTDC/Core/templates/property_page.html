@@ -617,6 +617,15 @@
             background: #0d6efd;
         }
 
+        .layer-options #dsm-toggle {
+            color: #0f8b69;
+        }
+
+        .layer-options #dsm-toggle.is-active {
+            color: #ffffff;
+            background: #0f8b69;
+        }
+
         .map-hover-label {
             min-width: max-content;
             max-width: 220px;
@@ -2003,6 +2012,7 @@
                     <button class="is-active" type="button" data-layer="satellite">Satellite</button>
                     <button type="button" data-layer="osm">OSM</button>
                     <button type="button" data-layer="terrain">Terrain</button>
+                    <button type="button" id="dsm-toggle" style="border-top:1px solid #e2e8f0;margin-top:4px;padding-top:6px;white-space:nowrap;">DSM Elevation</button>
                 </div>
             </div>
         </section>

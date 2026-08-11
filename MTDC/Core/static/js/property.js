@@ -1,5 +1,7 @@
 const GEOSERVER_URL = 'https://purandar-airport.rottengrapes.tech/geoserver';
 const GEOSERVER_WORKSPACE = 'mtdc';
+const TITILER_URL = 'https://mtdc.lrms.rottengrapes.tech/titiler';
+const DSM_VRT_URL = 'https://mtdc.lrms.rottengrapes.tech/dsm/mtdc_dsm_remote.vrt';
 const STATE_BOUNDARY_LAYER_NAME = `${GEOSERVER_WORKSPACE}:state_bd`;
 const MASTER_LAYER_NAME = `${GEOSERVER_WORKSPACE}:master_mtdc`;
 const urlParams = new URLSearchParams(window.location.search);
@@ -73,6 +75,21 @@ const stateBoundaryLayer = new ol.layer.Tile({
     zIndex: 5
 });
 
+const dsmSource = new ol.source.XYZ({
+    url: `${TITILER_URL}/cog/tiles/WebMercatorQuad/{z}/{x}/{y}?url=${encodeURIComponent(DSM_VRT_URL)}&algorithm=hillshade&nodata=-32767`,
+    crossOrigin: 'anonymous',
+    minZoom: 6,
+    maxZoom: 18,
+    transition: 250
+});
+
+const dsmLayer = new ol.layer.Tile({
+    source: dsmSource,
+    opacity: 0.6,
+    visible: false,
+    zIndex: 3
+});
+
 const escapeCqlText = (value) => String(value).replace(/'/g, "''");
 
 const normalizeText = (value) => String(value || '').replace(/\s+/g, ' ').trim();
@@ -130,7 +147,7 @@ const masterMtdcLayer = new ol.layer.Tile({
 
 const map = new ol.Map({
     target: 'mtdc-map',
-    layers: [baseLayers.satellite, stateBoundaryLayer, masterMtdcLayer],
+    layers: [baseLayers.satellite, dsmLayer, stateBoundaryLayer, masterMtdcLayer],
     view: new ol.View({
         center: ol.proj.fromLonLat([76.75, 18.85]),
         zoom: 6
@@ -420,17 +437,26 @@ if (hasSelectedPropertyExtent) {
     focusSelectedProperty(ol.proj.fromLonLat([selectedPropertyLon, selectedPropertyLat]));
 }
 
-document.querySelectorAll('.layer-options button').forEach((button) => {
+document.querySelectorAll('.layer-options button[data-layer]').forEach((button) => {
     button.addEventListener('click', () => {
         const selectedLayer = baseLayers[button.dataset.layer];
         if (!selectedLayer) return;
 
         map.getLayers().setAt(0, selectedLayer);
-        document.querySelectorAll('.layer-options button').forEach((item) => {
+        document.querySelectorAll('.layer-options button[data-layer]').forEach((item) => {
             item.classList.toggle('is-active', item === button);
         });
     });
 });
+
+const dsmToggleBtn = document.getElementById('dsm-toggle');
+if (dsmToggleBtn) {
+    dsmToggleBtn.addEventListener('click', () => {
+        const isVisible = dsmLayer.getVisible();
+        dsmLayer.setVisible(!isVisible);
+        dsmToggleBtn.classList.toggle('is-active', !isVisible);
+    });
+}
 
 const propertySearchInput = document.getElementById('property-search');
 const propertyCards = Array.from(document.querySelectorAll('.asset-card[data-property-id]'));

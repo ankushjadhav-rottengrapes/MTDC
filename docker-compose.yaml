@@ -17,3 +17,23 @@ services:
       - /var/www/static/mtdc:/app/MTDC/MTDC/staticfiles
     network_mode: host
     restart: always
+
+
+  titiler:
+    image: ghcr.io/developmentseed/titiler:latest
+    container_name: mtdc-titiler
+    network_mode: host
+    environment:
+      - FORWARDED_ALLOW_IPS=*
+      - WORKERS_PER_CORE=1
+      - HOST=127.0.0.1
+      - PORT=8008
+      - GDAL_HTTP_MERGE_CONSECUTIVE_RANGES=YES
+      - GDAL_DISABLE_READDIR_ON_OPEN=EMPTY_DIR
+      - CPL_VSIL_CURL_ALLOWED_EXTENSIONS=.tif,.tiff,.vrt
+      - GDAL_CACHEMAX=512
+      - VSI_CACHE=TRUE
+      - VSI_CACHE_SIZE=10000000
+      - GDAL_HTTP_MAX_RETRY=3
+      - GDAL_HTTP_RETRY_DELAY=1
+    restart: always
