@@ -1,6 +1,6 @@
 const GEOSERVER_URL = 'https://purandar-airport.rottengrapes.tech/geoserver';
 const GEOSERVER_WORKSPACE = 'mtdc';
-const TITILER_URL = 'http://localhost:8008';
+const TITILER_URL = 'https://mtdc.lrms.rottengrapes.tech/titiler';
 const DSM_VRT_URL = 'https://mtdc.lrms.rottengrapes.tech/dsm/mtdc_dsm_remote.vrt';
 const STATE_BOUNDARY_LAYER_NAME = `${GEOSERVER_WORKSPACE}:state_bd`;
 const MASTER_LAYER_NAME = `${GEOSERVER_WORKSPACE}:master_mtdc`;
