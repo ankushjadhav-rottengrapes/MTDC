@@ -9,294 +9,373 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', system-ui, sans-serif; overflow: hidden; }
+        button, input { font: inherit; }
+        button { cursor: pointer; }
+
+        .page {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            background: url("{% static 'logo/mtdc_new.png' %}") center/cover no-repeat;
         }
 
-        body {
-            margin: 0;
-            min-width: 320px;
-            min-height: 100vh;
-            color: #0f172a;
-            font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: #ffffff;
+        /* Dark overlay */
+        .page::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 55%, rgba(0,0,0,0.05) 100%);
+            z-index: 1;
         }
 
-        button,
-        input {
-            font: inherit;
+        /* Everything on top of overlay */
+        .page > * { position: relative; z-index: 2; }
+
+        /* === MAIN GRID === */
+        .layout {
+            width: 100%;
+            height: 100%;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            grid-template-rows: 1fr auto;
+            padding: 40px;
+            gap: 30px;
         }
 
-        button {
-            cursor: pointer;
-        }
-
-        .login-page {
-            min-height: 100vh;
-            padding: 70px 16px 36px;
+        /* === LEFT TEXT === */
+        .left-text {
+            grid-column: 1;
+            grid-row: 1;
             display: flex;
             flex-direction: column;
+            justify-content: flex-start;
+            padding-left: 60px;
+            padding-top: 40px;
+        }
+
+        .left-text .welcome {
+            color: #fff;
+            font-size: 17px;
+            font-style: italic;
+            margin-bottom: 6px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
+
+        .left-text h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 52px;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.05;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+
+        .left-text .tagline {
+            color: #fff;
+            font-size: 19px;
+            font-style: italic;
+            margin-bottom: 34px;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+        }
+
+        .org-badge {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .org-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+        }
+
+        .org-icon svg { width: 24px; height: 24px; fill: #fff; }
+
+        .org-text h3 {
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .org-text p {
+            color: rgba(255,255,255,0.8);
+            font-size: 12px;
+            font-style: italic;
+        }
+
+        /* === LOGIN CARD (right) === */
+        .card-area {
+            grid-column: 2;
+            grid-row: 1 / 3;
+            display: flex;
             align-items: center;
         }
 
-        .brand {
-            margin-bottom: 32px;
-            text-align: center;
-        }
-
-        .brand-logo-wrap {
-            width: 58px;
-            height: 58px;
-            margin: 0 auto 14px;
-            display: grid;
-            place-items: center;
-            border: 1px solid #ffe49a;
-            border-radius: 10px;
-            background: #ffffff;
-            box-shadow: 0 5px 16px rgba(15, 23, 42, 0.06);
-        }
-
-        .brand-logo {
-            width: 48px;
-            height: 42px;
-            object-fit: contain;
-        }
-
-        .brand h1 {
-            margin: 0;
-            color: #9a5a00;
-            font-size: 25px;
-            line-height: 1.1;
-            font-weight: 800;
-        }
-
-        .brand p {
-            margin: 5px 0 0;
-            color: #64748b;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
         .login-card {
-            width: min(100%, 416px);
-            padding: 34px 32px 32px;
-            border: 1px solid #e5e7eb;
-            border-radius: 14px;
-            background: #ffffff;
-            box-shadow: 0 24px 50px rgba(15, 23, 42, 0.13);
+            width: 370px;
+            background: #fff;
+            border-radius: 18px;
+            padding: 32px 32px 26px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.35);
         }
 
-        .login-card h2 {
-            margin: 0 0 28px;
-            color: #020617;
-            font-size: 21px;
-            line-height: 1.2;
-            font-weight: 700;
-            text-align: center;
-        }
+        .brand { text-align: center; margin-bottom: 12px; }
+        .brand img { width: 64px; height: 64px; object-fit: contain; margin-bottom: 8px; }
+        .brand h2 { font-size: 18px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
+        .brand p { font-size: 12px; color: #64748b; }
 
-        .form-field {
-            margin-bottom: 22px;
-        }
+        .diamond { text-align: center; color: #f97316; font-size: 13px; margin: 10px 0; }
 
-        .form-field label {
-            display: block;
-            margin-bottom: 8px;
-            color: #334155;
-            font-size: 14px;
-            font-weight: 500;
-        }
+        .form-title { text-align: center; font-size: 16px; font-weight: 700; color: #1e293b; margin-bottom: 18px; }
 
-        .form-field input {
-            width: 100%;
-            height: 50px;
-            border: 1px solid #d7dfeb;
-            border-radius: 8px;
-            outline: 0;
-            padding: 0 14px;
-            color: #020617;
-            background: #fff6d8;
-            font-size: 14px;
-            font-weight: 700;
-        }
+        .field { margin-bottom: 14px; }
+        .field label { display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 4px; }
 
-        .form-field input:focus {
-            border-color: #f5b800;
-            box-shadow: 0 0 0 3px rgba(255, 228, 154, 0.55);
-        }
-
-        .password-wrap {
+        .input-box {
             position: relative;
         }
 
-        .password-wrap input {
-            padding-right: 44px;
+        .input-box svg.ico {
+            position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+            width: 15px; height: 15px; color: #94a3b8;
         }
 
-        .password-toggle {
-            position: absolute;
-            top: 50%;
-            right: 12px;
-            width: 24px;
-            height: 24px;
-            transform: translateY(-50%);
-            border: 0;
-            padding: 0;
-            color: #64748b;
-            background: transparent;
-            line-height: 1;
+        .input-box input {
+            width: 100%; height: 42px;
+            border: 1.5px solid #e2e8f0; border-radius: 8px;
+            padding: 0 11px 0 34px;
+            font-size: 13px; color: #1e293b; background: #fff;
+            outline: none; transition: border-color 0.2s;
         }
 
-        .password-toggle::before {
-            content: "";
-            position: absolute;
-            top: 8px;
-            left: 4px;
-            width: 15px;
-            height: 8px;
-            border: 1.6px solid currentColor;
-            border-radius: 50%;
+        .input-box input::placeholder { color: #94a3b8; }
+        .input-box input:focus { border-color: #f97316; box-shadow: 0 0 0 3px rgba(249,115,22,0.08); }
+
+        .input-box .toggle {
+            position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+            border: none; background: none; color: #94a3b8; padding: 0;
+            width: 20px; height: 20px; display: grid; place-items: center;
         }
 
-        .password-toggle::after {
-            content: "";
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: currentColor;
+        .input-box .toggle:hover { color: #64748b; }
+
+        .row-between {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 18px;
         }
 
-        .login-alert {
-            margin: 0 0 18px;
-            padding: 10px 12px;
-            border: 1px solid #fecaca;
-            border-radius: 8px;
-            color: #b91c1c;
-            background: #fff1f2;
-            font-size: 13px;
-            font-weight: 600;
+        .remember { display: flex; align-items: center; gap: 6px; cursor: pointer; }
+        .remember input { width: 15px; height: 15px; accent-color: #f97316; }
+        .remember span { font-size: 12px; color: #475569; font-weight: 500; }
+
+        .forgot { font-size: 12px; color: #f97316; text-decoration: none; font-weight: 500; }
+        .forgot:hover { text-decoration: underline; }
+
+        .alert { margin-bottom: 12px; padding: 8px 10px; border-radius: 6px; border: 1px solid #fecaca; background: #fef2f2; color: #b91c1c; font-size: 12px; }
+        .field-error { margin-top: 4px; color: #dc2626; font-size: 11px; }
+
+        .btn-login {
+            width: 100%; height: 44px; border: 0; border-radius: 8px;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: #fff; font-size: 15px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center; gap: 7px;
+            box-shadow: 0 4px 12px rgba(249,115,22,0.35);
+            transition: transform 0.15s, box-shadow 0.15s;
         }
 
-        .field-error {
-            margin: 7px 0 0;
-            color: #b91c1c;
-            font-size: 12px;
-            font-weight: 600;
+        .btn-login:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(249,115,22,0.4); }
+
+        .footer { margin-top: 16px; text-align: center; font-size: 10px; color: #94a3b8; line-height: 1.5; }
+
+        /* === BOTTOM FEATURE BAR === */
+        .bottom-bar {
+            grid-column: 1;
+            grid-row: 2;
+            display: flex;
+            align-items: center;
+            background: rgba(35, 45, 35, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 40px;
+            padding: 12px 28px;
+            gap: 0;
+            align-self: end;
+            width: fit-content;
+            margin-left: 20px;
         }
 
-        .submit-button {
-            width: 100%;
-            height: 48px;
-            margin-top: 2px;
-            border: 0;
-            border-radius: 8px;
-            color: #332100;
-            background: #ffe49a;
-            box-shadow: 0 5px 12px rgba(153, 95, 0, 0.18);
-            font-size: 16px;
-            font-weight: 600;
+        .feat {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0 20px;
+            border-right: 1px solid rgba(255,255,255,0.2);
         }
 
-        .submit-button:hover,
-        .submit-button:focus {
-            background: #ffd86a;
+        .feat:first-child { padding-left: 0; }
+        .feat:last-child { border-right: none; padding-right: 0; }
+
+        .feat-icon {
+            width: 34px; height: 34px; border-radius: 50%;
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            display: grid; place-items: center; flex-shrink: 0;
         }
 
-        .footer-text {
-            margin: 24px 0 0;
-            color: #94a3b8;
-            font-size: 12px;
-            font-weight: 500;
-            text-align: center;
-        }
+        .feat-icon svg { width: 16px; height: 16px; fill: #fff; }
 
-        @media (max-width: 520px) {
-            .login-page {
-                padding-top: 40px;
-            }
+        .feat h4 { color: #fff; font-size: 12px; font-weight: 700; margin-bottom: 1px; white-space: nowrap; }
+        .feat p { color: rgba(255,255,255,0.75); font-size: 10.5px; white-space: nowrap; }
 
-            .login-card {
-                padding: 28px 22px;
-            }
+        /* === RESPONSIVE === */
+        @media (max-width: 1024px) {
+            .layout { grid-template-columns: 1fr; grid-template-rows: 1fr; padding: 20px; }
+            .left-text, .bottom-bar { display: none; }
+            .card-area { grid-column: 1; grid-row: 1; justify-content: center; }
+            .login-card { width: 100%; max-width: 400px; }
         }
     </style>
 </head>
 <body>
-    <main class="login-page">
-        <section class="brand" aria-label="MTDC GIS Dashboard">
-            <div class="brand-logo-wrap">
-                <img class="brand-logo" src="{% static 'logo/mtdc-logo.png' %}" alt="Maharashtra Tourism logo">
-            </div>
-            <h1>MTDC GIS Dashboard</h1>
-            <p>GIS Dashboard Access</p>
-        </section>
-
-        <form class="login-card" method="post" action="{% url 'core:login' %}">
-            {% csrf_token %}
-            <h2>Login to your account</h2>
-
-            {% if form.non_field_errors %}
-                <div class="login-alert">
-                    {% for error in form.non_field_errors %}
-                        <div>{{ error }}</div>
-                    {% endfor %}
+    <div class="page">
+        <div class="layout">
+            <!-- LEFT -->
+            <div class="left-text">
+                <p class="welcome">Welcome to</p>
+                <h1>MTDC GIS<br>Dashboard</h1>
+                <p class="tagline">Explore. Manage. Monitor.</p>
+                <div class="org-badge">
+                    <div class="org-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    </div>
+                    <div class="org-text">
+                        <h3>Maharashtra Tourism Development Corporation</h3>
+                        <p>Building Memorable Experiences</p>
+                    </div>
                 </div>
-            {% endif %}
-
-            <div class="form-field">
-                <label for="{{ form.username.id_for_label }}">Username</label>
-                <input
-                    type="text"
-                    name="{{ form.username.html_name }}"
-                    id="{{ form.username.id_for_label }}"
-                    value="{{ form.username.value|default_if_none:'' }}"
-                    autocomplete="username"
-                    required
-                >
-                {% for error in form.username.errors %}
-                    <p class="field-error">{{ error }}</p>
-                {% endfor %}
             </div>
 
-            <div class="form-field">
-                <label for="{{ form.password.id_for_label }}">Password</label>
-                <div class="password-wrap">
-                    <input
-                        type="password"
-                        name="{{ form.password.html_name }}"
-                        id="{{ form.password.id_for_label }}"
-                        autocomplete="current-password"
-                        required
-                    >
-                    <button class="password-toggle" type="button" aria-label="Show password" data-password-toggle></button>
+            <!-- RIGHT - LOGIN CARD -->
+            <div class="card-area">
+                <div class="login-card">
+                    <div class="brand">
+                        <img src="{% static 'logo/mtdc-logo.png' %}" alt="MTDC Logo">
+                        <h2>MTDC GIS Dashboard</h2>
+                        <p>GIS Dashboard Access</p>
+                    </div>
+                    <div class="diamond">&#10022;</div>
+                    <h3 class="form-title">Login to your account</h3>
+
+                    <form method="post" action="{% url 'core:login' %}">
+                        {% csrf_token %}
+
+                        {% if form.non_field_errors %}
+                            <div class="alert">
+                                {% for error in form.non_field_errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <div class="field">
+                            <label for="{{ form.username.id_for_label }}">Username</label>
+                            <div class="input-box">
+                                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="12" cy="7" r="4"/>
+                                </svg>
+                                <input type="text" name="{{ form.username.html_name }}" id="{{ form.username.id_for_label }}" value="{{ form.username.value|default_if_none:'' }}" placeholder="Enter your username" autocomplete="username" required>
+                            </div>
+                            {% for error in form.username.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                        </div>
+
+                        <div class="field">
+                            <label for="{{ form.password.id_for_label }}">Password</label>
+                            <div class="input-box">
+                                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                                <input type="password" name="{{ form.password.html_name }}" id="{{ form.password.id_for_label }}" placeholder="Enter your password" autocomplete="current-password" required>
+                                <button class="toggle" type="button" aria-label="Show password" data-password-toggle>
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                        <circle cx="12" cy="12" r="3"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            {% for error in form.password.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                        </div>
+
+                        <div class="row-between">
+                            <label class="remember">
+                                <input type="checkbox" name="remember" checked>
+                                <span>Remember me</span>
+                            </label>
+                            <a href="#" class="forgot">Forgot password?</a>
+                        </div>
+
+                        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+                        <button class="btn-login" type="submit">
+                            Login
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </button>
+                    </form>
+
+                    <p class="footer">&copy; 2026 Maharashtra Tourism Development Corporation<br>All rights reserved.</p>
                 </div>
-                {% for error in form.password.errors %}
-                    <p class="field-error">{{ error }}</p>
-                {% endfor %}
             </div>
 
-            {% if next %}
-                <input type="hidden" name="next" value="{{ next }}">
-            {% endif %}
-
-            <button class="submit-button" type="submit">Login</button>
-        </form>
-
-        <p class="footer-text">&copy; 2026 Maharashtra Tourism Development Corporation</p>
-    </main>
+            <!-- BOTTOM FEATURE BAR -->
+            <div class="bottom-bar">
+                <div class="feat">
+                    <div class="feat-icon">
+                        <svg viewBox="0 0 24 24"><path d="M15 11V5l-3-3-3 3v2H3v14h18V11h-6zm-8 8H5v-2h2v2zm0-4H5v-2h2v2zm0-4H5V9h2v2zm6 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V9h2v2zm0-4h-2V5h2v2zm6 12h-2v-2h2v2zm0-4h-2v-2h2v2z"/></svg>
+                    </div>
+                    <div>
+                        <h4>Tourism Assets</h4>
+                        <p>Hotels, Resorts &amp; Recreational Facilities</p>
+                    </div>
+                </div>
+                <div class="feat">
+                    <div class="feat-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg>
+                    </div>
+                    <div>
+                        <h4>Spatial Insights</h4>
+                        <p>Interactive maps and geospatial analytics</p>
+                    </div>
+                </div>
+                <div class="feat">
+                    <div class="feat-icon">
+                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                    </div>
+                    <div>
+                        <h4>Data-Driven Decisions</h4>
+                        <p>For sustainable tourism growth</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        const passwordToggle = document.querySelector('[data-password-toggle]');
-        const passwordInput = document.getElementById('{{ form.password.id_for_label }}');
-
-        passwordToggle?.addEventListener('click', () => {
-            const showPassword = passwordInput.type === 'password';
-            passwordInput.type = showPassword ? 'text' : 'password';
-            passwordToggle.setAttribute('aria-label', showPassword ? 'Hide password' : 'Show password');
+        const toggle = document.querySelector('[data-password-toggle]');
+        const pwInput = document.getElementById('{{ form.password.id_for_label }}');
+        toggle?.addEventListener('click', () => {
+            const show = pwInput.type === 'password';
+            pwInput.type = show ? 'text' : 'password';
+            toggle.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
         });
     </script>
 </body>
